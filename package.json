@@ -1,0 +1,21 @@
+{
+  "name": "cozy-webdav",
+  "version": "0.0.1",
+  "description": "A WebDav Server for cozy cloud",
+  "main": "server.coffee",
+  "scripts": {
+    "test": "cake tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mycozycloud/cozy-webdav"
+  },
+  "author": {
+    "name": "Romain"
+  },
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "jsDAV": "~0.3.2"
+  }
+}
