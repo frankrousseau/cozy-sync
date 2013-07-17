@@ -16,6 +16,8 @@
   "license": "BSD",
   "readmeFilename": "README.md",
   "dependencies": {
-    "jsDAV": "~0.3.2"
+    "jsDAV": "~0.3.2",
+    "jugglingdb": "~0.2.0-35",
+    "jugglingdb-cozy-adapter": "~0.3.5"
   }
 }

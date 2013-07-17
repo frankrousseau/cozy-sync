@@ -1,12 +1,8 @@
 # Interface = require 'jsdav/lib/CardDAV/interfaces/iBackend'
-Exc       = require 'jsdav/lib/shared/exceptions'
-BasicAuth = require 'jsdav/lib/DAV/plugins/auth/abstractBasic'
+Exc       = require 'jsDAV/lib/shared/exceptions'
+BasicAuth = require 'jsDAV/lib/DAV/plugins/auth/abstractBasic'
 
-handle (err) ->
-    console.log err
-    return new Exc err.message || err
-
-module.exports = Basic.extends
+module.exports = BasicAuth.extend
 
     # @TODO actualy check this
     validateUserPass: (username, password, cbvalidpass) -> cbvalidpass true

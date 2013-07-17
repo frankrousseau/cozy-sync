@@ -1,7 +1,7 @@
 # Interface = require 'jsdav/lib/CardDAV/interfaces/iBackend'
-Exc       = require 'jsdav/lib/shared/exceptions'
+Exc       = require 'jsDAV/lib/shared/exceptions'
 
-handle (err) ->
+handle    = (err) ->
     console.log err
     return new Exc err.message || err
 
