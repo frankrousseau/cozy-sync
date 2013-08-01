@@ -52,7 +52,7 @@ server = require('http').createServer (req, res) ->
 
 
 port = process.env.PORT || 9202
-host = process.env.HOST || "0.0.0.1"
+host = process.env.HOST || "0.0.0.0"
 
 server.listen port, host, ->
     console.log "WebDAV server is listening on #{host}:#{port}"
