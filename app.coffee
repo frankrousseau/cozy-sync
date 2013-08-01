@@ -12,25 +12,24 @@ module.exports = (davServer) ->
         dumpExceptions: true
         showStack: true
 
+    davAccount = null
+    WebDAVAccount.first (err, account) ->
+        if account? then davAccount = account
+        else davAccount = null
+
     # Index page
     app.get '/', (req, res) ->
-        WebDAVAccount.first (err, account) ->
-            if err
-                next err
-            else if not account?
-                res.render 'index'
-            else
-                res.render 'index', account.toJSON()
+        if davAccount?
+            res.render 'index', davAccount.toJSON()
+        else
+            res.render 'index'
 
     # Get credentials
     app.get '/token', (req, res) ->
-        WebDAVAccount.first (err, account) ->
-            if err
-                res.send error: true, msg: err.toString(), 500
-            else if not account?
-                res.send error: true, msg: 'No webdav account generated', 404
-            else
-                res.send account.toJSON()
+        if davAccount?
+            res.send account.toJSON()
+        else
+            res.send error: true, msg: 'No webdav account generated', 404
 
     # Generate credentials
     app.post '/token', (req, res) ->
@@ -38,19 +37,18 @@ module.exports = (davServer) ->
         password = shortId.generate()
         data = login: login, password: password
 
-        WebDAVAccount.first (err, account) ->
-            if err
-                res.send error: true, msg: err.toString(), 500
-            else if not account?
-                WebDAVAccount.create data, (err, account) ->
-                    if err then res.send error: true, msg: err.toString(), 500
-                    else res.send success: true, account: account.toJSON()
-            else
-                account.login = login
-                account.password = password
-                account.save (err) ->
-                    if err then res.send error: true, msg: err.toString(), 500
-                    else res.send success: true, account: account.toJSON()
+        if not davAccount?
+            WebDAVAccount.create data, (err, account) ->
+                if err then res.send error: true, msg: err.toString(), 500
+                else
+                    davAccount = account
+                    res.send success: true, account: account.toJSON()
+        else
+            davAccount.login = login
+            davAccount.password = password
+            davAccount.save (err) ->
+                if err then res.send error: true, msg: err.toString(), 500
+                else res.send success: true, account: davAccount.toJSON()
 
 
     app.propfind '*', (req, res) ->

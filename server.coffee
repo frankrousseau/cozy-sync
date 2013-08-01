@@ -39,7 +39,6 @@ DAVServer = jsDAV.mount
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
 
 
-
 app = require('./app')(DAVServer)
 
 port = process.env.PORT || 9116
