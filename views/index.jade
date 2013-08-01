@@ -14,5 +14,16 @@ html(lang="en")
   body
     #content
       h1  Cozy CalDAV server
-      h2  Auth Token Generator
-      button#generate-btn Generate token
+      h2 How to use CalDAV
+      p
+          | Simply connect your calendar application to the following URL: 
+          | <br />
+          | https://yourcozy.cozycloud.cc/apps/webdav/public
+      h2  CalDAV Credentials
+      p 
+        | login: 
+        span#login-span #{login}
+      p 
+        | password: 
+        span#password-span #{password}
+      button#generate-btn Reset Credentials
