@@ -54,7 +54,7 @@ module.exports = (davServer) ->
     app.propfind '*', (req, res) ->
         if /^\/public/.test req.url
             req.url = req.url.replace '/public', '/public/webdav'
-            daVServer.exec req, res
+            davServer.exec req, res
         else
             res.send error: true, msg: 'Path not found', 404
 
