@@ -71,7 +71,7 @@
     };
     return button.click(function() {
       button.startLoading();
-      return client.post('/token', {}, {
+      return client.post('token', {}, {
         success: function(data) {
           $('#password-span').html(data.account.password);
           return button.endLoading();

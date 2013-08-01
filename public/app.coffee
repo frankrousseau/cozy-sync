@@ -58,7 +58,7 @@ $ ->
 
     button.click ->
         button.startLoading()
-        client.post '/token', {},
+        client.post 'token', {},
             success: (data) ->
                 $('#password-span').html data.account.password
                 button.endLoading()
