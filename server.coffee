@@ -1,37 +1,56 @@
 jsDAV = require "jsDAV"
 jsDAV.debugMode = true
 
-Db = require './models/db'
+cozy_Auth_Backend           = require './backends/auth'
 
+jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
+cozy_PrincipalBackend        = require './backends/principal'
+principalBackend             = new cozy_PrincipalBackend
+nodePrincipalCollection      = jsDAVACL_PrincipalCollection.new(principalBackend)
 
-jsDAV_Auth_Backend           = require './backends/auth'
-jsDAVACL_PrincipalBackend    = require './backends/principal'
-jsCardDAV_Backend            = require './backends/carddav'
 
 jsCardDAV_AddressBookRoot    = require "jsDAV/lib/CardDAV/addressBookRoot"
-jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
+cozy_CardBackend             = require './backends/carddav'
+carddavBackend               = new cozy_CardBackend require './models/contact'
+nodeCardDAV                  = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 
-jsDAV_Auth_Plugin            = require "jsDAV/lib/DAV/plugins/auth"
-jsDAV_Browser_Plugin         = require "jsDAV/lib/DAV/plugins/browser"
-jsCardDAV_Plugin             = require "jsDAV/lib/CardDAV/plugin"
-jsDAVACL_Plugin              = require "jsDAV/lib/DAVACL/plugin"
 
-baseUri = '/public/'
+jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/CalendarRoot"
+cozy_CalBackend              = require './backends/caldav'
+caldavBackend                = new cozy_CalBackend require './models/calendar'
+nodeCalDAV                   = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
 
-authBackend      = new jsDAV_Auth_Backend
-principalBackend = new jsDAVACL_PrincipalBackend
-carddavBackend   = new jsCardDAV_Backend require './models/contact'
 
-nodes = [
-    jsDAVACL_PrincipalCollection.new(principalBackend),
-    jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
-]
+DAVServer = jsDAV.mount
+    server: true
+    standalone: false
 
-options = 
-    node: nodes,
-    baseUri: baseUri,
-    authBackend: authBackend,
-    realm: "jsDAV",
-    plugins: [jsDAV_Auth_Plugin, jsCardDAV_Plugin, jsDAVACL_Plugin]
+    realm: 'jsDAV'
+    mount: '/public/webdav/'
 
-jsDAV.createServer options, 9116
+    authBackend: cozy_Auth_Backend.new()
+    plugins: [
+        require "jsDAV/lib/DAV/plugins/auth"
+        require "jsDAV/lib/CardDAV/plugin"
+        require "jsDAV/lib/CalDAV/plugin"
+        require "jsDAV/lib/DAVACL/plugin"
+    ]
+
+    node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
+
+
+server = require('http').createServer (req, res) ->
+
+    console.log 'URL IS', req.url
+
+    if /^\/public/.test req.url
+        # DAVServer reacted weirdly to /public -> /public/webdav by cozy-proxy
+        req.url = req.url.replace '/public', '/public/webdav'
+        DAVServer.exec req, res
+    else
+        res.writeHead 404
+        res.end 'NOT FOUND'
+
+server.listen 9116, "0.0.0.0", -> console.log "listenning"
+
+# jsDAV.createServer options, 9116

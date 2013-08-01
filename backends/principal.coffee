@@ -2,27 +2,29 @@
 
 module.exports = class PrincipalBackend
 
-	principal = 
-		uri: 'my'
-		'{DAV:}displayname': 'cozy owner'
+    principal = 
+        uri:                 'principals/me'
+        '{DAV:}displayname': 'cozy owner'
 
-	getPrincipalsByPrefix: (prefixPath, callback) ->
-		callback [principal]
+    getPrincipalsByPrefix: (prefixPath, callback) ->
+        console.log "getPrincipalsByPrefix", prefixPath
+        callback null, [principal]
 
     getPrincipalByPath: (path, callback) ->
-    	callback [principal]
+        console.log "getPrincipalByPath", path
+        callback null, principal
 
     updatePrincipal: (path, mutations, callback) ->
-    	callback false
+        callback null, false
 
     searchPrincipals: (prefixPath, searchProperties, callback) ->
-    	callback [principal.uri]
+        callback null, [principal.uri]
 
     getGroupMemberSet: (principal, callback) ->
-    	callback [principal]
+        callback null, [principal]
 
-    getGroupMembership: (principal, callback) ->
-    	callback [principal]
+    getGroupMemberShip: (principal, callback) ->
+        callback null, [principal]
 
     setGroupMemberSet: (principal, members, callback) ->
-    	callback false
+        callback null, false
