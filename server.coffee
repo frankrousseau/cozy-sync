@@ -1,7 +1,7 @@
 jsDAV = require "jsDAV"
 jsDAV.debugMode = true
 
-cozy_Auth_Backend           = require './backends/auth'
+cozy_Auth_Backend            = require './backends/auth'
 
 jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
 cozy_PrincipalBackend        = require './backends/principal'
@@ -15,7 +15,7 @@ carddavBackend               = new cozy_CardBackend require './models/contact'
 nodeCardDAV                  = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 
 
-jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/CalendarRoot"
+jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/calendarRoot"
 cozy_CalBackend              = require './backends/caldav'
 caldavBackend                = new cozy_CalBackend require './models/calendar'
 nodeCalDAV                   = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
@@ -40,7 +40,6 @@ DAVServer = jsDAV.mount
 
 
 server = require('http').createServer (req, res) ->
-
     console.log 'URL IS', req.url
 
     if /^\/public/.test req.url
@@ -51,6 +50,9 @@ server = require('http').createServer (req, res) ->
         res.writeHead 404
         res.end 'NOT FOUND'
 
-server.listen 9116, "0.0.0.0", -> console.log "listenning"
 
-# jsDAV.createServer options, 9116
+port = process.env.PORT || 9202
+host = process.env.HOST || "0.0.0.1"
+
+server.listen port, host, ->
+    console.log "WebDAV server is listening on #{host}:#{port}"
