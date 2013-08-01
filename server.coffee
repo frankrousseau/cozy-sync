@@ -39,14 +39,17 @@ DAVServer = jsDAV.mount
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
 
 
-server = require('http').createServer (req, res) ->
-    console.log 'URL IS', req.url
+express = require('express')
+app = express()
 
+
+app.use (err, req, res, next) ->
     if /^\/public/.test req.url
         # DAVServer reacted weirdly to /public -> /public/webdav by cozy-proxy
         req.url = req.url.replace '/public', '/public/webdav'
         DAVServer.exec req, res
     else
+        DAVServer.exec req, res
         res.writeHead 404
         res.end 'NOT FOUND'
 
@@ -55,4 +58,4 @@ port = process.env.PORT || 9202
 host = process.env.HOST || "0.0.0.0"
 
 server.listen port, host, ->
-    console.log "WebDAV server is listening on #{host}:#{port}"
+    console.log "WebDAV server is listening on #{host}:#{port}..."
