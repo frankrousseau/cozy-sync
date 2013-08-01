@@ -2,7 +2,7 @@
 
 Exc = require "jsDAV/lib/shared/exceptions"
 async = require "async"
-{VCalendar} = require "../lib/ical_helpers"
+{ICalParser, VCalendar, VEvent, VTodo} = require "../lib/ical_helpers"
 
 module.exports = class CozyCalDAVBackend
 
@@ -64,6 +64,16 @@ module.exports = class CozyCalDAVBackend
         ], (err, results) =>
             callback err, (results[0] or results[1])
 
+    _parseSingleObjICal: (calendarData, callback) ->
+        new ICalParser().parseString calendarData, (err, calendar) =>
+            return callback err if err
+            # TODO BE SMARTER
+
+            timezone = calendar.subComponents[0]
+            daylightl = calendar.subComponents[0]
+            callback null, calendar.subComponents[1]
+
+
     getCalendarObject: (calendarId, objectUri, callback) ->
         @_findCalendarObject calendarId, objectUri, (err, obj) =>
             return callback err if err
@@ -76,14 +86,45 @@ module.exports = class CozyCalDAVBackend
                 lastmodified: new Date().getTime()
 
 
-    createCalendarObject: (calendarId, objectUri, calendarData, callback) ->
-        callback Exc.notImplementedYet()
+    createCalendarObject: (calendarId, objectUri, calendarData, callback) =>
+        @_parseSingleObjICal calendarData, (err, obj) =>
+            return callback err if err
+
+            if obj.name is 'VEVENT'
+                event = @Event.fromIcal obj
+                @Event.create event, (err, event) ->
+                    callback err, null
+
+            else if obj.name is 'VTODO'
+                console.log "ALARM"
+                alarm = @Alarm.fromIcal obj
+                @Alarm.create alarm, (err, alarm) ->
+                    callback err, null
+
+            else
+                callback Exc.notImplementedYet()
 
 
     updateCalendarObject: (calendarId, objectUri, calendarData, callback) ->
-        @_findCalendarObject calendarId, objectUri, (err, obj) ->
+        @_findCalendarObject calendarId, objectUri, (err, oldObj) ->
             return callback err if err
-            obj.updateAttributesIcal calendarData
+
+            @_parseSingleObjICal calendarData, (err, newObj) =>
+                return callback err if err
+
+                if newObj.name is 'VEVENT' and oldObj instanceof Event
+                    event = @Event.fromIcal newObj
+                    oldObj.updateAttributes event, (err, event) ->
+                        callback err, null
+
+                else if newObj.name is 'VTODO' and oldObj instanceof Alarm
+                    console.log "ALARM"
+                    alarm = @Alarm.fromIcal newObj
+                    oldObj.updateAttributes alarm, (err, alarm) ->
+                        callback err, null
+
+                else
+                    callback Exc.notImplementedYet()
 
     deleteCalendarObject: (calendarId, objectUri, callback) ->
         @_findCalendarObject calendarId, objectUri, (err, obj) ->
