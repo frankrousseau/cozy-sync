@@ -1,0 +1,53 @@
+shadow()
+    -moz-box-shadow: arguments
+    -webkit-box-shadow: arguments
+    box-shadow: arguments
+
+text-shadow()
+    -moz-text-shadow: arguments
+    -webkit-text-shadow: arguments
+    text-shadow: arguments
+
+@font-face
+    font-family: main
+    src: url('/signika-regular.ttf')
+
+blue = #34A6FF
+orange = #fe8800
+
+html, body
+    height: 100%
+    width: 100%
+    padding: 0
+    margin: 0
+    box-sizing: border-box
+
+html, body, h1, p
+    box-sizing: border-box
+
+body
+    background: #F4F4F4
+    font-family: main
+    padding: 20px
+
+button
+    border: 1px solid blue
+    background: blue
+    color: white
+    box-shadow: none
+    text-shadow: none
+    border-radius: 0
+    font-family: main
+    font-weight: bold
+    padding: 5px
+
+button:hover
+    background: orange
+    border: 1px solid orange
+    color: white
+
+button:active
+    background: orange - 3%
+    border: 1px solid orange
+    shadow: 1px 3px 2px rgba(0, 0, 0, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.0)
+    color: white

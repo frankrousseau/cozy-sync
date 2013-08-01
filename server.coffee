@@ -40,22 +40,36 @@ DAVServer = jsDAV.mount
 
 
 express = require('express')
+
 app = express()
-
-
+app.set 'view engine', 'jade'
+app.use express.static(__dirname + '/public')
 app.use (err, req, res, next) ->
+    console.error err.stack
+    res.send 500, 'Something broke!'
+
+# Index page
+app.get '/', (req, res) ->
+    res.render 'index'
+
+# Get credentials
+app.get '/token/', (req, res) ->
+    res.send true
+
+# Generate credentials
+app.post '/token/', (req, res) ->
+    res.send true
+
+app.propfind '*', (req, res) ->
     if /^\/public/.test req.url
-        # DAVServer reacted weirdly to /public -> /public/webdav by cozy-proxy
         req.url = req.url.replace '/public', '/public/webdav'
         DAVServer.exec req, res
     else
-        DAVServer.exec req, res
-        res.writeHead 404
-        res.end 'NOT FOUND'
+        res.send error: true, msg: 'Path not found', 404
 
 
-port = process.env.PORT || 9202
+port = process.env.PORT || 9116
 host = process.env.HOST || "0.0.0.0"
 
-server.listen port, host, ->
+app.listen port, host, ->
     console.log "WebDAV server is listening on #{host}:#{port}..."
