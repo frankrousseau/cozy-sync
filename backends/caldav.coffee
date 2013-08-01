@@ -2,6 +2,7 @@
 
 Exc = require "jsDAV/lib/shared/exceptions"
 async = require "async"
+{VCalendar} = require "../lib/ical_helpers"
 
 module.exports = class CozyCalDAVBackend
 
@@ -25,7 +26,10 @@ module.exports = class CozyCalDAVBackend
     deleteCalendar: (calendarId, callback) ->
         callback null, null
 
-    _toICal: (obj) -> obj.toIcal().toString()
+    _toICal: (obj) ->
+        cal = new VCalendar('cozy', 'my-calendar')
+        cal.add obj.toIcal() #todo : handle user & timezone
+        cal.toString()
 
     getCalendarObjects: (calendarId, callback) ->
         objects = []
