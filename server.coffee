@@ -39,26 +39,59 @@ DAVServer = jsDAV.mount
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
 
 
-express = require('express')
+
+shortId = require 'shortid'
+express = require 'express'
+WebDAVAccount = require './models/webdavaccount'
 
 app = express()
 app.set 'view engine', 'jade'
 app.use express.static(__dirname + '/public')
-app.use (err, req, res, next) ->
-    console.error err.stack
-    res.send 500, 'Something broke!'
+app.use express.logger 'dev'
+app.use express.errorHandler
+    dumpExceptions: true
+    showStack: true
 
 # Index page
 app.get '/', (req, res) ->
-    res.render 'index'
+    WebDAVAccount.first (err, account) ->
+        if err
+            next err
+        else if not account?
+            res.render 'index'
+        else
+            res.render 'index', account.toJSON()
 
 # Get credentials
-app.get '/token/', (req, res) ->
-    res.send true
+app.get '/token', (req, res) ->
+    WebDAVAccount.first (err, account) ->
+        if err
+            res.send error: true, msg: err.toString(), 500
+        else if not account?
+            res.send error: true, msg: 'No webdav account generated', 404
+        else
+            res.send account.toJSON()
 
 # Generate credentials
-app.post '/token/', (req, res) ->
-    res.send true
+app.post '/token', (req, res) ->
+    login = 'me'
+    password = shortId.generate()
+    data = login: login, password: password
+
+    WebDAVAccount.first (err, account) ->
+        if err
+            res.send error: true, msg: err.toString(), 500
+        else if not account?
+            WebDAVAccount.create data, (err, account) ->
+                if err then res.send error: true, msg: err.toString(), 500
+                else res.send success: true, account: account.toJSON()
+        else
+            account.login = login
+            account.password = password
+            account.save (err) ->
+                if err then res.send error: true, msg: err.toString(), 500
+                else res.send success: true, account: account.toJSON()
+
 
 app.propfind '*', (req, res) ->
     if /^\/public/.test req.url
@@ -72,4 +105,5 @@ port = process.env.PORT || 9116
 host = process.env.HOST || "0.0.0.0"
 
 app.listen port, host, ->
-    console.log "WebDAV server is listening on #{host}:#{port}..."
+    console.log "WebDAV Server listening on %s:%d within %s environment",
+                host, port, app.get('env')
