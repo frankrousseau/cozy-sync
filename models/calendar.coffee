@@ -12,7 +12,7 @@ module.exports.Alarm = Alarm = db.define 'Alarm',
     action:      type: String, default: 'DISPLAY'
     related:     type: String, default: null
 
-Alarm.defineRequest 'byId', all, -> console.log 'req created'
+Alarm.defineRequest 'byId', all, -> console.log 'Alarm "byId" request created'
 Alarm.all = (cb) -> Alarm.request 'byId', cb
 
 Alarm::toIcal = (user, timezone) ->
@@ -44,7 +44,7 @@ module.exports.Event = Event = db.define 'Event',
     related:     type: String, default: null
 
 
-Event.defineRequest 'byId', all, -> console.log 'req created'
+Event.defineRequest 'byId', all, -> console.log 'Event "byId" request created'
 Event.all = (cb) -> Event.request 'byId', cb
 Event::toIcal = (user, timezone) ->
     startDate = new time.Date @start
