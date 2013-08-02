@@ -1,19 +1,25 @@
 db = require './db'
 all = (doc) -> emit doc._id, doc
+byURI = (doc) -> emit (doc.caldavuri or doc._id + '.ics'), doc
 time = require 'time'
 moment = require 'moment'
 {VCalendar, VTodo, VAlarm, VEvent} = require '../lib/ical_helpers'
+
 
 # ALARM
 module.exports.Alarm = Alarm = db.define 'Alarm',
     id:          String
     trigg:       String
     description: String
+    caldavuri:   String
     action:      type: String, default: 'DISPLAY'
     related:     type: String, default: null
 
 Alarm.defineRequest 'byId', all, -> console.log 'req created'
+Alarm.defineRequest 'byURI', byURI, -> console.log 'req created'
 Alarm.all = (cb) -> Alarm.request 'byId', cb
+Alarm.byURI = (uri, cb) ->
+    Alarm.request 'byURI', key: uri, (err, res) -> cb(err, res?[0])
 
 Alarm::toIcal = (user, timezone) ->
     date = new time.Date @trigg
@@ -40,12 +46,17 @@ module.exports.Event = Event = db.define 'Event',
     end:         String
     place:       String
     description: String
+    caldavuri:   String
     diff:        Number
     related:     type: String, default: null
 
 
 Event.defineRequest 'byId', all, -> console.log 'req created'
+Event.defineRequest 'byURI', byURI, -> console.log 'req created'
 Event.all = (cb) -> Event.request 'byId', cb
+Event.byURI = (uri, cb) ->
+    Event.request 'byURI', key: uri, (err, res) -> cb(err, res?[0])
+
 Event::toIcal = (user, timezone) ->
     startDate = new time.Date @start
     endDate = new time.Date @end

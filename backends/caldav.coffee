@@ -35,31 +35,30 @@ module.exports = class CozyCalDAVBackend
         objects = []
         async.parallel [
             (cb) => @Alarm.request 'byId', (err, items) =>
-                console.log 'alarm.all', err, items
-                cb(err?.stack, items)
+                console.log 'alarm.all', err?.stack, items
+                cb(err, items)
             (cb) => @Event.request 'byId', (err, items) =>
-                console.log 'event.all', err, items
-                cb(err?.stack, items)
+                console.log 'event.all', err?.stack, items
+                cb(err, items)
         ], (err, results) =>
             return callback err if err
 
-            objects = results[0].concat results[1]
+            objects = results[0].concat(results[1])
 
-            objects = objects.map (obj) =>
-                id:           obj.id
-                uri:          obj.id
+            callback null, objects.map (obj) =>
+                id:           obj.caldavuri or (obj.id + '.ics')
+                uri:          obj.caldavuri or (obj.id + '.ics')
                 calendardata: @_toICal(obj)
                 lastmodified: null
 
-            callback null, objects
-
     _findCalendarObject: (calendarId, objectUri, callback) ->
+
         async.parallel [
-            (cb) => @Alarm.find objectUri, (err, items) =>
-                console.log 'alarm.all', err?.stack, items
+            (cb) => @Alarm.byURI objectUri, (err, item) =>
+                console.log 'alarm.byURI', err?.stack, items
                 cb(err?.stack, items)
-            (cb) => @Event.find objectUri, (err, items) =>
-                console.log 'alarm.all', err?.stack, items
+            (cb) => @Event.byURI objectUri, (err, item) =>
+                console.log 'alarm.byURI', err?.stack, items
                 cb(err?.stack, items)
         ], (err, results) =>
             callback err, (results[0] or results[1])
@@ -75,13 +74,16 @@ module.exports = class CozyCalDAVBackend
 
 
     getCalendarObject: (calendarId, objectUri, callback) ->
+
+        console.log "GETCALENDAROBJECT", objectUri
+
         @_findCalendarObject calendarId, objectUri, (err, obj) =>
             return callback err if err
             return callback null, null unless obj
 
             return callback null,
-                id:           obj.id
-                uri:          obj.id
+                id:           obj.caldavuri or (obj.id + '.ics')
+                uri:          obj.caldavuri or (obj.id + '.ics')
                 calendardata: @_toICal(obj)
                 lastmodified: new Date().getTime()
 
@@ -92,12 +94,14 @@ module.exports = class CozyCalDAVBackend
 
             if obj.name is 'VEVENT'
                 event = @Event.fromIcal obj
+                event.caldavuri = objectUri
                 @Event.create event, (err, event) ->
                     callback err, null
 
             else if obj.name is 'VTODO'
                 console.log "ALARM"
                 alarm = @Alarm.fromIcal obj
+                alarm.caldavuri = objectUri
                 @Alarm.create alarm, (err, alarm) ->
                     callback err, null
 
