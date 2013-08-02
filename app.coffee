@@ -7,6 +7,13 @@ CozyInstance = require './models/cozy_instance'
 module.exports = (davServer) ->
     app = express()
     app.set 'view engine', 'jade'
+
+    # /public is the WebDAV server
+    app.use '/public', (req, res) ->
+        # jsDAV need to know the true client url
+        req.url = "/public/webdav#{req.url}"
+        davServer.exec req, res
+
     app.use express.static(__dirname + '/public')
     app.use express.logger 'dev'
     app.use express.errorHandler
@@ -59,15 +66,6 @@ module.exports = (davServer) ->
             davAccount.save (err) ->
                 if err then res.send error: true, msg: err.toString(), 500
                 else res.send success: true, account: davAccount.toJSON()
-
-    # WebDAV routes
-    # TODO: Add authentication
-    app.propfind '*', (req, res) ->
-        if /^\/public/.test req.url
-            req.url = req.url.replace '/public', '/public/webdav'
-            davServer.exec req, res
-        else
-            res.send error: true, msg: 'Path not found', 404
 
     app
 
