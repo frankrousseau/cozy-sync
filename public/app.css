@@ -19,6 +19,8 @@ p {
 body {
   background: #f4f4f4;
   font-family: main;
+}
+#content {
   padding: 20px;
 }
 button {
