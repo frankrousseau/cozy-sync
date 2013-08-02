@@ -8,6 +8,4 @@ module.exports = BasicAuth.extend
     validateUserPass: (username, password, cbvalidpass) ->
         WebDAVAccount.first (err, account) ->
             result = not err and account? and account.password is password
-            console.log 'AUTH RESULT :' + result
-
             cbvalidpass = result
