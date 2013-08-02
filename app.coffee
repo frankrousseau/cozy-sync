@@ -1,6 +1,7 @@
 shortId = require 'shortid'
 express = require 'express'
 WebDAVAccount = require './models/webdavaccount'
+CozyInstance = require './models/cozy_instance'
 
 
 module.exports = (davServer) ->
@@ -12,17 +13,26 @@ module.exports = (davServer) ->
         dumpExceptions: true
         showStack: true
 
+    # Init auth account
     davAccount = null
     WebDAVAccount.first (err, account) ->
         if account? then davAccount = account
         else davAccount = null
 
+    # Init Cozy instance
+    cozyInstance = null
+    CozyInstance.first (err, instance) ->
+        if instance? then cozyInstance = instance
+        else cozyInstance = null
+
     # Index page
     app.get '/', (req, res) ->
-        if davAccount?
-            res.render 'index', davAccount.toJSON()
-        else
-            res.render 'index'
+        domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
+        data =
+            login: davAccount?.login
+            password: davAccount?.password
+            domain: domain
+        res.render 'index', data
 
     # Get credentials
     app.get '/token', (req, res) ->
@@ -50,7 +60,8 @@ module.exports = (davServer) ->
                 if err then res.send error: true, msg: err.toString(), 500
                 else res.send success: true, account: davAccount.toJSON()
 
-
+    # WebDAV routes
+    # TODO: Add authentication
     app.propfind '*', (req, res) ->
         if /^\/public/.test req.url
             req.url = req.url.replace '/public', '/public/webdav'
