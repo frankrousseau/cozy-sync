@@ -34,10 +34,10 @@ module.exports = class CozyCalDAVBackend
     getCalendarObjects: (calendarId, callback) ->
         objects = []
         async.parallel [
-            (cb) => @Alarm.request 'byId', (err, items) =>
+            (cb) => @Alarm.all (err, items) =>
                 console.log 'alarm.all', err?.stack, items
                 cb(err, items)
-            (cb) => @Event.request 'byId', (err, items) =>
+            (cb) => @Event.all (err, items) =>
                 console.log 'event.all', err?.stack, items
                 cb(err, items)
         ], (err, results) =>
@@ -46,22 +46,25 @@ module.exports = class CozyCalDAVBackend
             objects = results[0].concat(results[1])
 
             callback null, objects.map (obj) =>
-                id:           obj.caldavuri or (obj.id + '.ics')
+                id:           obj.id
                 uri:          obj.caldavuri or (obj.id + '.ics')
                 calendardata: @_toICal(obj)
                 lastmodified: null
 
     _findCalendarObject: (calendarId, objectUri, callback) ->
 
-        async.parallel [
+        require('eyes').inspect objectUri
+
+        async.series [
             (cb) => @Alarm.byURI objectUri, (err, item) =>
-                console.log 'alarm.byURI', err?.stack, items
-                cb(err?.stack, items)
+                console.log 'alarm.byURI', err, item
+                cb(err?.stack, item)
             (cb) => @Event.byURI objectUri, (err, item) =>
-                console.log 'alarm.byURI', err?.stack, items
-                cb(err?.stack, items)
+                console.log 'event.byURI', err, item
+                cb(err?.stack, item)
         ], (err, results) =>
-            callback err, (results[0] or results[1])
+            console.log "ASYNCRES", results
+            callback err, (results[0]?[0] or results[1]?[0])
 
     _parseSingleObjICal: (calendarData, callback) ->
         new ICalParser().parseString calendarData, (err, calendar) =>
@@ -75,14 +78,16 @@ module.exports = class CozyCalDAVBackend
 
     getCalendarObject: (calendarId, objectUri, callback) ->
 
-        console.log "GETCALENDAROBJECT", objectUri
+        console.log "GETCALENDAROBJECT", calendarId, objectUri
 
         @_findCalendarObject calendarId, objectUri, (err, obj) =>
             return callback err if err
             return callback null, null unless obj
 
+            console.log "WE ARE HERE"
+
             return callback null,
-                id:           obj.caldavuri or (obj.id + '.ics')
+                id:           obj.id
                 uri:          obj.caldavuri or (obj.id + '.ics')
                 calendardata: @_toICal(obj)
                 lastmodified: new Date().getTime()
