@@ -33,10 +33,10 @@ Alarm.byURI = (uri, cb) ->
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
 
-Alarm::toIcal = (user, timezone) ->
+Alarm::toIcal = (timezone) ->
     date = new time.Date @trigg
     date.setTimezone timezone, false
-    vtodo = new VTodo date, user, @description
+    vtodo = new VTodo date, @id, @description
     vtodo.addAlarm date
     vtodo
 
@@ -71,12 +71,12 @@ Event.byURI = (uri, cb) ->
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
 
-Event::toIcal = (user, timezone) ->
+Event::toIcal = (timezone) ->
     startDate = new time.Date @start
     endDate = new time.Date @end
     startDate.setTimezone timezone, false
     endDate.setTimezone timezone, false
-    new VEvent startDate, endDate, @description, @place
+    new VEvent startDate, endDate, @id, @description, @place
 
 Event.fromIcal = (vevent) ->
     event = new Event()
