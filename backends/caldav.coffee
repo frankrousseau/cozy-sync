@@ -2,12 +2,13 @@
 
 Exc = require "jsDAV/lib/shared/exceptions"
 async = require "async"
-{ICalParser, VCalendar, VEvent, VTodo} = require "../lib/ical_helpers"
+time  = require "time"
+{ICalParser, VCalendar, VTimezone, VEvent, VTodo} = require "cozy-ical"
 
 module.exports = class CozyCalDAVBackend
 
     constructor: (models) ->
-        {@Event, @Alarm} = models
+        {@Event, @Alarm, @User} = models
 
     getCalendarsForUser: (principalUri, callback) ->
         calendar =
@@ -26,9 +27,10 @@ module.exports = class CozyCalDAVBackend
     deleteCalendar: (calendarId, callback) ->
         callback null, null
 
-    _toICal: (obj) ->
+    _toICal: (obj, timezone) ->
         cal = new VCalendar('cozy', 'my-calendar')
-        cal.add obj.toIcal() #todo : handle timezone
+        cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
+        cal.add obj.toIcal(timezone)
         cal.toString()
 
     getCalendarObjects: (calendarId, callback) ->
@@ -36,13 +38,14 @@ module.exports = class CozyCalDAVBackend
         async.parallel [
             (cb) => @Alarm.all cb
             (cb) => @Event.all cb
+            (cb) => @User.getTimezone cb
         ], (err, results) =>
             return callback err if err
 
             objects = results[0].concat(results[1]).map (obj) =>
                 id:           obj.id
                 uri:          obj.caldavuri or (obj.id + '.ics')
-                calendardata: @_toICal(obj)
+                calendardata: @_toICal(obj, results[2])
                 lastmodified: new Date().getTime()
 
             console.log "GETCALENDAROBJECTS", objects
@@ -82,11 +85,14 @@ module.exports = class CozyCalDAVBackend
             return callback err if err
             return callback null, null unless obj
 
-            return callback null,
-                id:           obj.id
-                uri:          obj.caldavuri or (obj.id + '.ics')
-                calendardata: @_toICal(obj)
-                lastmodified: new Date().getTime()
+            @User.getTimezone (err, timezone) =>
+                return callback err if err
+
+                callback null,
+                    id:           obj.id
+                    uri:          obj.caldavuri or (obj.id + '.ics')
+                    calendardata: @_toICal(obj, timezone)
+                    lastmodified: new Date().getTime()
 
 
     createCalendarObject: (calendarId, objectUri, calendarData, callback) =>
