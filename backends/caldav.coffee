@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 Exc = require "jsDAV/lib/shared/exceptions"
 async = require "async"

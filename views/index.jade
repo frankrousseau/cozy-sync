@@ -1,0 +1,30 @@
+doctype 5
+html(lang="en")
+  head
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    meta(http-equiv="content-type", content="text/html; charset=utf-8")
+    title Cozy CalDAV Server
+    script(src='jquery-1.8.2.js')
+    script(src='spin.min.js')
+    script(src='client.js')
+    script(src='app.js')
+    link(rel='stylesheet', href='app.css') 
+    link(rel='icon', type='image/x-icon', href='/favicon.png')
+  body
+    #content
+      h1  Cozy CalDAV Server
+      h2 How to use CalDAV
+      p
+          | Simply connect your calendar application to the following URL: 
+          | <br />
+          | https://#{domain}/apps/webdav/public
+          | <br />
+          | And use following credentials for authentification parameters.
+      h2  CalDAV Credentials
+      p 
+        | login: 
+        span#login-span #{login}
+      p 
+        | password: 
+        span#password-span #{password}
+      button#generate-btn Reset Credentials

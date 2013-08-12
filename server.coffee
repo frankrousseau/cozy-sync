@@ -1,21 +1,24 @@
 jsDAV = require "jsDAV"
 jsDAV.debugMode = true
 
-cozy_Auth_Backend           = require './backends/auth'
 
+# Auth
+cozy_Auth_Backend            = require './backends/auth'
+
+# Permissions
 jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
 cozy_PrincipalBackend        = require './backends/principal'
 principalBackend             = new cozy_PrincipalBackend
 nodePrincipalCollection      = jsDAVACL_PrincipalCollection.new(principalBackend)
 
-
+# Contacts
 jsCardDAV_AddressBookRoot    = require "jsDAV/lib/CardDAV/addressBookRoot"
 cozy_CardBackend             = require './backends/carddav'
 carddavBackend               = new cozy_CardBackend require './models/contact'
 nodeCardDAV                  = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 
-
-jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/CalendarRoot"
+# Calendar
+jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/calendarRoot"
 cozy_CalBackend              = require './backends/caldav'
 caldavBackend                = new cozy_CalBackend
     Alarm: require './models/alarm'
@@ -24,6 +27,7 @@ caldavBackend                = new cozy_CalBackend
 nodeCalDAV                   = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
 
 
+# Init DAV Server
 DAVServer = jsDAV.mount
     server: true
     standalone: false
@@ -42,18 +46,11 @@ DAVServer = jsDAV.mount
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
 
 
-server = require('http').createServer (req, res) ->
+# Include UI then run server
+app = require('./app')(DAVServer)
+port = process.env.PORT || 9116
+host = process.env.HOST || "0.0.0.0"
 
-    console.log 'URL IS', req.url
-
-    if /^\/public/.test req.url
-        # DAVServer reacted weirdly to /public -> /public/webdav by cozy-proxy
-        req.url = req.url.replace '/public', '/public/webdav'
-        DAVServer.exec req, res
-    else
-        res.writeHead 404
-        res.end 'NOT FOUND'
-
-server.listen 9116, "0.0.0.0", -> console.log "listenning"
-
-# jsDAV.createServer options, 9116
+app.listen port, host, ->
+    console.log "WebDAV Server listening on %s:%d within %s environment",
+                host, port, app.get('env')
