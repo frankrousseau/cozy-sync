@@ -15,7 +15,8 @@ module.exports = Alarm = db.define 'Alarm',
 require('cozy-ical/lib/alarm')(Alarm)
 
 byURI = (doc) -> emit (doc.caldavuri or doc._id + '.ics'), doc
-Alarm.defineRequest 'byURI', byURI, -> console.log 'req created'
+Alarm.defineRequest 'byURI', byURI, ->
+    console.log 'Alarm "byURI" request created'
 
 Alarm.all = (cb) -> Alarm.request 'byURI', cb
 Alarm.byURI = (uri, cb) ->

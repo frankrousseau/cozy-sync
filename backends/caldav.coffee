@@ -48,8 +48,6 @@ module.exports = class CozyCalDAVBackend
                 calendardata: @_toICal(obj, results[2])
                 lastmodified: new Date().getTime()
 
-            console.log "GETCALENDAROBJECTS", objects
-
             callback null, objects
 
     _findCalendarObject: (calendarId, objectUri, callback) ->
@@ -59,7 +57,6 @@ module.exports = class CozyCalDAVBackend
             (cb) => @Event.byURI objectUri, cb
         ], (err, results) =>
             object = (results[0]?[0] or results[1]?[0])
-            console.log "GETOBJECT", objectUri, object
             callback err, object
 
     # take a calendar object from ICalParser, extract VEvent ot VTodo
