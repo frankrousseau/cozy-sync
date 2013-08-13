@@ -120,10 +120,10 @@ module.exports = class CozyCalDAVBackend
             @_parseSingleObjICal calendarData, (err, newObj) =>
                 return callback err if err
 
-                console.log "UPDATE", newObj.name, oldObj instanceof @Event
-
                 if newObj.name is 'VEVENT' and oldObj instanceof @Event
-                    event = @Event.fromIcal newObj
+                    event = @Event.fromIcal(newObj).toObject()
+                    delete event.id
+
                     oldObj.updateAttributes event, (err, event) ->
                         console.log "RESULT", err, event
                         callback err, null

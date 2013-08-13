@@ -2,13 +2,13 @@ db = require './db'
 
 # EVENT
 module.exports = Event = db.define 'Event',
-    id:          String
+    id:          type:String, default: null
     caldavuri:   String
     start:       String
     end:         String
     place:       String
     description: String
-    diff:        Number
+    diff:        type: Number, default: 0
     related:     type: String, default: null
 
 # Add Ical utilities to Event model
