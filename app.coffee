@@ -35,9 +35,9 @@ module.exports = (davServer) ->
     # Index page
     app.get '/', (req, res) ->
         data =
-            login: davAccount?.login
-            password: davAccount?.password
-            domain: cozyInstance?.domain or 'your.cozy.url'
+            login: davAccount?.login       or 'me'
+            password: davAccount?.password or 'Use button below to reset'
+            domain: cozyInstance?.domain   or 'your.cozy.url'
         res.render 'index', data
 
     # Get credentials
