@@ -12,7 +12,7 @@ module.exports = Event = db.define 'Event',
     related:     type: String, default: null
 
 # Add Ical utilities to Event model
-require('cozy-ical/lib/event')(Event)
+require('cozy-ical').decorateEvent Event
 
 
 byURI = (doc) -> emit (doc.caldavuri or doc._id + '.ics'), doc
