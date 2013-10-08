@@ -52,6 +52,10 @@ port = process.env.PORT || 9116
 host = process.env.HOST || "127.0.0.1"
 
 unless module.parent
-    app.start port, host, ->
-        console.log "WebDAV Server listening on %s:%d within %s environment",
-                    host, port, app.get('env')
+    app.start port, host, (err) ->
+        if err
+            console.log "Not started because : "
+            console.log err
+        else
+            console.log "WebDAV Server listening on %s:%d within %s environment",
+                        host, port, app.get('env')
