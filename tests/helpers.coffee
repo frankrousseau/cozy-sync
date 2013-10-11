@@ -4,9 +4,6 @@ PASSWORD = 'test'
 request = require 'request'
 async   = require 'async'
 
-longjohn = require 'longjohn'
-longjohn.async_trace_limit = -1
-
 exports.TESTPORT = TESTPORT
 
 
