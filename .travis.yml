@@ -25,4 +25,4 @@ before_install:
     - export TOKEN=apptoken
 
 after_failure:
-    - cat forever-ds.log
+    - cat cozy-data-system/forever-ds.log
