@@ -19,7 +19,7 @@ before_install:
     - cat forever-ds.log
     - sudo netstat -plunt
     - curl http://localhost:9101/
-    - coffee commands.coffee test-install contacts
+    - coffee commands.coffee test-install webdav
     - cd ..
-    - export NAME=contacts
+    - export NAME=webdav
     - export TOKEN=apptoken
