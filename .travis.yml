@@ -23,3 +23,6 @@ before_install:
     - cd ..
     - export NAME=webdav
     - export TOKEN=apptoken
+
+after_failure:
+    - cat forever-ds.log
