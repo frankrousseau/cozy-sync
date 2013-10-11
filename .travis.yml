@@ -24,5 +24,10 @@ before_install:
     - export NAME=webdav
     - export TOKEN=apptoken
 
+after_install:
+    - cd node_modules/jsDAV
+    - npm install
+    - cd ../..
+
 after_failure:
     - cat cozy-data-system/forever-ds.log
