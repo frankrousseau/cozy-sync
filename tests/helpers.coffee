@@ -9,7 +9,6 @@ exports.TESTPORT = TESTPORT
 
 exports.startServer = (done) ->
     @timeout 5000
-    require('jsDAV').debugMode = false
     @server = require('../server')
     @server.start TESTPORT, done
 
