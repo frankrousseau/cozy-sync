@@ -12,7 +12,7 @@ html(lang="en")
     link(rel='icon', type='image/x-icon', href='/favicon.png')
   body
     #content
-      h1  Cozy CalDAV/CardDAV Server
+      h1  Cozy WebDAV: CalDAV/CardDAV Synchronization
 
       h2  Credentials
       p Use the following credentials when prompted by your CalDAV/CardDAV client
@@ -31,22 +31,25 @@ html(lang="en")
       h3 Thunderbird/Lightning
       p
         strong CalDAV
+      p
         | Use the following url :
         | https://#{domain}/public/webdav/calendars/me/my-calendar/
         <br />
-        strong CardDAV
-        | There is no support for carddav
 
       h3 iOS
       p
         strong CalDAV / CardDAV
+      p
         | In the "Account url" field :
         | https://#{domain}/public/webdav/principals/me/
 
       h3 Android
       p
-        | Android does not support CalDAV/CardDAV natively, you will need
-        | to install an app to manage it. We are still working on it.
+        | To sync your android phone with CalDAV/CardDAV, you have
+        | to install a dedicated app. The required url depend of your app. But
+        | you can try this one by default.
+      p
+        | https://#{domain}/public/webdav/principals/me/
 
       h3 Other ?
       p

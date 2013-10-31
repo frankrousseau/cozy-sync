@@ -2,6 +2,10 @@
   font-family: main;
   src: url("/signika-regular.ttf");
 }
+@font-face {
+  font-family: styled;
+  src: url("/maven-pro-light-200.otf");
+}
 html,
 body {
   height: 100%;
@@ -20,10 +24,26 @@ body {
   background: #f4f4f4;
   font-family: main;
 }
+h1,
+h2,
+h3 {
+  font-family: styled;
+}
+h2 {
+  margin-top: 50px;
+}
+h3 {
+  margin-top: 30px;
+}
+p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 #content {
   padding: 20px;
 }
 button {
+  cursor: pointer;
   border: 1px solid #34a6ff;
   background: #34a6ff;
   color: #fff;
@@ -44,8 +64,8 @@ button:hover {
 button:active {
   background: #f68400;
   border: 1px solid #fe8800;
-  -moz-box-shadow: 1px 3px 2px rgba(0,0,0,0.20) inset, 0 1px 2px rgba(0,0,0,0.00);
-  -webkit-box-shadow: 1px 3px 2px rgba(0,0,0,0.20) inset, 0 1px 2px rgba(0,0,0,0.00);
-  box-shadow: 1px 3px 2px rgba(0,0,0,0.20) inset, 0 1px 2px rgba(0,0,0,0.00);
+  -moz-box-shadow: 1px 3px 2px rgba(0,0,0,0.2) inset, 0 1px 2px rgba(0,0,0,0);
+  -webkit-box-shadow: 1px 3px 2px rgba(0,0,0,0.2) inset, 0 1px 2px rgba(0,0,0,0);
+  box-shadow: 1px 3px 2px rgba(0,0,0,0.2) inset, 0 1px 2px rgba(0,0,0,0);
   color: #fff;
 }
