@@ -3,7 +3,7 @@ html(lang="en")
   head
     meta(name="viewport", content="width=device-width,initial-scale=1")
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
-    title Cozy CalDAV Server
+    title Cozy WebDAV
     script(src='jquery-1.8.2.js')
     script(src='spin.min.js')
     script(src='client.js')
@@ -12,48 +12,81 @@ html(lang="en")
     link(rel='icon', type='image/x-icon', href='/favicon.png')
   body
     #content
-      h1  Cozy WebDAV: CalDAV/CardDAV Synchronization
 
-      h2  Credentials
-      p Use the following credentials when prompted by your CalDAV/CardDAV client
+      h1 WebDAV: CalDAV and CardDAV
       p
-        | login:&nbsp;
-        span#login-span #{login}
-      p
-        | password:&nbsp;
-        span#password-span #{password}
+        | WebDAV is standard protocol that allows any device (that suppports
+        | it) to get synchronized with your Contact, Calendar and files
+        | informations. So, if you want that your smartphone to be kept up to 
+        | date with your Cozy, you will find in the following, the
+        | instructions to set this syncrhonization
 
-      button#generate-btn Reset Credentials
-
-      h2 URLs
-      p The url to connect to your server depends on your client
-
-      h3 Thunderbird/Lightning
+      h1 Server Credentials
       p
-        strong CalDAV
+        | Before going further, you need to set specific credentials for your
+        | CalDAV server (you calendar phone application should not be able to
+        | access to your whole Cozy). Here are the credentials required for 
+        | your client to get synchronized
+
+      .url.credentials
+        p
+          | login:&nbsp;
+          span#login-span #{login}
+        p
+          | password:&nbsp;
+          span#password-span #{password}
+
+        button#generate-btn reset password
+
+      h1 CalDAV urls
+      p 
+        | Your client will ask for an url on which to connect, here are the
+        | required ones, depending on your phone or software.
+
+      h2 iOS
       p
-        | Use the following url :
+        | In the "Account url" field, type:
+      p.url
+        | https://#{domain}/public/webdav/principals/me/
+
+      h2 Android
+      p
+        | To sync your android phone with CalDAV, you have
+        | to install a dedicated app. The required url depend of that app. But
+        | you can try that one by default:
+      p.url
+        | https://#{domain}/public/webdav/principals/me/
+
+      h2 Thunderbird (Lightning)
+      p
+        | Use the following url:
+      p.url
         | https://#{domain}/public/webdav/calendars/me/my-calendar/
-        <br />
 
-      h3 iOS
+
+      h1 CardDAV urls
+      p 
+        | Your client will ask for an url on which to connect, here are the
+        | required ones, depending on your phone or software.
+      h2 iOS
       p
-        strong CalDAV / CardDAV
-      p
-        | In the "Account url" field :
+        | In the "Account url" field, type:
+      p.url
         | https://#{domain}/public/webdav/principals/me/
 
-      h3 Android
+      h2 Android
       p
-        | To sync your android phone with CalDAV/CardDAV, you have
+        | To sync your android phone with CardDAV, you have
         | to install a dedicated app. The required url depend of your app. But
-        | you can try this one by default.
-      p
+        | you can try that one by default:
+      p.url
         | https://#{domain}/public/webdav/principals/me/
 
-      h3 Other ?
+
+      h1 Trouble Shootings
       p
-        | If you use another client and made it work or are exprimenting
+        | If you use another client and are exprimenting
         | problems, please let us know about it&nbsp;
-        a(href="https://github.com/mycozycloud/cozy-webdav/issues") on github.
+        a(href="https://github.com/mycozycloud/cozy-webdav/issues") on Github.
+
 
