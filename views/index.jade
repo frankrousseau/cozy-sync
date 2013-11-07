@@ -38,7 +38,7 @@ html(lang="en")
 
         button#generate-btn reset password
 
-      h1 CalDAV urls
+      h1 CalDAV urls (Calendar)
       p 
         | Your client will ask for an url on which to connect, here are the
         | required ones, depending on your phone or software.
@@ -64,7 +64,7 @@ html(lang="en")
         | https://#{domain}/public/webdav/calendars/me/my-calendar/
 
 
-      h1 CardDAV urls
+      h1 CardDAV urls (Contacts)
       p 
         | Your client will ask for an url on which to connect, here are the
         | required ones, depending on your phone or software.
@@ -82,6 +82,9 @@ html(lang="en")
       p.url
         | https://#{domain}/public/webdav/principals/me/
 
+      h1 WebDAV urls (files)
+      p
+        | Cozy doesn't support file synchronization through WebDAV
 
       h1 Trouble Shootings
       p
