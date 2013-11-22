@@ -1,5 +1,4 @@
-# Interface = require 'jsdav/lib/CardDAV/interfaces/iBackend'
-Exc       = require 'jsDAV/lib/shared/exceptions'
+Exc       = require 'cozy-jsdav-fork/lib/shared/exceptions'
 
 handle    = (err) ->
     console.log err

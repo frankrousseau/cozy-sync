@@ -16,7 +16,7 @@
   "license": "BSD",
   "readmeFilename": "README.md",
   "dependencies": {
-    "jsDAV": "git://github.com/aenario/jsDAV.git#caldav",
+    "cozy-jsdav-fork": "0.3.2-caldav",
     "jugglingdb": "0.2.0-35",
     "jugglingdb-cozy-adapter": "0.3.12",
     "async": "0.2.9",
