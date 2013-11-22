@@ -1,6 +1,6 @@
 "use strict"
 
-Exc = require "jsDAV/lib/shared/exceptions"
+Exc = require "cozy-jsdav-fork/lib/shared/exceptions"
 WebdavAccount = require '../models/webdavaccount'
 async = require "async"
 axon = require 'axon'
