@@ -1,4 +1,3 @@
-# Interface = require 'jsdav/lib/DAVACL/interfaces/iBackend'
 
 module.exports = class PrincipalBackend
 
