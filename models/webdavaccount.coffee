@@ -6,6 +6,7 @@ module.exports = WebDAVAccount = db.define 'WebDAVAccount',
     login: String
     password: String
     ctag: Number # used to keep track of changes in the calendar
+    cardctag: Number # used to keep track of changes in the addressbook
 
 WebDAVAccount.first = (callback) ->
     WebDAVAccount.request 'all', (err, accounts) ->
