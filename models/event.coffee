@@ -8,6 +8,7 @@ module.exports = Event = db.define 'Event',
     end:         String
     place:       String
     description: String
+    details:     String
     diff:        type: Number, default: 0
     related:     type: String, default: null
 
