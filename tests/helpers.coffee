@@ -34,6 +34,23 @@ exports.createContact = (name) -> (done) ->
         @contacts[name] = doc
         done err
 
+exports.createEvent = (title, description, start) -> (done) ->
+    Event = require('../models/event')
+    start = new Date(2013, 11, start, 10, 0, 0)
+    end = new Date(start.getTime() + 7200000)
+    data =
+        start:       start.toString()
+        end:         end.toString()
+        place:       description
+        details:     description
+        description: title
+
+    Event.create data, (err, doc)  =>
+        @events ?= {}
+        @events[title] = doc
+        done err
+
+
 
 exports.cleanDB = (done) ->
     @timeout 5000
