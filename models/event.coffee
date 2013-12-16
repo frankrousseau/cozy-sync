@@ -6,8 +6,9 @@ module.exports = Event = db.define 'Event',
     caldavuri:   String
     start:       String
     end:         String
-    place:       String
-    description: String
+    place:       type: String, default: ''
+    description: type: String, default: ''
+    details:     type: String, default: ''
     diff:        type: Number, default: 0
     related:     type: String, default: null
 

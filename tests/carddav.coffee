@@ -17,7 +17,7 @@ describe 'Carddav support', ->
         @steveHref = url + @contacts['Steve'].id + '.vcf'
 
     after  helpers.closeServer
-    # after  helpers.cleanDB
+    after  helpers.cleanDB
 
     ### Not tested because part of jsDAV
        OPTIONS /public/webdav/addressbooks/me/all-contacts/

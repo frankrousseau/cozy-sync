@@ -25,7 +25,7 @@ html(lang="en")
       p
         | Before going further, you need to set specific credentials for your
         | CalDAV server (you calendar phone application should not be able to
-        | access to your whole Cozy). Here are the credentials required for 
+        | access to your whole Cozy). Here are the credentials required for
         | your client to get synchronized
 
       .url.credentials
@@ -39,15 +39,15 @@ html(lang="en")
         button#generate-btn reset password
 
       h1 CalDAV urls (Calendar)
-      p 
+      p
         | Your client will ask for an url on which to connect, here are the
         | required ones, depending on your phone or software.
 
       h2 iOS
       p
-        | In the "Account url" field, type:
+        | In the "Server" field, type:
       p.url
-        | https://#{domain}/public/webdav/principals/me/
+        | #{domain}/public/webdav/principals/me
 
       h2 Android
       p
@@ -65,14 +65,15 @@ html(lang="en")
 
 
       h1 CardDAV urls (Contacts)
-      p 
+      p
         | Your client will ask for an url on which to connect, here are the
         | required ones, depending on your phone or software.
       h2 iOS
       p
-        | In the "Account url" field, type:
+        | In the "Server" field, type:
       p.url
-        | https://#{domain}/public/webdav/principals/me/
+        | #{domain}/public/webdav
+      p
 
       h2 Android
       p
@@ -92,6 +93,6 @@ html(lang="en")
       p
         | If you use another client and are exprimenting
         | problems, please let us know about it&nbsp;
-        a(href="https://github.com/mycozycloud/cozy-webdav/issues") on Github!
+        a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") on Github!
 
 
