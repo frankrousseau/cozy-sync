@@ -1,6 +1,7 @@
 "use strict"
 
 Exc = require "cozy-jsdav-fork/lib/shared/exceptions"
+SCCS = require "cozy-jsdav-fork/lib/CalDAV/properties/supportedCalendarComponentSet"
 WebdavAccount = require '../models/webdavaccount'
 async = require "async"
 axon = require 'axon'
@@ -42,6 +43,7 @@ module.exports = class CozyCalDAVBackend
             uri: 'my-calendar'
             principaluri: principalUri
             "{http://calendarserver.org/ns/}getctag": @ctag
+            "{http://calendarserver.org/ns/}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
             "{DAV:}displayname": 'Cozy Calendar'
         callback null, [calendar]
 

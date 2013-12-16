@@ -72,7 +72,7 @@ module.exports = (davServer) ->
                 if err
                     res.error 500, err
                 else
-                    res.send success: true, account: davAccount.toJSON()
+                    res.send success: true, account: req.davAccount.toJSON()
 
     app.start = ->
         initRequests = require './models/requests'
