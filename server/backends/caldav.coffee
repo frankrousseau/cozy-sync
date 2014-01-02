@@ -6,8 +6,7 @@ async = require "async"
 
 module.exports = class CozyCalDAVBackend
 
-    constructor: (models) ->
-        {@Event, @Alarm} = models
+    constructor: (@Event, @Alarm) ->
 
     getCalendarsForUser: (principalUri, callback) ->
         calendar =

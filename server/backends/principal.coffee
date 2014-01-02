@@ -2,7 +2,7 @@
 
 module.exports = class PrincipalBackend
 
-    principal = 
+    principal =
         uri:                 'principals/me'
         '{DAV:}displayname': 'cozy owner'
 

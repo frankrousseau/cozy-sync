@@ -10,7 +10,7 @@ module.exports = class CozyCardDAVBackend
     constructor: (@Contact) ->
 
     getAddressBooksForUser: (principalUri, callback) ->
-        book = 
+        book =
             id: 'all-contacts'
             uri: 'all-contacts'
             ctag: 0 # ?
@@ -32,7 +32,7 @@ module.exports = class CozyCardDAVBackend
         @Contact.find cardUri, (err, contact) ->
             return callback handle err if err
 
-            callback null, 
+            callback null,
                 lastmodified: 0
                 carddata:     contact.toVCF()
                 uri:          contact.id
@@ -45,7 +45,7 @@ module.exports = class CozyCardDAVBackend
 
     updateCard: (addressBookId, cardUri, cardData, callback) ->
         @Contact.find cardUri, (err, contact) ->
-            return callback handle err if err 
+            return callback handle err if err
 
             contact.updateAttributes @Contact.parse(cardData), (err, contact) ->
                 return callback handle err if err
@@ -56,8 +56,8 @@ module.exports = class CozyCardDAVBackend
 
         @Contact.find cardUri, (err, contact) ->
             return callback handle err if err
-            
+
             contact.destroy (err) ->
                 return callback handle err if err
 
-                callback null        
+                Callback null
