@@ -1,19 +1,19 @@
 americano = require 'americano'
-jsDAV = require "jsDAV"
-jsDAV.debugMode = true
 
+jsDAV = require "cozy-jsdav-fork"
+jsDAV.debugMode = true unless process.env.NODE_ENV is 'test'
 
 # Auth
 cozy_Auth_Backend = require './server/backends/auth'
 
 # Permissions
-jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
+jsDAVACL_PrincipalCollection = require "cozy-jsdav-fork/lib/DAVACL/principalCollection"
 cozy_PrincipalBackend = require './server/backends/principal'
 principalBackend = new cozy_PrincipalBackend
 nodePrincipalCollection = jsDAVACL_PrincipalCollection.new(principalBackend)
 
 # Contacts
-jsCardDAV_AddressBookRoot = require "jsDAV/lib/CardDAV/addressBookRoot"
+jsCardDAV_AddressBookRoot = require "cozy-jsdav-fork/lib/CardDAV/addressBookRoot"
 cozy_CardBackend = require './server/backends/carddav'
 carddavBackend = new cozy_CardBackend require './server/models/contact'
 nodeCardDAV = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
@@ -21,9 +21,10 @@ nodeCardDAV = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 # Calendar
 Event = require './server/models/event'
 Alarm = require './server/models/alarm'
-jsCalDAV_CalendarRoot = require "jsDAV/lib/CalDAV/calendarRoot"
+User = require './server/models/user'
+jsCalDAV_CalendarRoot        = require "cozy-jsdav-fork/lib/CalDAV/calendarRoot"
 cozy_CalBackend = require './server/backends/caldav'
-caldavBackend  = new cozy_CalBackend Event, Alarm
+caldavBackend  = new cozy_CalBackend Event, Alarm, User
 nodeCalDAV = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
 
 
@@ -37,10 +38,10 @@ DAVServer = jsDAV.mount
 
     authBackend: cozy_Auth_Backend.new()
     plugins: [
-        require "jsDAV/lib/DAV/plugins/auth"
-        require "jsDAV/lib/CardDAV/plugin"
-        require "jsDAV/lib/CalDAV/plugin"
-        require "jsDAV/lib/DAVACL/plugin"
+        require "cozy-jsdav-fork/lib/DAV/plugins/auth"
+        require "cozy-jsdav-fork/lib/CardDAV/plugin"
+        require "cozy-jsdav-fork/lib/CalDAV/plugin"
+        require "cozy-jsdav-fork/lib/DAVACL/plugin"
     ]
 
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]

@@ -5,6 +5,8 @@ module.exports = WebDAVAccount = americano.getModel 'WebDAVAccount',
     id: String
     login: String
     password: String
+    ctag: Number # used to keep track of changes in the calendar
+    cardctag: Number # used to keep track of changes in the addressbook
 
 WebDAVAccount.first = (callback) ->
     WebDAVAccount.request 'all', (err, accounts) ->

@@ -4,6 +4,7 @@
   "description": "A WebDav Server for cozy cloud",
   "main": "server.coffee",
   "scripts": {
+    "start": "coffee server.coffee",
     "test": "cake tests"
   },
   "repository": {
@@ -16,16 +17,44 @@
   "license": "BSD",
   "readmeFilename": "README.md",
   "dependencies": {
-    "jsDAV": "git://github.com/aenario/jsDAV.git#caldav",
-    "jugglingdb": "~0.2.0-35",
-    "jugglingdb-cozy-adapter": "~0.3.5",
-    "async": "~0.2.9",
-    "moment": "~2.1.0",
-    "lazy": "~1.0.11",
-    "time": "~0.9.2",
-    "jade": "*",
-    "shortid": "~2.0.0",
+    "cozy-jsdav-fork": "0.3.4-caldav",
+    "async": "0.2.9",
+    "moment": "2.1.0",
+    "lazy": "1.0.11",
+    "time": "0.9.2",
+    "cozy-ical": "0.0.9",
+    "jade": "0.35.0",
+    "shortid": "2.0.0",
+    "axon": "1.0.0",
+    "cozy-vcard": "0.0.2",
     "americano": "0.3.0",
     "americano-cozy": "0.2.0"
+  },
+  "devDependencies": {
+    "chai": "~1.8.0",
+    "request": "~2.27.0",
+    "xmldoc": "~0.1.2",
+    "mocha": "~1.13.0",
+    "coffee-script": "latest"
+  },
+  "cozy-permissions": {
+    "Alarm": {
+      "description": "Creates and edits your alarms."
+    },
+    "Event": {
+      "description": "Creates and edits your events."
+    },
+    "Contact": {
+      "description": "Creates and edits your contacts"
+    },
+    "User": {
+      "description": "Used to recover your timezone"
+    },
+    "WebDAVAccount": {
+      "description": "Store webDAV password and sync informations"
+    },
+    "CozyInstance": {
+      "description": "Read your cozy's url to generate help"
+    }
   }
 }

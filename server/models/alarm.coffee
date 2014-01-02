@@ -1,35 +1,30 @@
 americano = require 'americano-cozy'
 
-time = require 'time'
-moment = require 'moment'
-{VCalendar, VTodo, VAlarm, VEvent} = require '../lib/ical_helpers'
-
-
 # ALARM
 module.exports = Alarm = americano.getModel 'Alarm',
     id:          String
+    caldavuri:   String
     trigg:       String
     description: String
+    timezone:    String
     action:      type: String, default: 'DISPLAY'
     related:     type: String, default: null
 
-Alarm.all = (cb) -> Alarm.request 'all', cb
+# Add Ical utilities to Alarm model
+require('cozy-ical').decorateAlarm Alarm
 
-Alarm::toIcal = (user, timezone) ->
-    date = new time.Date @trigg
-    date.setTimezone timezone, false
-    vtodo = new VTodo date, user, @description
-    vtodo.addAlarm date
-    vtodo
-
-Alarm.fromIcal = (valarm) ->
-    alarm = new Alarm()
-    alarm.description = valarm.fields["SUMMARY"]
-    date = valarm.fields["DSTAMP"]
-    date = moment(date, "YYYYMMDDTHHmm00")
-    triggerDate = new time.Date new Date(date), 'UTC'
-    alarm.trigg = triggerDate.toString().slice(0, 24)
-    alarm
-
-
-
+Alarm.all = (cb) -> Alarm.request 'byURI', cb
+Alarm.byURI = (uri, cb) ->
+    # this fail in strange way if we let request handle JSON
+    # bug tracked down to Node's EventEmitter in request :
+    # the array is lost somehow
+    # unable to reproduce outside of the app
+    # may be some module is messing with EventEmitter
+    #
+    # console.log response.body  ===> [{object}]
+    # self.emit 'complete', response, response.body
+    # self.on 'complete', -> console arguments
+    #     ===>  {body: [{object}]}, {object} <---- no [ ]
+    req = Alarm.request 'byURI', null, cb
+    req.body = JSON.stringify key: uri
+    req.setHeader 'content-type', 'application/json'
