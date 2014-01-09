@@ -50,13 +50,16 @@ DAVServer = jsDAV.mount
 port = process.env.PORT || 9116
 host = process.env.HOST || "127.0.0.1"
 
-americano.start name: 'webdav', port: port, (app) ->
+if not module.parent
+    americano.start name: 'webdav', port: port, (app) ->
 
-    # /public is the WebDAV server
-    app.use '/public', (req, res) ->
-        # jsDAV need to know the true client url
-        req.url = "/public/webdav#{req.url}"
-        DavServer.exec req, res
+        # /public is the WebDAV server
+        app.use '/public', (req, res) ->
+            # jsDAV need to know the true client url
+            req.url = "/public/webdav#{req.url}"
+            DavServer.exec req, res
 
-    console.log "WebDAV Server listening on %s:%d within %s environment",
-                host, port, app.get('env')
+        console.log "WebDAV Server listening on %s:%d within %s environment",
+                    host, port, app.get('env')
+else
+    module.exports = DAVServer

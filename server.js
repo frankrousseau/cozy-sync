@@ -55,13 +55,17 @@ port = process.env.PORT || 9116;
 
 host = process.env.HOST || "127.0.0.1";
 
-americano.start({
-  name: 'webdav',
-  port: port
-}, function(app) {
-  app.use('/public', function(req, res) {
-    req.url = "/public/webdav" + req.url;
-    return DavServer.exec(req, res);
+if (!module.parent) {
+  americano.start({
+    name: 'webdav',
+    port: port
+  }, function(app) {
+    app.use('/public', function(req, res) {
+      req.url = "/public/webdav" + req.url;
+      return DavServer.exec(req, res);
+    });
+    return console.log("WebDAV Server listening on %s:%d within %s environment", host, port, app.get('env'));
   });
-  return console.log("WebDAV Server listening on %s:%d within %s environment", host, port, app.get('env'));
-});
+} else {
+  module.exports = DAVServer;
+}

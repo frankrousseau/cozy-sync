@@ -3,22 +3,31 @@ PASSWORD = 'test'
 
 request = require 'request'
 async   = require 'async'
+americano = require 'americano'
 
 exports.TESTPORT = TESTPORT
 
+DavServer = require '../server'
 
 exports.startServer = (done) ->
     @timeout 5000
-    @server = require('../server')
-    @server.start TESTPORT, done
+    options =
+        port: TESTPORT
+        name: "Test Contacts"
+    americano.start options, (app, server) =>
+        app.use '/public', (req, res) ->
+             req.url = "/public/webdav#{req.url}"
+             DavServer.exec req, res
+        @server = server
+        done()
 
 exports.makeDAVAccount = (done) ->
-    WebDAVAccount = require('../models/webdavaccount')
+    WebDAVAccount = require '../server/models/webdavaccount'
     data = login: 'me', password: PASSWORD
     WebDAVAccount.create data, done
 
 exports.createContact = (name) -> (done) ->
-    Contact = require('../models/contact')
+    Contact = require '../server/models/contact'
     sampleaddress = 'Box3;Suite215;14 Avenue de la République;Compiègne;Picardie;60200;France'
     data =
         fn: name
@@ -35,9 +44,9 @@ exports.createContact = (name) -> (done) ->
         done err
 
 exports.createEvent = (title, description, start) -> (done) ->
-    Event = require('../models/event')
-    start = new Date(2013, 11, start, 10, 0, 0)
-    end = new Date(start.getTime() + 7200000)
+    Event = require '../server/models/event'
+    start = new Date 2013, 11, start, 10, 0, 0
+    end = new Date start.getTime() + 7200000
     data =
         start:       start.toString()
         end:         end.toString()
@@ -61,17 +70,17 @@ exports.cleanDB = (done) ->
         'contact':       'byURI'
         'webdavaccount': 'all'
         'user':          'all'
-        'cozy_instance': 'all'
+        'cozyinstance': 'all'
 
     ops = []
 
     addOp = (model, requestname) ->
         ops.push (cb) ->
-            model = require("../models/#{model}")
+            model = require "../server/models/#{model}"
             model.requestDestroy requestname, cb
 
     for model, requestname of models
-            addOp model, requestname
+        addOp model, requestname
 
     async.series ops, done
 

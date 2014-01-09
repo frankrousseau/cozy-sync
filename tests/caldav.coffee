@@ -1,11 +1,10 @@
 helpers = require './helpers'
 should = require('chai').Should()
 xmldoc = require 'xmldoc'
-Contact = require '../models/contact'
+Contact = require '../server/models/contact'
 
 describe 'Caldav support', ->
 
-    before require '../models/requests'
     before helpers.cleanDB
     before helpers.startServer
     before helpers.makeDAVAccount
@@ -16,8 +15,8 @@ describe 'Caldav support', ->
         @event1href = url + @events['A'].id + '.ics'
         @event2href = url + @events['C'].id + '.ics'
 
-    after  helpers.closeServer
-    after  helpers.cleanDB
+    after helpers.closeServer
+    after helpers.cleanDB
 
 
     describe 'Apple PROPFIND /public/webdav/calendars/me/my-calendar/ D=1', ->
