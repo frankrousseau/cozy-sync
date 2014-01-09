@@ -18,10 +18,11 @@ time = require("time");
 _ref = require("cozy-ical"), ICalParser = _ref.ICalParser, VCalendar = _ref.VCalendar, VTimezone = _ref.VTimezone, VEvent = _ref.VEvent, VTodo = _ref.VTodo;
 
 module.exports = CozyCalDAVBackend = (function() {
-  function CozyCalDAVBackend(Event, Alarm) {
+  function CozyCalDAVBackend(Event, Alarm, User) {
     var _this = this;
     this.Event = Event;
     this.Alarm = Alarm;
+    this.User = User;
     this.createCalendarObject = __bind(this.createCalendarObject, this);
     this._extractCalObject = __bind(this._extractCalObject, this);
     this.saveLastCtag = __bind(this.saveLastCtag, this);

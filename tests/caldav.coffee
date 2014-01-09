@@ -8,6 +8,7 @@ describe 'Caldav support', ->
     before helpers.cleanDB
     before helpers.startServer
     before helpers.makeDAVAccount
+    #before helpers.createUser
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
     before ->

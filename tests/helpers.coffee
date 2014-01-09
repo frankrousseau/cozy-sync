@@ -59,8 +59,6 @@ exports.createEvent = (title, description, start) -> (done) ->
         @events[title] = doc
         done err
 
-
-
 exports.cleanDB = (done) ->
     @timeout 5000
 

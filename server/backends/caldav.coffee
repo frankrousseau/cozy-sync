@@ -10,7 +10,7 @@ time  = require "time"
 
 module.exports = class CozyCalDAVBackend
 
-    constructor: (@Event, @Alarm) ->
+    constructor: (@Event, @Alarm, @User) ->
 
         @getLastCtag (err, ctag) =>
             # we suppose something happened while webdav was down
