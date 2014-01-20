@@ -1,5 +1,6 @@
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
+shortId = require 'shortid'
 
 davAccount = null
 WebDAVAccount.first (err, account) ->
