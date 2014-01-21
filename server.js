@@ -62,7 +62,7 @@ if (!module.parent) {
   }, function(app) {
     app.use('/public', function(req, res) {
       req.url = "/public/webdav" + req.url;
-      return DavServer.exec(req, res);
+      return DAVServer.exec(req, res);
     });
     return console.log("WebDAV Server listening on %s:%d within %s environment", host, port, app.get('env'));
   });

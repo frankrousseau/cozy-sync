@@ -12,15 +12,29 @@ module.exports = {
   },
   contact: {
     all: function(doc) {
-      return emit(doc.caldavuri || doc._id + '.ics', doc);
+      return emit(doc._id, doc);
+    },
+    byURI: function(doc) {
+      return emit(doc.carddavuri || doc._id + '.vcf', doc);
     }
   },
   alarm: {
     all: function(doc) {
-      return emit(doc.carddavuri || doc._id + '.vcf', doc);
+      return emit(doc._id, doc);
+    },
+    byURI: function(doc) {
+      return emit(doc.caldavuri || doc._id + '.ics', doc);
     }
   },
   event: {
+    all: function(doc) {
+      return emit(doc._id, doc);
+    },
+    byURI: function(doc) {
+      return emit(doc.caldavuri || doc._id + '.ics', doc);
+    }
+  },
+  user: {
     all: function(doc) {
       return emit(doc._id, doc);
     }

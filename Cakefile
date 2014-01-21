@@ -47,9 +47,9 @@ runTests = (fileList) ->
         command += "--debug --forward-io --profile "
     command += " --reporter spec --compilers coffee:coffee-script --colors"
     exec command, (err, stdout, stderr) ->
+        console.log stdout
         if err
             console.log "Running mocha caught exception: \n" + err
-        console.log stdout
         process.exit if err then 1 else 0
 
 task 'convert', 'convert from coffee to JS', ->

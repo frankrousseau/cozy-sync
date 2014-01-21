@@ -57,7 +57,7 @@ if not module.parent
         app.use '/public', (req, res) ->
             # jsDAV need to know the true client url
             req.url = "/public/webdav#{req.url}"
-            DavServer.exec req, res
+            DAVServer.exec req, res
 
         console.log "WebDAV Server listening on %s:%d within %s environment",
                     host, port, app.get('env')
