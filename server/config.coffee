@@ -1,4 +1,5 @@
 americano = require 'americano'
+DAVServer = require './davserver'
 
 module.exports =
 
@@ -13,6 +14,10 @@ module.exports =
             americano.errorHandler
                 dumpExceptions: true
                 showStack: true
+            (req, res, next) ->
+                return next null unless req.url.indexOf('/public') is 0
+                req.url = req.url.replace '/public', '/public/webdav'
+                DAVServer.exec req, res
         ]
     development: [
         americano.logger 'dev'
