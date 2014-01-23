@@ -14,6 +14,4 @@ if (!module.parent) {
   }, function(app) {
     return console.log("WebDAV Server listening on %s:%d within %s environment", host, port, app.get('env'));
   });
-} else {
-  module.exports = DAVServer;
 }

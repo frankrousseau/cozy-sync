@@ -7,17 +7,12 @@ americano = require 'americano'
 
 exports.TESTPORT = TESTPORT
 
-DavServer = require '../server'
-
 exports.startServer = (done) ->
     @timeout 5000
     options =
         port: TESTPORT
         name: "Test Contacts"
     americano.start options, (app, server) =>
-        app.use '/public', (req, res) ->
-             req.url = "/public/webdav#{req.url}"
-             DavServer.exec req, res
         @server = server
         done()
 

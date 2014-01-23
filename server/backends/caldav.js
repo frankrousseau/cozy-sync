@@ -279,15 +279,12 @@ module.exports = CozyCalDAVBackend = (function() {
         return callback(err);
       }
       alarms = results[0], events = results[1], timezone = results[2];
-      console.log("FILTERS", filters);
       try {
         _ref1 = alarms.concat(events);
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           jugglingObj = _ref1[_i];
           vobj = reader.read(ical = _this._toICal(jugglingObj, timezone));
-          console.log("TEST", vobj);
           if (validator.validate(vobj, filters)) {
-            console.log("YES");
             uri = jugglingObj.caldavuri || (jugglingObj.id + '.ics');
             objects.push({
               id: jugglingObj.id,
