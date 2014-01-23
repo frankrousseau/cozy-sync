@@ -274,25 +274,32 @@ module.exports = CozyCalDAVBackend = (function() {
         return _this.User.getTimezone(cb);
       }
     ], function(err, results) {
-      var alarms, events, ical, jugglingObj, timezone, uri, vobj, _i, _len, _ref1;
+      var alarms, events, ex, ical, jugglingObj, timezone, uri, vobj, _i, _len, _ref1;
       if (err) {
         return callback(err);
       }
       alarms = results[0], events = results[1], timezone = results[2];
-      _ref1 = alarms.concat(events);
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        jugglingObj = _ref1[_i];
-        ical = _this._toICal(jugglingObj, timezone);
-        vobj = reader.read(ical);
-        if (validator.validate(vobj, filters)) {
-          uri = jugglingObj.caldavuri || (jugglingObj.id + '.ics');
-          objects.push({
-            id: jugglingObj.id,
-            uri: uri,
-            calendardata: ical,
-            lastmodified: new Date().getTime()
-          });
+      console.log("FILTERS", filters);
+      try {
+        _ref1 = alarms.concat(events);
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          jugglingObj = _ref1[_i];
+          vobj = reader.read(ical = _this._toICal(jugglingObj, timezone));
+          console.log("TEST", vobj);
+          if (validator.validate(vobj, filters)) {
+            console.log("YES");
+            uri = jugglingObj.caldavuri || (jugglingObj.id + '.ics');
+            objects.push({
+              id: jugglingObj.id,
+              uri: uri,
+              calendardata: ical,
+              lastmodified: new Date().getTime()
+            });
+          }
         }
+      } catch (_error) {
+        ex = _error;
+        return callback(ex, []);
       }
       return callback(null, objects);
     });

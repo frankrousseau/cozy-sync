@@ -186,17 +186,20 @@ module.exports = class CozyCalDAVBackend
 
             [alarms, events, timezone] = results
 
-            for jugglingObj in alarms.concat events
-                ical = @_toICal jugglingObj, timezone
-                # @TODO convert directly from juggling to VObject
-                vobj = reader.read ical
-                if validator.validate vobj, filters
-                    uri = jugglingObj.caldavuri or (jugglingObj.id + '.ics')
-                    objects.push
-                        id:           jugglingObj.id
-                        uri:          uri
-                        calendardata: ical
-                        lastmodified: new Date().getTime()
+            try
 
+                for jugglingObj in alarms.concat events
+                    # @TODO convert directly from juggling to VObject
+                    vobj = reader.read ical = @_toICal jugglingObj, timezone
+                    if validator.validate vobj, filters
+                        uri = jugglingObj.caldavuri or (jugglingObj.id + '.ics')
+                        objects.push
+                            id:           jugglingObj.id
+                            uri:          uri
+                            calendardata: ical
+                            lastmodified: new Date().getTime()
+
+            catch ex
+                return callback ex, []
 
             callback null, objects

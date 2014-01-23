@@ -17,7 +17,7 @@
   "license": "BSD",
   "readmeFilename": "README.md",
   "dependencies": {
-    "cozy-jsdav-fork": "0.3.5-caldav",
+    "cozy-jsdav-fork": "0.3.6",
     "async": "0.2.9",
     "moment": "2.1.0",
     "lazy": "1.0.11",
