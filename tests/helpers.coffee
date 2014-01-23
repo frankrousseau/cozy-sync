@@ -75,7 +75,9 @@ exports.cleanDB = (done) ->
     for model, requestname of models
         addOp model, requestname
 
-    async.series ops, done
+    root = require('path').join __dirname, '..'
+    require('americano-cozy').configure root, null, ->
+        async.series ops, done
 
 exports.closeServer = (done) ->
     @server.close()
