@@ -54,6 +54,13 @@ exports.createEvent = (title, description, start) -> (done) ->
         @events[title] = doc
         done err
 
+exports.createRequests = (done) ->
+    root = require('path').join __dirname, '..'
+    require('americano-cozy').configure root, null, (err) ->
+        exports.createRequests = ->
+        done err
+
+
 exports.cleanDB = (done) ->
     @timeout 5000
 
@@ -75,8 +82,8 @@ exports.cleanDB = (done) ->
     for model, requestname of models
         addOp model, requestname
 
-    root = require('path').join __dirname, '..'
-    require('americano-cozy').configure root, null, ->
+    exports.createRequests (err) ->
+        return done err if err
         async.series ops, done
 
 exports.closeServer = (done) ->
