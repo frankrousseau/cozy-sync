@@ -8,6 +8,7 @@ americano = require 'americano'
 exports.TESTPORT = TESTPORT
 
 exports.startServer = (done) ->
+    console.log "WE TRY TO START"
     @timeout 5000
     options =
         port: TESTPORT
@@ -57,7 +58,7 @@ exports.createEvent = (title, description, start) -> (done) ->
 exports.createRequests = (done) ->
     root = require('path').join __dirname, '..'
     require('americano-cozy').configure root, null, (err) ->
-        exports.createRequests = ->
+        exports.createRequests = (cb) -> cb()
         done err
 
 
@@ -70,19 +71,18 @@ exports.cleanDB = (done) ->
         'contact':       'byURI'
         'webdavaccount': 'all'
         'user':          'all'
-        'cozyinstance': 'all'
+        'cozyinstance':  'all'
 
     ops = []
 
-    addOp = (model, requestname) ->
-        ops.push (cb) ->
-            model = require "../server/models/#{model}"
-            model.requestDestroy requestname, cb
-
     for model, requestname of models
-        addOp model, requestname
+        do (model, requestname) ->
+            ops.push (cb) ->
+                model = require "../server/models/#{model}"
+                model.requestDestroy requestname, cb
 
     exports.createRequests (err) ->
+        console.log "WE GET HERE"
         return done err if err
         async.series ops, done
 
