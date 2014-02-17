@@ -17,10 +17,23 @@ exports.startServer = (done) ->
         @server = server
         done()
 
+exports.prepareForCrypto = (done) ->
+    request.post
+        url: 'http://localhost:9101/user'
+        auth: user: 'proxy', pass: 'token'
+        json: password: 'testpass', timezone: 'Europe/Paris'
+    , (err, user) ->
+        request.post
+            url: 'http://localhost:9101/account/password'
+            json: password: 'testpass'
+        , done
+
 exports.makeDAVAccount = (done) ->
-    WebDAVAccount = require '../server/models/webdavaccount'
-    data = login: 'me', password: PASSWORD
-    WebDAVAccount.create data, done
+    exports.prepareForCrypto (err) ->
+        return done err if err
+        WebDAVAccount = require '../server/models/webdavaccount'
+        data = login: 'me', password: PASSWORD
+        WebDAVAccount.create data, done
 
 exports.createContact = (name) -> (done) ->
     Contact = require '../server/models/contact'
