@@ -23,10 +23,13 @@ exports.prepareForCrypto = (done) ->
         auth: user: 'proxy', pass: 'token'
         json: password: 'testpass', timezone: 'Europe/Paris'
     , (err, user) ->
+        console.log "USER CREATION ERRROR : ", err
         request.post
             url: 'http://localhost:9101/account/password'
             json: password: 'testpass'
-        , done
+        , (err, result) ->
+            console.log "KEYS INIT ERRROR", err
+            done err
 
 exports.makeDAVAccount = (done) ->
     exports.prepareForCrypto (err) ->
