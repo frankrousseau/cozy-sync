@@ -19,13 +19,13 @@ exports.startServer = (done) ->
 
 exports.prepareForCrypto = (done) ->
     request.post
-        url: 'http://localhost:9101/user'
+        url: 'http://localhost:9101/user/'
         auth: user: 'proxy', pass: 'token'
         json: password: 'testpass', timezone: 'Europe/Paris'
     , (err, res, user) ->
         console.log "USER CREATION ERRROR : ", err, user
         request.post
-            url: 'http://localhost:9101/account/password'
+            url: 'http://localhost:9101/accounts/password/'
             json: password: 'testpass'
         , (err, res, result) ->
             console.log "KEYS INIT ERRROR", err, result
