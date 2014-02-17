@@ -30,7 +30,9 @@ exports.prepareForCrypto = (done) ->
 
 exports.makeDAVAccount = (done) ->
     exports.prepareForCrypto (err) ->
-        return done err if err
+        if err
+            console.log "FAIL TO PREPARE CRYPTO", err
+            return done err
         WebDAVAccount = require '../server/models/webdavaccount'
         data = login: 'me', password: PASSWORD
         WebDAVAccount.create data, done
