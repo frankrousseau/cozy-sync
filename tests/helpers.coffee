@@ -18,15 +18,25 @@ exports.startServer = (done) ->
         done()
 
 exports.prepareForCrypto = (done) ->
+    # don't want to include bcrypt
+    clear = "password"
+    salt = "th00ee2l2w23ayvi2njpwm1n"
+    hash = "$2a$10$sKO5HTT58LhMFywFKLKFx.//q.MzNwwlLvdKVBePP4P8uv7igimD6"
+
     request.post
         url: 'http://localhost:9101/user/'
         auth: user: 'proxy', pass: 'token'
-        json: password: 'testpass', timezone: 'Europe/Paris'
+        json:
+            email: 'test@example.com'
+            owner: true
+            salt: salt
+            password: hash
+            timezone: 'Europe/Paris'
     , (err, res, user) ->
         console.log "USER CREATION ERRROR : ", err, user
         request.post
             url: 'http://localhost:9101/accounts/password/'
-            json: password: 'testpass'
+            json: password: clear
         , (err, res, result) ->
             console.log "KEYS INIT ERRROR", err, result
             done err
