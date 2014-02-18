@@ -4,7 +4,7 @@
   "description": "A WebDav Server for cozy cloud",
   "main": "server.coffee",
   "scripts": {
-    "start": "node server.js",
+    "start": "node build/server.js",
     "test": "cake tests"
   },
   "repository": {
