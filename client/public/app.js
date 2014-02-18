@@ -70,6 +70,7 @@
       button.startLoading();
       return client.post('token', {}, {
         success: function(data) {
+          $('#login-span').html(data.account.login);
           $('#password-span').html(data.account.password);
           return button.endLoading();
         },
