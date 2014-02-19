@@ -1,3 +1,5 @@
+fs = require 'fs'
+path = require 'path'
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
 shortId = require 'shortid'
@@ -14,12 +16,21 @@ CozyInstance.first (err, instance) ->
 
 module.exports =
     index: (req, res) ->
-            domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
-            data =
-                login: davAccount?.login
-                password: davAccount?.password
-                domain: domain
-            res.render 'index', data
+        locale = cozyInstance?.locale or 'en'
+
+        filename = "index_#{locale}"
+        filePath = path.resolve __dirname, "../views/#{filename}.jade"
+        try
+            stats = fs.lstatSync filePath
+        catch e
+            filename = "index_en"
+
+        domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
+        data =
+            login: davAccount?.login
+            password: davAccount?.password
+            domain: domain
+        res.render filename, data
 
     getCredentials: (req, res) ->
         if davAccount?
