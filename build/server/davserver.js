@@ -3,9 +3,7 @@ var Alarm, Event, User, caldavBackend, carddavBackend, cozy_Auth_Backend, cozy_C
 
 jsDAV = require("cozy-jsdav-fork");
 
-if (process.env.NODE_ENV !== 'test') {
-  jsDAV.debugMode = true;
-}
+jsDAV.debugMode = !!process.env.DEBUG;
 
 cozy_Auth_Backend = require('./backends/auth');
 
