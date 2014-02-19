@@ -30,6 +30,7 @@ exports.prepareForCrypto = (done) ->
             email: 'test@example.com'
             owner: true
             salt: salt
+            docType: 'User'
             password: hash
             timezone: 'Europe/Paris'
     , (err, res, user) ->
