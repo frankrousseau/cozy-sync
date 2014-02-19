@@ -40,6 +40,7 @@ exports.prepareForCrypto = (done) ->
             json: password: clear
         , (err, res, result) ->
             console.log "KEYS INIT ERRROR", err, result
+            process.exit 1
             done err
 
 exports.makeDAVAccount = (done) ->

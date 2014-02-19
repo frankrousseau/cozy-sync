@@ -31,3 +31,4 @@ after_install:
 
 after_failure:
     - cat cozy-data-system/forever-ds.log
+    - curl -X POST --user proxy:token http://localhost:9101/request/user/all/
