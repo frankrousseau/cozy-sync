@@ -4,7 +4,12 @@ PASSWORD = 'test'
 request = require 'request'
 async   = require 'async'
 
-initializeApplication = require '../server'
+if process.env.USE_JS
+    exports.prefix = '../build/'
+else
+    exports.prefix = '../'
+
+initializeApplication = require "#{exports.prefix}server"
 
 exports.TESTPORT = TESTPORT
 

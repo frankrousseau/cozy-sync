@@ -1,7 +1,7 @@
 helpers = require './helpers'
 should = require('chai').Should()
 xmldoc = require 'xmldoc'
-Contact = require '../server/models/contact'
+Contact = require "#{helpers.prefix}server/models/contact"
 
 describe 'Carddav support - Apple', ->
 
