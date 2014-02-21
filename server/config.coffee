@@ -1,6 +1,14 @@
 americano = require 'americano'
 DAVServer = require './davserver'
 
+
+# public path depends on what app is running (./server or ./build/server)
+publicPath = __dirname + '/../client/public'
+try
+    fs.lstatSync publicPath
+catch e
+    publicPath = __dirname + '/../../client/public'
+
 module.exports =
 
     common:
@@ -8,7 +16,7 @@ module.exports =
             'view engine': 'jade'
             views: './server/views'
         use: [
-            americano.static __dirname + '/../client/public', maxAge: 86400000
+            americano.static publicPath, maxAge: 86400000
             americano.bodyParser keepExtensions: true
             americano.logger 'dev'
             americano.errorHandler
