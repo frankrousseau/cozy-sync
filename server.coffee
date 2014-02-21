@@ -1,10 +1,14 @@
-americano = require 'americano'
+application = module.exports = (callback) ->
+    americano = require 'americano'
 
-port = process.env.PORT || 9116
-host = process.env.HOST || "127.0.0.1"
+    options =
+        name: 'webdav'
+        port: process.env.PORT or 9116
+        host: process.env.HOST or "127.0.0.1"
+        root: __dirname
+
+    americano.start options, (app, server) ->
+        callback app, server if callback?
 
 if not module.parent
-    americano.start name: 'webdav', port: port, (app) ->
-
-        console.log "WebDAV Server listening on %s:%d within %s environment",
-                    host, port, app.get('env')
+    application()
