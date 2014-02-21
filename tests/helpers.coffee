@@ -3,17 +3,15 @@ PASSWORD = 'test'
 
 request = require 'request'
 async   = require 'async'
-americano = require 'americano'
+
+initializeApplication = require '../server'
 
 exports.TESTPORT = TESTPORT
 
 exports.startServer = (done) ->
-    console.log "WE TRY TO START"
     @timeout 5000
-    options =
-        port: TESTPORT
-        name: "Test Contacts"
-    americano.start options, (app, server) =>
+    process.env.PORT = TESTPORT
+    initializeApplication (app, server) =>
         @server = server
         done()
 
@@ -42,6 +40,7 @@ exports.prepareForCrypto = (done) ->
             done err
 
 exports.makeDAVAccount = (done) ->
+    @timeout 5000
     exports.prepareForCrypto (err) ->
         if err
             console.log "FAIL TO PREPARE CRYPTO", err
@@ -115,8 +114,7 @@ exports.cleanDB = (done) ->
         async.series ops, done
 
 exports.closeServer = (done) ->
-    @server.close()
-    done()
+    @server.close done
 
 exports.after = exports.cleanDB
 
