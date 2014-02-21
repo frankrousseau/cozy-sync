@@ -28,11 +28,13 @@ exports.prepareForCrypto = (done) ->
             email: 'test@example.com'
             owner: true
             salt: salt
+            docType: 'User'
             password: hash
             timezone: 'Europe/Paris'
     , (err, res, user) ->
         console.log "USER CREATION ERRROR : ", err, user
         request.post
+            auth: user: 'proxy', pass: 'token'
             url: 'http://localhost:9101/accounts/password/'
             json: password: clear
         , (err, res, result) ->

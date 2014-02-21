@@ -1,5 +1,6 @@
 jsDAV = require "cozy-jsdav-fork"
-jsDAV.debugMode = true unless process.env.NODE_ENV is 'test'
+
+jsDAV.debugMode = not not process.env.DEBUG
 
 # Auth
 cozy_Auth_Backend = require './backends/auth'
