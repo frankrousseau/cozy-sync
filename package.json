@@ -5,7 +5,7 @@
   "main": "server.coffee",
   "scripts": {
     "start": "node build/server.js",
-    "test": "cake tests"
+    "test": "cake --use-js tests"
   },
   "repository": {
     "type": "git",
