@@ -37,13 +37,11 @@ exports.prepareForCrypto = (done) ->
             password: hash
             timezone: 'Europe/Paris'
     , (err, res, user) ->
-        console.log "USER CREATION ERRROR : ", err, user
         request.post
             auth: user: 'proxy', pass: 'token'
             url: 'http://localhost:9101/accounts/password/'
             json: password: clear
         , (err, res, result) ->
-            console.log "KEYS INIT ERRROR", err, result
             done err
 
 exports.makeDAVAccount = (done) ->
@@ -116,7 +114,6 @@ exports.cleanDB = (done) ->
                 model.requestDestroy requestname, cb
 
     exports.createRequests (err) ->
-        console.log "WE GET HERE"
         return done err if err
         async.series ops, done
 

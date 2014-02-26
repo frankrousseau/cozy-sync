@@ -7,9 +7,7 @@ describe 'Caldav support', ->
 
     before helpers.cleanDB
     before helpers.startServer
-    before -> console.log "Server started"
     before helpers.makeDAVAccount
-    before -> console.log "DAV Account created"
     #before helpers.createUser
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
