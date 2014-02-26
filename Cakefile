@@ -64,6 +64,7 @@ task 'build', 'Build CoffeeScript to Javascript', ->
               "coffee -cb --output build/ server.coffee"
     exec command, (err, stdout, stderr) ->
         if err
+            console.log stderr
             logger.error "An error has occurred while compiling:\n" + err
             process.exit 1
         else
