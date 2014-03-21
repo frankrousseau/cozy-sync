@@ -2,7 +2,14 @@
   "name": "cozy-webdav",
   "version": "0.0.1",
   "description": "A WebDav Server for cozy cloud",
-  "main": "server.coffee",
+  "author": "Cozy Cloud <contact@cozycloud.cc> (http://cozycloud.cc)",
+  "licenses": [
+    {
+      "type": "AGPL v3",
+      "url": "http://www.gnu.org/licenses/agpl-3.0.html"
+    }
+  ],
+  "main": "server.js",
   "scripts": {
     "start": "node build/server.js",
     "test": "cake --use-js tests"
@@ -14,7 +21,6 @@
   "author": {
     "name": "Romain"
   },
-  "license": "BSD",
   "readmeFilename": "README.md",
   "dependencies": {
     "cozy-jsdav-fork": "0.3.6",
