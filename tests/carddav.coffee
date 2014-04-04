@@ -88,9 +88,9 @@ describe 'Carddav support', ->
         before helpers.send 'PUT', url, """
             BEGIN:VCARD
             VERSION:3.0
-            FN:Steve
             EMAIL;TYPE=INTERNET;TYPE=HOME:stw@test.com
-            N:Wonder;;;;
+            FN:Steve Wonder
+            N:Wonder;Steve;;;
             TEL;TYPE=CELL:+33 1 23 45 67 89
             PRODID:-//dmfs.org//mimedir.vcard//EN
             REV:20131011T070908Z
@@ -107,7 +107,9 @@ describe 'Carddav support', ->
         it "and contact has been created in db", (done) ->
             Contact.byURI '24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf', (err, contact) ->
                 should.not.exist err
-                contact.should.have.property.cardavuri
+                contact = contact[0]
+                contact.should.have.property 'carddavuri'
+                should.not.exist contact.fn
                 done()
 
     describe "Android Check contact creation", ->
@@ -144,7 +146,8 @@ describe 'Carddav support', ->
         it "and contact has been updated in db", (done) ->
             Contact.byURI '24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf', (err, contact) ->
                 should.not.exist err
-                contact.should.have.property.cardavuri
+                contact = contact[0]
+                contact.should.have.property 'carddavuri'
                 done()
 
     describe "Android update Cozy Contact", ->

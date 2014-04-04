@@ -37,8 +37,13 @@ Contact.prototype.toVCF = function() {
 };
 
 Contact.parse = function(vcf) {
-  var parser;
+  var contact, parser;
   parser = new VCardParser();
   parser.read(vcf);
+  contact = parser.contacts[0];
+  console.log("THERE", contact);
+  if (contact.fn && contact.n) {
+    delete contact.fn;
+  }
   return new Contact(parser.contacts[0]);
 };
