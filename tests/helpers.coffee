@@ -50,12 +50,12 @@ exports.makeDAVAccount = (done) ->
         if err
             console.log "FAIL TO PREPARE CRYPTO", err
             return done err
-        WebDAVAccount = require '../server/models/webdavaccount'
+        WebDAVAccount = require "#{exports.prefix}server/models/webdavaccount"
         data = login: 'me', password: PASSWORD
         WebDAVAccount.create data, done
 
 exports.createContact = (name) -> (done) ->
-    Contact = require '../server/models/contact'
+    Contact = require "#{exports.prefix}server/models/contact"
     sampleaddress = 'Box3;Suite215;14 Avenue de la République;Compiègne;Picardie;60200;France'
     data =
         fn: name
@@ -72,7 +72,7 @@ exports.createContact = (name) -> (done) ->
         done err
 
 exports.createEvent = (title, description, start) -> (done) ->
-    Event = require '../server/models/event'
+    Event = require "#{exports.prefix}server/models/event"
     start = new Date 2013, 11, start, 10, 0, 0
     end = new Date start.getTime() + 7200000
     data =
@@ -88,34 +88,34 @@ exports.createEvent = (title, description, start) -> (done) ->
         done err
 
 exports.createRequests = (done) ->
-    root = require('path').join __dirname, '..'
+    @timeout 10000
+    root = require('path').join __dirname, exports.prefix
     require('americano-cozy').configure root, null, (err) ->
-        exports.createRequests = (cb) -> cb()
         done err
 
-
 exports.cleanDB = (done) ->
-    @timeout 5000
+    @timeout 10000
 
-    models =
+    requests =
         'event':         'byURI'
         'alarm':         'byURI'
         'contact':       'byURI'
-        'webdavaccount': 'all'
         'user':          'all'
         'cozyinstance':  'all'
 
-    ops = []
+    ops = Object.keys(requests).map (name) -> (cb) ->
+        model = require "#{exports.prefix}server/models/#{name}"
+        model.requestDestroy requests[name], cb
 
-    for model, requestname of models
-        do (model, requestname) ->
-            ops.push (cb) ->
-                model = require "../server/models/#{model}"
-                model.requestDestroy requestname, cb
+    # need to tmp this a bit as davaccount changes when other docs are deleted
+    deleteWebdavaccout = ->
+        DAVAccount = require "#{exports.prefix}server/models/webdavaccount"
+        DAVAccount.requestDestroy 'all', done
 
-    exports.createRequests (err) ->
-        return done err if err
-        async.series ops, done
+    async.series ops, (err) ->
+        setTimeout deleteWebdavaccout, 2000
+
+
 
 exports.closeServer = (done) ->
     @server.close done
