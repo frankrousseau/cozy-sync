@@ -69,32 +69,19 @@ module.exports = {
       login: login,
       password: password
     };
-    if (davAccount == null) {
-      return WebDAVAccount.create(data, function(err, account) {
-        if (err) {
-          return res.send({
-            error: true,
-            msg: err.toString()
-          }, 500);
-        } else {
-          davAccount = account;
-          return res.send({
-            success: true,
-            account: account.toJSON()
-          });
-        }
-      });
-    } else {
-      davAccount.login = login;
-      davAccount.password = password;
-      return davAccount.save(function(err) {
-        if (err) {
-          return res.send({
-            error: true,
-            msg: err.toString()
-          }, 500);
-        }
-      });
-    }
+    return WebDAVAccount.set(data, function(err, account) {
+      if (err) {
+        return res.send({
+          error: true,
+          msg: err.toString()
+        }, 500);
+      } else {
+        davAccount = account;
+        return res.send({
+          success: true,
+          account: account.toJSON()
+        });
+      }
+    });
   }
 };
