@@ -12,7 +12,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node build/server.js",
-    "test": "cake --use-js tests"
+    "test": "cake --use-js tests",
+    "build": "cake build"
   },
   "repository": {
     "type": "git",
