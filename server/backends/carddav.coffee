@@ -1,4 +1,4 @@
-Exc       = require 'cozy-jsdav-fork/lib/shared/exceptions'
+Exc       = require 'jsDAV/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
 axon = require 'axon'
 

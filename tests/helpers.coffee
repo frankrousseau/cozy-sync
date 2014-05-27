@@ -21,11 +21,11 @@ exports.startServer = (done) ->
         done()
 
 exports.prepareForCrypto = (done) ->
+    # return done null
     # don't want to include bcrypt
     clear = "password"
     salt = "th00ee2l2w23ayvi2njpwm1n"
     hash = "$2a$10$sKO5HTT58LhMFywFKLKFx.//q.MzNwwlLvdKVBePP4P8uv7igimD6"
-
     request.post
         url: 'http://localhost:9101/user/'
         auth: user: 'proxy', pass: 'token'
@@ -45,7 +45,7 @@ exports.prepareForCrypto = (done) ->
             done err
 
 exports.makeDAVAccount = (done) ->
-    @timeout 5000
+    @timeout 25000
     exports.prepareForCrypto (err) ->
         if err
             console.log "FAIL TO PREPARE CRYPTO", err
@@ -118,6 +118,7 @@ exports.cleanDB = (done) ->
 
 
 exports.closeServer = (done) ->
+    @timeout 5000
     @server.close done
 
 exports.after = exports.cleanDB

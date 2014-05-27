@@ -2,7 +2,7 @@
 var CozyCardDAVBackend, Exc, WebdavAccount, axon, handle,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-Exc = require('cozy-jsdav-fork/lib/shared/exceptions');
+Exc = require('jsDAV/lib/shared/exceptions');
 
 WebdavAccount = require('../models/webdavaccount');
 

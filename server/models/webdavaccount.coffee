@@ -15,17 +15,22 @@ WebDAVAccount.first = (callback) ->
         else if not accounts or accounts.length is 0 then callback null, null
         else
             account = accounts[0]
+
             # Retrocompatibility, webdav account has no business
             # being encrypted, we rename the password field as token in the db
-            account.password = account.token if account.token
-            delete account.token
+            if account?.password
+                console.log "WEBDAVACCOUNT HAS A PASSWORD, PATCHING"
+                account.token = account.password
+                account.password = null
+                account.save (err) ->
+                    callback err, account
 
-            callback null, account
+            else
+                callback null, account
+
 
 WebDAVAccount.set = (data, callback) ->
     # Patching
-    data.token = data.password
-    delete data.password
 
     WebDAVAccount.first (err, account) ->
         if not account?

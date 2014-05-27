@@ -165,8 +165,6 @@ module.exports.ICalParser = class ICalParser
         createComponent = (name) ->
             parent = component
 
-            console.log "CC", name
-
             if name is "VCALENDAR"
                 if result.fields?
                     sendError "Cannot import more than one calendar"

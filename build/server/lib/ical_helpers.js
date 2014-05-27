@@ -307,7 +307,6 @@ module.exports.ICalParser = ICalParser = (function() {
     };
     createComponent = function(name) {
       parent = component;
-      console.log("CC", name);
       if (name === "VCALENDAR") {
         if (result.fields != null) {
           sendError("Cannot import more than one calendar");

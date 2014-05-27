@@ -7,8 +7,8 @@ describe 'Carddav support - Apple', ->
 
     before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
+    before helpers.startServer
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve'
     before ->
@@ -41,7 +41,7 @@ describe 'Carddav support - Apple', ->
 
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
-            responses.length.should.equal 3
+            responses.length.should.equal 2
             hrefs = responses.map (res) -> res.childNamed('d:href').val
 
             hrefs.should.include @bobHref

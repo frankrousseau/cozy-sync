@@ -1,10 +1,10 @@
 "use strict"
 
-Exc = require "cozy-jsdav-fork/lib/shared/exceptions"
-SCCS = require "cozy-jsdav-fork/lib/CalDAV/properties/supportedCalendarComponentSet"
-CalendarQueryParser = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryParser')
-VObject_Reader = require('cozy-jsdav-fork/lib/VObject/reader')
-CalDAV_CQValidator = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryValidator')
+Exc = require "jsDAV/lib/shared/exceptions"
+SCCS = require "jsDAV/lib/CalDAV/properties/supportedCalendarComponentSet"
+CalendarQueryParser = require('jsDAV/lib/CalDAV/calendarQueryParser')
+VObject_Reader = require('jsDAV/lib/VObject/reader')
+CalDAV_CQValidator = require('jsDAV/lib/CalDAV/calendarQueryValidator')
 WebdavAccount = require '../models/webdavaccount'
 async = require "async"
 axon = require 'axon'
@@ -134,7 +134,6 @@ module.exports = class CozyCalDAVBackend
                     callback err, null
 
             else if obj.name is 'VTODO'
-                console.log "ALARM"
                 alarm = @Alarm.fromIcal obj
                 alarm.caldavuri = objectUri
                 @Alarm.create alarm, (err, alarm) ->
@@ -156,11 +155,9 @@ module.exports = class CozyCalDAVBackend
                     delete event.id
 
                     oldObj.updateAttributes event, (err, event) ->
-                        console.log "RESULT", err, event
                         callback err, null
 
                 else if newObj.name is 'VTODO' and oldObj instanceof @Alarm
-                    console.log "ALARM"
                     alarm = @Alarm.fromIcal newObj
                     oldObj.updateAttributes alarm, (err, alarm) ->
                         callback err, null
@@ -190,7 +187,9 @@ module.exports = class CozyCalDAVBackend
 
                 for jugglingObj in alarms.concat events
                     # @TODO convert directly from juggling to VObject
-                    vobj = reader.read ical = @_toICal jugglingObj, timezone
+                    ical = @_toICal jugglingObj, timezone
+                    vobj = reader.read ical
+
                     if validator.validate vobj, filters
                         uri = jugglingObj.caldavuri or (jugglingObj.id + '.ics')
                         objects.push
@@ -200,6 +199,7 @@ module.exports = class CozyCalDAVBackend
                             lastmodified: new Date().getTime()
 
             catch ex
+                console.log ex.stack
                 return callback ex, []
 
             callback null, objects

@@ -28,7 +28,7 @@ module.exports =
         domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
         data =
             login: davAccount?.login
-            password: davAccount?.password
+            password: davAccount?.token
             domain: domain
         res.render filename, data
 
@@ -39,9 +39,9 @@ module.exports =
             res.send error: true, msg: 'No webdav account generated', 404
 
     createCredentials: (req, res) ->
-        login = 'me'
-        password = shortId.generate()
-        data = login: login, password: password
+        data =
+            login: 'me'
+            token: shortId.generate()
 
         WebDAVAccount.set data, (err, account) ->
             if err then res.send error: true, msg: err.toString(), 500
