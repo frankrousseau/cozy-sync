@@ -21,18 +21,21 @@ WebDAVAccount.first = function(callback) {
       return callback(null, null);
     } else {
       account = accounts[0];
-      if (account.token) {
-        account.password = account.token;
+      if (account != null ? account.password : void 0) {
+        console.log("WEBDAVACCOUNT HAS A PASSWORD, PATCHING");
+        account.token = account.password;
+        account.password = null;
+        return account.save(function(err) {
+          return callback(err, account);
+        });
+      } else {
+        return callback(null, account);
       }
-      delete account.token;
-      return callback(null, account);
     }
   });
 };
 
 WebDAVAccount.set = function(data, callback) {
-  data.token = data.password;
-  delete data.password;
   return WebDAVAccount.first(function(err, account) {
     if (account == null) {
       return WebDAVAccount.create(data, callback);

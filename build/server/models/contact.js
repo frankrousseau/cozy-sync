@@ -41,7 +41,6 @@ Contact.parse = function(vcf) {
   parser = new VCardParser();
   parser.read(vcf);
   contact = parser.contacts[0];
-  console.log("THERE", contact);
   if (contact.fn && contact.n) {
     delete contact.fn;
   }

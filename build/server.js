@@ -10,10 +10,12 @@ application = module.exports = function(callback) {
     host: process.env.HOST || "127.0.0.1",
     root: __dirname
   };
-  return americano.start(options, function(app, server) {
-    if (callback != null) {
-      return callback(app, server);
-    }
+  return require('./server/models/webdavaccount').first(function() {
+    return americano.start(options, function(app, server) {
+      if (callback != null) {
+        return callback(app, server);
+      }
+    });
   });
 };
 
