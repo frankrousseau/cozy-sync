@@ -21,7 +21,7 @@
   },
   "readmeFilename": "README.md",
   "dependencies": {
-    "cozy-jsdav-fork": "0.3.6",
+    "jsDAV": "mikedeboer/jsDAV#e566fb3da",
     "async": "0.2.10",
     "moment": "2.5.1",
     "lazy": "1.0.11",

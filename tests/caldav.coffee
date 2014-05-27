@@ -7,9 +7,8 @@ describe 'Caldav support', ->
 
     before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
-    #before helpers.createUser
+    before helpers.startServer
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
     before ->
@@ -37,7 +36,7 @@ describe 'Caldav support', ->
         it 'should contains a ref to both events', ->
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
-            responses.length.should.equal 3 #2events + calendar itself
+            responses.length.should.equal 2 #2events
             hrefs = responses.map (res) -> res.childNamed('d:href').val
 
             hrefs.should.include @event1href
