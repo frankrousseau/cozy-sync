@@ -44,7 +44,7 @@ describe 'Carddav support', ->
 
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
-            responses.length.should.equal 2
+            responses.length.should.equal 3
             hrefs = responses.map (res) -> res.childNamed('d:href').val
 
             hrefs.should.include @bobHref
