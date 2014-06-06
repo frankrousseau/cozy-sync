@@ -42,6 +42,7 @@
     "mocha": "1.17.1",
     "coffee-script": "latest"
   },
+  "icon-path": "client/public/icons/main_icon.png",
   "cozy-permissions": {
     "Alarm": {
       "description": "Creates and edits your alarms."
