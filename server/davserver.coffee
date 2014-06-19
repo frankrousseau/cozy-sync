@@ -33,7 +33,7 @@ module.exports = jsDAV.mount
     standalone: false
 
     realm: 'jsDAV'
-    mount: '/public/webdav/'
+    mount: '/public/sync/'
 
     authBackend: cozy_Auth_Backend.new()
     plugins: [

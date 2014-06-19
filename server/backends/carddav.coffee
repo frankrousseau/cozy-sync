@@ -79,7 +79,8 @@ module.exports = class CozyCardDAVBackend
             return callback handle 'Not Found' unless contact.length
 
             contact = contact[0]
-            data = @Contact.parse(cardData)
+            data = @Contact.parse(cardData).toObject()
+            data.id = contact._id
             data.carddavuri = cardUri
 
             contact.updateAttributes data, (err, contact) ->

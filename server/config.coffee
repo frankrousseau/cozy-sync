@@ -24,7 +24,7 @@ module.exports =
                 showStack: true
             (req, res, next) ->
                 return next null unless req.url.indexOf('/public') is 0
-                req.url = req.url.replace '/public', '/public/webdav'
+                req.url = req.url.replace '/public', '/public/sync'
                 DAVServer.exec req, res
         ]
     development: [
