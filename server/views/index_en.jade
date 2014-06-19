@@ -51,7 +51,7 @@ html(lang="en")
         p
           | In the "Server" field, type:
         p.url
-          | #{domain}/public/webdav/principals/me
+          | #{domain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
         p
@@ -59,13 +59,13 @@ html(lang="en")
           | to install a dedicated app. The required url depend of that app. But
           | you can try that one by default:
         p.url
-          | https://#{domain}/public/webdav/principals/me/
+          | https://#{domain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
         p
           | Use the following url:
         p.url
-          | https://#{domain}/public/webdav/calendars/me/my-calendar/
+          | https://#{domain}/public/sync/calendars/me/my-calendar/
 
 
       h1 CardDAV configuration (Contacts)
@@ -79,7 +79,7 @@ html(lang="en")
         p
           | In the "Server" field, type:
         p.url
-          | #{domain}/public/webdav
+          | #{domain}/public/sync
 
       .carddavconf(data-device="android")
         p
@@ -87,7 +87,7 @@ html(lang="en")
           | to install a dedicated app. The required url depend of your app. But
           | you can try that one by default:
         p.url
-          | https://#{domain}/public/webdav/principals/me/
+          | https://#{domain}/public/sync/principals/me/
 
       h1 WebDAV configuration (Files)
       p
