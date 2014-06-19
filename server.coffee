@@ -7,8 +7,9 @@ application = module.exports = (callback) ->
         host: process.env.HOST or "127.0.0.1"
         root: __dirname
 
-    americano.start options, (app, server) ->
-        callback app, server if callback?
+    require('./server/models/webdavaccount').first ->
+        americano.start options, (app, server) ->
+            callback app, server if callback?
 
 if not module.parent
     application()

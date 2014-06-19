@@ -52,7 +52,7 @@ html(lang="en")
         p
           | Dans le champ "Serveur", écrivez :
         p.url
-          | #{domain}/public/webdav/principals/me
+          | #{domain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
         p
@@ -61,13 +61,13 @@ html(lang="en")
           | Google Play avec le mot-clé "caldav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/webdav/principals/me/
+          | https://#{domain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
         p
           | Utilisez l'URL suivante :
         p.url
-          | https://#{domain}/public/webdav/calendars/me/my-calendar/
+          | https://#{domain}/public/sync/calendars/me/my-calendar/
 
 
       h1 Configuration de CardDav (Contacts)
@@ -82,7 +82,7 @@ html(lang="en")
         p
           | Dans le champ "Serveur", écrivez :
         p.url
-          | #{domain}/public/webdav
+          | #{domain}/public/sync
 
       .carddavconf(data-device="android")
         p
@@ -91,7 +91,7 @@ html(lang="en")
           | Google Play avec le mot-clé "carddav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/webdav/principals/me/
+          | https://#{domain}/public/sync/principals/me/
 
       h1 Configuration de WebDav (Fichiers)
       p
@@ -100,7 +100,7 @@ html(lang="en")
         | avec une application Cozy et des logiciels pour les différents systèmes
         | d'exploitation et téléphones.
 
-      h1 Trouble Shootings
+      h1 Troubleshooting
       p
         | Si vous rencontrez des problèmes, faites le nos savoir&nbsp;
         a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") sur Github !

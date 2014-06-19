@@ -5,12 +5,10 @@ Contact = require "#{helpers.prefix}server/models/contact"
 
 describe 'Caldav support', ->
 
+    before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
-    before -> console.log "Server started"
     before helpers.makeDAVAccount
-    before -> console.log "DAV Account created"
-    #before helpers.createUser
+    before helpers.startServer
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
     before ->
@@ -104,8 +102,6 @@ describe 'Caldav support', ->
             """, depth: 1).call(this, done)
 
         it 'responds with 1 event', ->
-
-            console.log @resbody
 
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'

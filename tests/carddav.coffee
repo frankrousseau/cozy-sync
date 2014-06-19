@@ -5,9 +5,10 @@ Contact = require "#{helpers.prefix}server/models/contact"
 
 describe 'Carddav support', ->
 
+    before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
+    before helpers.startServer
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve'
     before ->
@@ -38,6 +39,8 @@ describe 'Carddav support', ->
         """, depth: 1
 
         it 'contains a ref to each Contacts', ->
+
+            console.log @resbody
 
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
@@ -87,9 +90,9 @@ describe 'Carddav support', ->
         before helpers.send 'PUT', url, """
             BEGIN:VCARD
             VERSION:3.0
-            FN:Steve
             EMAIL;TYPE=INTERNET;TYPE=HOME:stw@test.com
-            N:Wonder;;;;
+            FN:Steve Wonder
+            N:Wonder;Steve;;;
             TEL;TYPE=CELL:+33 1 23 45 67 89
             PRODID:-//dmfs.org//mimedir.vcard//EN
             REV:20131011T070908Z
@@ -103,11 +106,16 @@ describe 'Carddav support', ->
             @res.statusCode.should.equal 201
             @resbody.should.have.length 0
 
+        created = null
         it "and contact has been created in db", (done) ->
             Contact.byURI '24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf', (err, contact) ->
                 should.not.exist err
-                contact.should.have.property.cardavuri
+                created = contact[0]
+                created.should.have.property 'carddavuri'
+                should.not.exist created.fn
                 done()
+        it "and contact's vcf should include the UID property", ->
+            created.toVCF().indexOf('UID').should.not.equal -1
 
     describe "Android Check contact creation", ->
 
@@ -143,7 +151,8 @@ describe 'Carddav support', ->
         it "and contact has been updated in db", (done) ->
             Contact.byURI '24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf', (err, contact) ->
                 should.not.exist err
-                contact.should.have.property.cardavuri
+                contact = contact[0]
+                contact.should.have.property 'carddavuri'
                 done()
 
     describe "Android update Cozy Contact", ->
@@ -169,17 +178,22 @@ describe 'Carddav support', ->
             @res.statusCode.should.equal 201
             @resbody.should.have.length 0
 
+        created = null
         it "and contact has been updated in db", (done) ->
 
-            Contact.byURI '926f1393b7e328e6992e54178903582c.vcf', (err, contact) ->
+            Contact.byURI '926f1393b7e328e6992e54178903582c.vcf', (err, contacts) ->
                 should.not.exist err
-                should.exist contact
-                for dp in contact[0].datapoints
+                created = contacts[0]
+                should.exist created
+                for dp in created.datapoints
                     if dp.value is '1 11 2'
                         return done()
                     if dp.value is '1 11 1'
                         return done new Error('contact was not updated')
 
+        it "and contact's vcf should include the UID property", ->
+            console.log created.toVCF()
+            created.toVCF().indexOf('UID').should.not.equal -1
 
 
     describe "Android delete Contact", ->

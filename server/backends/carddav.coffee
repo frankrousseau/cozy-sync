@@ -1,4 +1,4 @@
-Exc       = require 'cozy-jsdav-fork/lib/shared/exceptions'
+Exc       = require 'jsDAV/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
 axon = require 'axon'
 
@@ -79,7 +79,8 @@ module.exports = class CozyCardDAVBackend
             return callback handle 'Not Found' unless contact.length
 
             contact = contact[0]
-            data = @Contact.parse(cardData)
+            data = @Contact.parse(cardData).toObject()
+            data.id = contact._id
             data.carddavuri = cardUri
 
             contact.updateAttributes data, (err, contact) ->

@@ -51,11 +51,12 @@ task 'tests', "Run tests #{taskDetails}", (opts) ->
     exec command, (err, stdout, stderr) ->
         console.log stdout
         if err
+            console.log stderr
             logger.error "Running mocha caught exception:\n" + err
-            process.exit 1
+            setTimeout (=> process.exit 1), 10
         else
             logger.info "Tests succeeded!"
-            process.exit 0
+            setTimeout (=> process.exit 0), 10
 
 task 'build', 'Build CoffeeScript to Javascript', ->
     logger.options.prefix = 'cake:build'
@@ -64,6 +65,7 @@ task 'build', 'Build CoffeeScript to Javascript', ->
               "coffee -cb --output build/ server.coffee"
     exec command, (err, stdout, stderr) ->
         if err
+            console.log stderr
             logger.error "An error has occurred while compiling:\n" + err
             process.exit 1
         else

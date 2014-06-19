@@ -6,6 +6,7 @@ americano = require('americano-cozy');
 module.exports = WebDAVAccount = americano.getModel('WebDAVAccount', {
   id: String,
   login: String,
+  token: String,
   password: String,
   ctag: Number,
   cardctag: Number
@@ -13,12 +14,33 @@ module.exports = WebDAVAccount = americano.getModel('WebDAVAccount', {
 
 WebDAVAccount.first = function(callback) {
   return WebDAVAccount.request('all', function(err, accounts) {
+    var account;
     if (err) {
       return callback(err);
     } else if (!accounts || accounts.length === 0) {
       return callback(null, null);
     } else {
-      return callback(null, accounts[0]);
+      account = accounts[0];
+      if (account != null ? account.password : void 0) {
+        console.log("WEBDAVACCOUNT HAS A PASSWORD, PATCHING");
+        account.token = account.password;
+        account.password = null;
+        return account.save(function(err) {
+          return callback(err, account);
+        });
+      } else {
+        return callback(null, account);
+      }
+    }
+  });
+};
+
+WebDAVAccount.set = function(data, callback) {
+  return WebDAVAccount.first(function(err, account) {
+    if (account == null) {
+      return WebDAVAccount.create(data, callback);
+    } else {
+      return account.updateAttributes(data, callback);
     }
   });
 };

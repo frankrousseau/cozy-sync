@@ -4,7 +4,8 @@ americano = require 'americano-cozy'
 module.exports = WebDAVAccount = americano.getModel 'WebDAVAccount',
     id: String
     login: String
-    password: String
+    token: String
+    password: String # old token, kept for retrocompatiblity
     ctag: Number # used to keep track of changes in the calendar
     cardctag: Number # used to keep track of changes in the addressbook
 
@@ -12,4 +13,27 @@ WebDAVAccount.first = (callback) ->
     WebDAVAccount.request 'all', (err, accounts) ->
         if err then callback err
         else if not accounts or accounts.length is 0 then callback null, null
-        else  callback null, accounts[0]
+        else
+            account = accounts[0]
+
+            # Retrocompatibility, webdav account has no business
+            # being encrypted, we rename the password field as token in the db
+            if account?.password
+                console.log "WEBDAVACCOUNT HAS A PASSWORD, PATCHING"
+                account.token = account.password
+                account.password = null
+                account.save (err) ->
+                    callback err, account
+
+            else
+                callback null, account
+
+
+WebDAVAccount.set = (data, callback) ->
+    # Patching
+
+    WebDAVAccount.first (err, account) ->
+        if not account?
+            WebDAVAccount.create data, callback
+        else
+            account.updateAttributes data, callback
