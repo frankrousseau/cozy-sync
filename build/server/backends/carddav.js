@@ -122,7 +122,8 @@ module.exports = CozyCardDAVBackend = (function() {
           return callback(handle('Not Found'));
         }
         contact = contact[0];
-        data = _this.Contact.parse(cardData);
+        data = _this.Contact.parse(cardData).toObject();
+        data.id = contact._id;
         data.carddavuri = cardUri;
         return contact.updateAttributes(data, function(err, contact) {
           if (err) {
