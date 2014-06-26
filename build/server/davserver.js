@@ -41,7 +41,7 @@ module.exports = jsDAV.mount({
   server: true,
   standalone: false,
   realm: 'jsDAV',
-  mount: '/public/webdav/',
+  mount: '/public/sync/',
   authBackend: cozy_Auth_Backend["new"](),
   plugins: [require("jsDAV/lib/DAV/plugins/auth"), require("jsDAV/lib/CardDAV/plugin"), require("jsDAV/lib/CalDAV/plugin"), require("jsDAV/lib/DAVACL/plugin")],
   node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
