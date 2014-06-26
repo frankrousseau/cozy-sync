@@ -12,7 +12,7 @@ describe 'Carddav support', ->
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve'
     before ->
-        url = '/public/webdav/addressbooks/me/all-contacts/'
+        url = '/public/sync/addressbooks/me/all-contacts/'
         @bobHref   = url + @contacts['Bob'].id   + '.vcf'
         @steveHref = url + @contacts['Steve'].id + '.vcf'
 
@@ -20,12 +20,12 @@ describe 'Carddav support', ->
     after  helpers.cleanDB
 
     ### Not tested because part of jsDAV
-       OPTIONS /public/webdav/addressbooks/me/all-contacts/
-       PROPFIND /public/webdav/addressbooks/me/all-contacts/ DEPTH=0
+       OPTIONS /public/sync/addressbooks/me/all-contacts/
+       PROPFIND /public/sync/addressbooks/me/all-contacts/ DEPTH=0
     ###
 
 
-    describe 'Android PROPFIND /public/webdav/addressbooks/me/all-contacts/ D=1', ->
+    describe 'Android PROPFIND /public/sync/addressbooks/me/all-contacts/ D=1', ->
 
         url = '/public/addressbooks/me/all-contacts/'
         before helpers.send 'PROPFIND', url, """
@@ -50,7 +50,7 @@ describe 'Carddav support', ->
             hrefs.should.include @bobHref
             hrefs.should.include @steveHref
 
-    describe 'Android REPORT /public/webdav/addressbooks/me/all-contacts/', ->
+    describe 'Android REPORT /public/sync/addressbooks/me/all-contacts/', ->
 
         url = '/public/addressbooks/me/all-contacts/'
         before (done) ->

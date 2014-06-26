@@ -12,7 +12,7 @@ describe 'Caldav support', ->
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
     before ->
-        url = '/public/webdav/calendars/me/my-calendar/'
+        url = '/public/sync/calendars/me/my-calendar/'
         @event1Id = @events['A'].id
         @event1href = url + @events['A'].id + '.ics'
         @event2href = url + @events['C'].id + '.ics'
@@ -21,7 +21,7 @@ describe 'Caldav support', ->
     after helpers.cleanDB
 
 
-    describe 'Apple PROPFIND /public/webdav/calendars/me/my-calendar/ D=1', ->
+    describe 'Apple PROPFIND /public/sync/calendars/me/my-calendar/ D=1', ->
 
         before helpers.send 'PROPFIND', '/public/calendars/me/my-calendar/', """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -44,7 +44,7 @@ describe 'Caldav support', ->
 
 
 
-    describe 'Apple REPORT /public/webdav/calendars/me/my-calendar/', ->
+    describe 'Apple REPORT /public/sync/calendars/me/my-calendar/', ->
 
         before (done) ->
             helpers.send('REPORT', '/public/calendars/me/my-calendar/', """

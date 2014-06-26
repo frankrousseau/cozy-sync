@@ -12,7 +12,7 @@ describe 'Carddav support - Apple', ->
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve'
     before ->
-        url = '/public/webdav/addressbooks/me/all-contacts/'
+        url = '/public/sync/addressbooks/me/all-contacts/'
         @bobHref   = url + @contacts['Bob'].id   + '.vcf'
         @steveHref = url + @contacts['Steve'].id + '.vcf'
 
@@ -20,12 +20,12 @@ describe 'Carddav support - Apple', ->
     after  helpers.cleanDB
 
     ### Not tested because part of jsDAV
-       OPTIONS /public/webdav/addressbooks/me/all-contacts/
-       PROPFIND /public/webdav/addressbooks/me/all-contacts/ DEPTH=0
+       OPTIONS /public/sync/addressbooks/me/all-contacts/
+       PROPFIND /public/sync/addressbooks/me/all-contacts/ DEPTH=0
     ###
 
 
-    describe 'Apple PROPFIND /public/webdav/addressbooks/me/all-contacts/ D=1', ->
+    describe 'Apple PROPFIND /public/sync/addressbooks/me/all-contacts/ D=1', ->
 
         url = '/public/addressbooks/me/all-contacts/'
         before helpers.send 'PROPFIND', url, """
