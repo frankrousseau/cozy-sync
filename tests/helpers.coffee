@@ -21,7 +21,6 @@ exports.startServer = (done) ->
         done()
 
 exports.prepareForCrypto = (done) ->
-    # return done null
     # don't want to include bcrypt
     clear = "password"
     salt = "th00ee2l2w23ayvi2njpwm1n"

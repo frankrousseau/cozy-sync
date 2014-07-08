@@ -45,7 +45,7 @@ module.exports = class CozyCalDAVBackend
             uri: 'my-calendar'
             principaluri: principalUri
             "{http://calendarserver.org/ns/}getctag": @ctag
-            "{http://calendarserver.org/ns/}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
+            "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
             "{DAV:}displayname": 'Cozy Calendar'
         callback null, [calendar]
 
