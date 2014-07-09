@@ -32,7 +32,7 @@ module.exports = {
         if (req.url.indexOf('/public') !== 0) {
           return next(null);
         }
-        req.url = req.url.replace('/public', '/public/webdav');
+        req.url = req.url.replace('/public', '/public/sync');
         return DAVServer.exec(req, res);
       }
     ]

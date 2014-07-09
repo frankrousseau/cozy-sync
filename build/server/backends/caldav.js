@@ -3,15 +3,15 @@
 var CalDAV_CQValidator, CalendarQueryParser, CozyCalDAVBackend, Exc, ICalParser, SCCS, VCalendar, VEvent, VObject_Reader, VTimezone, VTodo, WebdavAccount, async, axon, time, _ref,
   __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-Exc = require("cozy-jsdav-fork/lib/shared/exceptions");
+Exc = require("jsDAV/lib/shared/exceptions");
 
-SCCS = require("cozy-jsdav-fork/lib/CalDAV/properties/supportedCalendarComponentSet");
+SCCS = require("jsDAV/lib/CalDAV/properties/supportedCalendarComponentSet");
 
-CalendarQueryParser = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryParser');
+CalendarQueryParser = require('jsDAV/lib/CalDAV/calendarQueryParser');
 
-VObject_Reader = require('cozy-jsdav-fork/lib/VObject/reader');
+VObject_Reader = require('jsDAV/lib/VObject/reader');
 
-CalDAV_CQValidator = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryValidator');
+CalDAV_CQValidator = require('jsDAV/lib/CalDAV/calendarQueryValidator');
 
 WebdavAccount = require('../models/webdavaccount');
 
@@ -77,7 +77,7 @@ module.exports = CozyCalDAVBackend = (function() {
       uri: 'my-calendar',
       principaluri: principalUri,
       "{http://calendarserver.org/ns/}getctag": this.ctag,
-      "{http://calendarserver.org/ns/}supported-calendar-component-set": SCCS["new"](['VEVENT', 'VTODO']),
+      "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS["new"](['VEVENT', 'VTODO']),
       "{DAV:}displayname": 'Cozy Calendar'
     };
     return callback(null, [calendar]);
@@ -223,7 +223,6 @@ module.exports = CozyCalDAVBackend = (function() {
             return callback(err, null);
           });
         } else if (obj.name === 'VTODO') {
-          console.log("ALARM");
           alarm = _this.Alarm.fromIcal(obj);
           alarm.caldavuri = objectUri;
           return _this.Alarm.create(alarm, function(err, alarm) {
@@ -251,11 +250,9 @@ module.exports = CozyCalDAVBackend = (function() {
             event = _this.Event.fromIcal(newObj).toObject();
             delete event.id;
             return oldObj.updateAttributes(event, function(err, event) {
-              console.log("RESULT", err, event);
               return callback(err, null);
             });
           } else if (newObj.name === 'VTODO' && oldObj instanceof _this.Alarm) {
-            console.log("ALARM");
             alarm = _this.Alarm.fromIcal(newObj);
             return oldObj.updateAttributes(alarm, function(err, alarm) {
               return callback(err, null);
@@ -307,7 +304,8 @@ module.exports = CozyCalDAVBackend = (function() {
           _ref1 = alarms.concat(events);
           for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
             jugglingObj = _ref1[_i];
-            vobj = reader.read(ical = _this._toICal(jugglingObj, timezone));
+            ical = _this._toICal(jugglingObj, timezone);
+            vobj = reader.read(ical);
             if (validator.validate(vobj, filters)) {
               uri = jugglingObj.caldavuri || (jugglingObj.id + '.ics');
               objects.push({
@@ -320,6 +318,7 @@ module.exports = CozyCalDAVBackend = (function() {
           }
         } catch (_error) {
           ex = _error;
+          console.log(ex.stack);
           return callback(ex, []);
         }
         return callback(null, objects);

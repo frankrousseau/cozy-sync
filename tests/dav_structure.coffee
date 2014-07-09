@@ -3,14 +3,14 @@ should = require('chai').Should()
 
 describe 'Basic DAV Structure', ->
 
-    #before require '../server/models/requests'
+    before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
+    before helpers.startServer
     after  helpers.closeServer
     after  helpers.cleanDB
 
-    describe 'Android PROPFIND /public/webdav/', ->
+    describe 'Android PROPFIND /public/sync/', ->
 
         before helpers.send 'PROPFIND', '/public', """
             <?xml version="1.0" encoding="utf-8" ?>
@@ -21,13 +21,13 @@ describe 'Basic DAV Structure', ->
 
         it 'contains a ref to "me" principals', ->
             ref2me = '<d:current-user-principal><d:href>' +
-                     '/public/webdav/principals/me/' +
+                     '/public/sync/principals/me/' +
                      '</d:href></d:current-user-principal>'
 
             @resbody.should.have.string ref2me
 
 
-    # describe 'Android PROPFIND /public/webdav/principals/me/', ->
+    # describe 'Android PROPFIND /public/sync/principals/me/', ->
 
     #     before helpers.send 'PROFIND', '/public/principals/me', """
     #         <?xml version="1.0" encoding="utf-8" ?>
@@ -38,11 +38,11 @@ describe 'Basic DAV Structure', ->
 
     #     it 'contains a ref to the addressbook set', ->
     #         ref = '<card:addressbook-home-set><d:href>' +
-    #               '/public/webdav/addressbooks/me/' +
+    #               '/public/sync/addressbooks/me/' +
     #               '</d:href></card:addressbook-home-set>'
     #         @resbody.should.have.string ref
 
-    # describe 'Apple PROPFIND /public/webdav/principals/me/', ->
+    # describe 'Apple PROPFIND /public/sync/principals/me/', ->
 
     #     before helpers.send 'PROFIND', '/public/principals/me', """
     #        <?xml version="1.0" encoding="UTF-8"?>
@@ -62,11 +62,11 @@ describe 'Basic DAV Structure', ->
 
     #     it 'contains a ref to the addressbook set', ->
     #         ref = '<card:addressbook-home-set><d:href>' +
-    #               '/public/webdav/addressbooks/me/' +
+    #               '/public/sync/addressbooks/me/' +
     #               '</d:href></card:addressbook-home-set>'
     #         @resbody.should.have.string ref
 
-    describe 'Android PROPFIND /public/webdav/addressbooks/me/', ->
+    describe 'Android PROPFIND /public/sync/addressbooks/me/', ->
 
         before helpers.send 'PROPFIND', '/public/addressbooks/me', """
             <?xml version="1.0" encoding="utf-8" ?>
@@ -77,7 +77,7 @@ describe 'Basic DAV Structure', ->
 
         it 'contains ref to the addressbook', ->
 
-            ref = '<d:href>/public/webdav/addressbooks/me/all-contacts/</d:href>'
+            ref = '<d:href>/public/sync/addressbooks/me/all-contacts/</d:href>'
             refName = '<d:displayname>Cozy Contacts</d:displayname>'
             refType = '<d:resourcetype><d:collection/><card:addressbook/></d:resourcetype>'
 
@@ -85,7 +85,7 @@ describe 'Basic DAV Structure', ->
             @resbody.should.have.string refName
             @resbody.should.have.string refType
 
-    describe 'Apple PROPFIND /public/webdav/addressbooks/me/', ->
+    describe 'Apple PROPFIND /public/sync/addressbooks/me/', ->
 
         before helpers.send 'PROPFIND', '/public/addressbooks/me', """
             <?xml version="1.0" encoding="utf-8" ?>
@@ -113,7 +113,7 @@ describe 'Basic DAV Structure', ->
 
         it 'contains ref to the addressbook', ->
 
-            ref = '<d:href>/public/webdav/addressbooks/me/all-contacts/</d:href>'
+            ref = '<d:href>/public/sync/addressbooks/me/all-contacts/</d:href>'
             refName = '<d:displayname>Cozy Contacts</d:displayname>'
             refType = '<d:resourcetype><d:collection/><card:addressbook/></d:resourcetype>'
 
@@ -121,7 +121,7 @@ describe 'Basic DAV Structure', ->
             @resbody.should.have.string refName
             @resbody.should.have.string refType
 
-    describe 'Apple PROPFIND /public/webdav/calendars/me/ D=1', ->
+    describe 'Apple PROPFIND /public/sync/calendars/me/ D=1', ->
 
         before helpers.send 'PROPFIND', '/public/calendars/me/', """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -168,7 +168,7 @@ describe 'Basic DAV Structure', ->
 
         it 'contains ref to the calendar', ->
 
-            ref = '<d:href>/public/webdav/calendars/me/my-calendar/</d:href>'
+            ref = '<d:href>/public/sync/calendars/me/my-calendar/</d:href>'
             refName = '<d:displayname>Cozy Calendar</d:displayname>'
             refType = '<d:resourcetype><d:collection/><cal:calendar/></d:resourcetype>'
 

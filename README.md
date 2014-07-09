@@ -1,6 +1,6 @@
-# [Cozy](http://cozy.io) WebDAV
+# [Cozy](http://cozy.io) Sync
 
-Cozy WebDAV allows you to synchronize your Contacts and your Calendars from
+Cozy Sync allows you to synchronize your Contacts and your Calendars from
 your Cozy with any device or software that supports CalDAV and CarDAV
 protocols.
 

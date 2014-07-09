@@ -24,5 +24,8 @@ Contact::toVCF = ->
 
 Contact.parse = (vcf) ->
     parser = new VCardParser()
-    parser.read vcf
+    parser.read(vcf)
+    contact = parser.contacts[0]
+    if contact.fn and contact.n
+        delete contact.fn
     return new Contact parser.contacts[0]

@@ -5,13 +5,14 @@ Contact = require "#{helpers.prefix}server/models/contact"
 
 describe 'Carddav support - Apple', ->
 
+    before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
+    before helpers.startServer
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve'
     before ->
-        url = '/public/webdav/addressbooks/me/all-contacts/'
+        url = '/public/sync/addressbooks/me/all-contacts/'
         @bobHref   = url + @contacts['Bob'].id   + '.vcf'
         @steveHref = url + @contacts['Steve'].id + '.vcf'
 
@@ -19,12 +20,12 @@ describe 'Carddav support - Apple', ->
     after  helpers.cleanDB
 
     ### Not tested because part of jsDAV
-       OPTIONS /public/webdav/addressbooks/me/all-contacts/
-       PROPFIND /public/webdav/addressbooks/me/all-contacts/ DEPTH=0
+       OPTIONS /public/sync/addressbooks/me/all-contacts/
+       PROPFIND /public/sync/addressbooks/me/all-contacts/ DEPTH=0
     ###
 
 
-    describe 'Apple PROPFIND /public/webdav/addressbooks/me/all-contacts/ D=1', ->
+    describe 'Apple PROPFIND /public/sync/addressbooks/me/all-contacts/ D=1', ->
 
         url = '/public/addressbooks/me/all-contacts/'
         before helpers.send 'PROPFIND', url, """
@@ -69,8 +70,13 @@ describe 'Carddav support - Apple', ->
             @res.statusCode.should.equal 201
             @resbody.should.have.length 0
 
+        created = null
         it "and contact has been created in db", (done) ->
-            Contact.byURI '300C1951-1585-49C9-AD22-661DBCCA89F4.vcf', (err, contact) ->
+            Contact.byURI '300C1951-1585-49C9-AD22-661DBCCA89F4.vcf', (err, contacts) ->
                 should.not.exist err
-                contact.should.have.property.cardavuri
+                created = contacts[0]
+                created.should.have.property 'carddavuri'
                 done()
+
+        it "and contact's vcf should include the UID property", ->
+            created.toVCF().indexOf('UID').should.not.equal -1

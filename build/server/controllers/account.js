@@ -46,7 +46,7 @@ module.exports = {
     domain = cozyInstance != null ? cozyInstance.domain : 'your.cozy.url';
     data = {
       login: davAccount != null ? davAccount.login : void 0,
-      password: davAccount != null ? davAccount.password : void 0,
+      password: davAccount != null ? davAccount.token : void 0,
       domain: domain
     };
     return res.render(filename, data);
@@ -62,39 +62,24 @@ module.exports = {
     }
   },
   createCredentials: function(req, res) {
-    var data, login, password;
-    login = 'me';
-    password = shortId.generate();
+    var data;
     data = {
-      login: login,
-      password: password
+      login: 'me',
+      token: shortId.generate()
     };
-    if (davAccount == null) {
-      return WebDAVAccount.create(data, function(err, account) {
-        if (err) {
-          return res.send({
-            error: true,
-            msg: err.toString()
-          }, 500);
-        } else {
-          davAccount = account;
-          return res.send({
-            success: true,
-            account: account.toJSON()
-          });
-        }
-      });
-    } else {
-      davAccount.login = login;
-      davAccount.password = password;
-      return davAccount.save(function(err) {
-        if (err) {
-          return res.send({
-            error: true,
-            msg: err.toString()
-          }, 500);
-        }
-      });
-    }
+    return WebDAVAccount.set(data, function(err, account) {
+      if (err) {
+        return res.send({
+          error: true,
+          msg: err.toString()
+        }, 500);
+      } else {
+        davAccount = account;
+        return res.send({
+          success: true,
+          account: account.toJSON()
+        });
+      }
+    });
   }
 };

@@ -5,14 +5,14 @@ Contact = require "#{helpers.prefix}server/models/contact"
 
 describe 'Caldav support', ->
 
+    before helpers.createRequests
     before helpers.cleanDB
-    before helpers.startServer
     before helpers.makeDAVAccount
-    #before helpers.createUser
+    before helpers.startServer
     before helpers.createEvent 'A', 'B', 13
     before helpers.createEvent 'C', 'D', 15
     before ->
-        url = '/public/webdav/calendars/me/my-calendar/'
+        url = '/public/sync/calendars/me/my-calendar/'
         @event1Id = @events['A'].id
         @event1href = url + @events['A'].id + '.ics'
         @event2href = url + @events['C'].id + '.ics'
@@ -21,7 +21,7 @@ describe 'Caldav support', ->
     after helpers.cleanDB
 
 
-    describe 'Apple PROPFIND /public/webdav/calendars/me/my-calendar/ D=1', ->
+    describe 'Apple PROPFIND /public/sync/calendars/me/my-calendar/ D=1', ->
 
         before helpers.send 'PROPFIND', '/public/calendars/me/my-calendar/', """
             <?xml version="1.0" encoding="UTF-8"?>
@@ -44,7 +44,7 @@ describe 'Caldav support', ->
 
 
 
-    describe 'Apple REPORT /public/webdav/calendars/me/my-calendar/', ->
+    describe 'Apple REPORT /public/sync/calendars/me/my-calendar/', ->
 
         before (done) ->
             helpers.send('REPORT', '/public/calendars/me/my-calendar/', """
@@ -102,8 +102,6 @@ describe 'Caldav support', ->
             """, depth: 1).call(this, done)
 
         it 'responds with 1 event', ->
-
-            console.log @resbody
 
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
