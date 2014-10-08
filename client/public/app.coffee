@@ -60,7 +60,7 @@ $ ->
         button.startLoading()
         client.post 'token', {},
             success: (data) ->
-                $('#password-span').html data.account.password
+                $('#password-span').html data.account.token
                 button.endLoading()
             error: (err) ->
                 button.endLoading()

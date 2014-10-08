@@ -71,7 +71,7 @@
       return client.post('token', {}, {
         success: function(data) {
           $('#login-span').html(data.account.login);
-          $('#password-span').html(data.account.password);
+          $('#password-span').html(data.account.token);
           return button.endLoading();
         },
         error: function(err) {
