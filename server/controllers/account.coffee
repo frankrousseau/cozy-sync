@@ -30,7 +30,6 @@ module.exports =
             login: davAccount?.login
             password: davAccount?.token
             domain: domain
-            locale: locale
         res.render filename, data
 
     getCredentials: (req, res) ->
