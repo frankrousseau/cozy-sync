@@ -6,11 +6,15 @@ controller = require('./controllers/account');
 WebDAVAccount = require('./models/webdavaccount');
 
 module.exports = function(callback) {
-  return WebDAVAccount.first(function(err, account) {
-    if (account == null) {
-      return controller.createCredentials({}, {
-        send: callback
-      });
-    }
-  });
+  if (process.env.NODE_ENV === 'test') {
+    return callback();
+  } else {
+    return WebDAVAccount.first(function(err, account) {
+      if (account == null) {
+        return controller.createCredentials({}, {
+          send: callback
+        });
+      }
+    });
+  }
 };
