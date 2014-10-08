@@ -1,0 +1,137 @@
+shadow()
+    -moz-box-shadow arguments
+    -webkit-box-shadow arguments
+    box-shadow arguments
+
+text-shadow()
+    -moz-text-shadow arguments
+    -webkit-text-shadow arguments
+    text-shadow arguments
+
+@font-face
+    font-family main
+    src url('../fonts/signika-regular.ttf')
+
+@font-face
+    font-family styled
+    src url('../fonts/maven-pro-light-200.otf')
+
+blue = #34A6FF
+orange = #fe8800
+
+html, body
+    height 100%
+    width 100%
+    padding 0
+    margin 0
+    box-sizing border-box
+
+html, body, h1, p
+    box-sizing border-box
+
+body
+    background #F4F4F4
+    font-family main
+
+a
+    color blue
+
+    &:hover
+        color orange
+
+#show-password
+#hide-password
+    display inline-block
+    margin-left 15px
+
+#hide-password
+    display none
+
+
+h1
+h2
+h3
+    font-family styled
+
+h1
+    margin-top 65px
+    border-bottom 1px solid #CCC
+
+h2
+    margin-top 50px
+    background #77A
+    font-size 26px
+
+    &.tab
+        display inline-block
+        border-radius 0
+        border-right 1px solid #fff
+
+        &.selected
+        &:hover
+            background #77A - 20%
+
+.caldavconf
+.carddavconf
+    display block
+
+.caldavconf ~ .caldavconf
+.carddavconf ~ .carddavconf
+    display none
+
+
+h3
+    margin-top:30px
+
+p
+    margin-top 5px
+    margin-bottom 5px
+
+h2
+.url
+   color white
+   font-size 20px
+   border-radius 5px
+   padding 10px
+
+#content
+    padding 20px
+    max-width 600px
+    margin auto
+    background #FBFBFB
+    border-right 1px solid #EEE
+    border-left 1px solid #EEE
+
+button
+    cursor pointer
+    border 1px solid blue
+    background blue
+    color white
+    box-shadow none
+    text-shadow none
+    border-radius 5px
+    font-family main
+    padding 5px
+    font-size 12px
+    min-width 50px
+    outline none
+
+button:hover
+    background orange
+    border 1px solid orange
+    color white
+
+button:active
+    background orange - 3%
+    border 1px solid orange
+    shadow 1px 3px 2px rgba(0, 0, 0, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.0)
+    color white
+
+.url
+   background #7A7
+
+.credentials
+   font-weight normal
+
+   span
+     font-weight bold
