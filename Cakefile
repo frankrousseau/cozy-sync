@@ -62,7 +62,9 @@ task 'build', 'Build CoffeeScript to Javascript', ->
     logger.options.prefix = 'cake:build'
     logger.info "Start compilation..."
     command = "coffee -cb --output build/server server && " + \
-              "coffee -cb --output build/ server.coffee"
+              "coffee -cb --output build/ server.coffee && " + \
+              "rm -rf build/server/views && " + \
+              "cp -R server/views build/server/views"
     exec command, (err, stdout, stderr) ->
         if err
             console.log stderr
