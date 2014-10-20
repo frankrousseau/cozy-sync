@@ -2,7 +2,6 @@ fs = require 'fs'
 path = require 'path'
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
-shortId = require 'shortid'
 
 davAccount = null
 WebDAVAccount.first (err, account) ->
@@ -39,12 +38,8 @@ module.exports =
             res.send error: true, msg: 'No webdav account generated', 404
 
     createCredentials: (req, res) ->
-        data =
-            login: 'me'
-            token: shortId.generate()
-
-        WebDAVAccount.set data, (err, account) ->
-            if err then res.send error: true, msg: err.toString(), 500
+        WebDAVAccount.createAccount (err, account) ->
+            if err?
+                res.send 500, error: err.toString()
             else
-                davAccount = account
-                res.send success: true, account: account.toJSON()
+                res.send 201, success: true, account: account.toJSON()

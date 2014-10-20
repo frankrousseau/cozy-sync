@@ -1,4 +1,5 @@
 americano = require 'americano-cozy'
+shortId = require 'shortid'
 
 # Object required to store the automatically generated webdav credentials.
 module.exports = WebDAVAccount = americano.getModel 'WebDAVAccount',
@@ -30,10 +31,15 @@ WebDAVAccount.first = (callback) ->
 
 
 WebDAVAccount.set = (data, callback) ->
-    # Patching
-
     WebDAVAccount.first (err, account) ->
         if not account?
             WebDAVAccount.create data, callback
         else
             account.updateAttributes data, callback
+
+WebDAVAccount.createAccount = (callback) ->
+    data =
+        login: 'me'
+        token: shortId.generate()
+
+    WebDAVAccount.set data, callback

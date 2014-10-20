@@ -1,6 +1,6 @@
+fs = require 'fs'
 americano = require 'americano'
 DAVServer = require './davserver'
-
 
 # public path depends on what app is running (./server or ./build/server)
 publicPath = __dirname + '/../client/public'
