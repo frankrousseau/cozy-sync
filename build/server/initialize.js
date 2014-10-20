@@ -11,9 +11,7 @@ module.exports = function(callback) {
   } else {
     return WebDAVAccount.first(function(err, account) {
       if (account == null) {
-        return controller.createCredentials({}, {
-          send: callback
-        });
+        return WebDAVAccount.createAccount(callback);
       }
     });
   }
