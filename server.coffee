@@ -11,7 +11,8 @@ application = module.exports = (callback) ->
 
     require('./server/models/webdavaccount').first ->
         americano.start options, (app, server) ->
-            initialize -> callback app, server if callback?
+            initialize ->
+                callback app, server if callback?
 
 if not module.parent
     application()
