@@ -10,7 +10,4 @@ module.exports = (callback) ->
     else
         WebDAVAccount.first (err, account) ->
             # if no account has been created
-            if not account?
-                # we create one based on the code in the controller by mocking
-                # express' req and res variables
-                controller.createCredentials {}, send: callback
+            WebDAVAccount.createAccount callback unless account?
