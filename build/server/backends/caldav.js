@@ -97,7 +97,10 @@ module.exports = CozyCalDAVBackend = (function() {
 
   CozyCalDAVBackend.prototype._toICal = function(obj, timezone) {
     var cal;
-    cal = new VCalendar('cozy', 'my-calendar');
+    cal = new VCalendar({
+      organization: 'Cozy',
+      title: 'Cozy Calendar'
+    });
     cal.add(obj.toIcal(timezone));
     return cal.toString();
   };

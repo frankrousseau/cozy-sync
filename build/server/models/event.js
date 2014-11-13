@@ -17,12 +17,7 @@ module.exports = Event = americano.getModel('Event', {
   caldavuri: String,
   start: String,
   end: String,
-  rrule: String,
   place: {
-    type: String,
-    "default": ''
-  },
-  description: {
     type: String,
     "default": ''
   },
@@ -30,17 +25,35 @@ module.exports = Event = americano.getModel('Event', {
     type: String,
     "default": ''
   },
-  diff: {
-    type: Number,
-    "default": 0
+  description: {
+    type: String,
+    "default": ''
+  },
+  rrule: String,
+  attendees: {
+    type: [Object]
   },
   related: {
     type: String,
     "default": null
+  },
+  timezone: {
+    type: String
+  },
+  alarms: {
+    type: [Object]
   }
 });
 
 require('cozy-ical').decorateEvent(Event);
+
+Event.dateFormat = 'YYYY-MM-DD';
+
+Event.ambiguousDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000';
+
+Event.utcDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000[Z]';
+
+Event.alarmTriggRegex = /(\+?|-)PT?(\d+)(W|D|H|M|S)/;
 
 Event.all = function(cb) {
   return Event.request('byURI', cb);
