@@ -337,7 +337,7 @@ module.exports = CozyCalDAVBackend = (function() {
   };
 
   CozyCalDAVBackend.prototype.getCalendarsName = function(callback) {
-    return async.parallel([this.Event.tags, this.Alarm.tags], function(err, results) {
+    return async.series([this.Event.tags, this.Alarm.tags], function(err, results) {
       var calendars, rawCalendar, rawCalendars, _i, _len;
       if (err != null) {
         return callback(err);
