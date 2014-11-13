@@ -205,7 +205,7 @@ module.exports = class CozyCalDAVBackend
             callback null, objects
 
     getCalendarsName: (callback) ->
-        async.parallel [
+        async.series [
             @Event.tags
             @Alarm.tags
         ], (err, results) ->
@@ -216,9 +216,9 @@ module.exports = class CozyCalDAVBackend
                 rawCalendars = results[0].calendar.concat results[1].calendar
                 calendars = []
                 # removes duplicates
-                for rawCalendar in rawCalendars
-                    if rawCalendar not in calendars
-                        calendars.push rawCalendar
+                for rawCalendar in rawCalendars \
+                when rawCalendar not in calendars
+                    calendars.push rawCalendar
 
                 callback null, calendars
 
