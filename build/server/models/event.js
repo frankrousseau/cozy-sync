@@ -59,6 +59,33 @@ Event.all = function(cb) {
   return Event.request('byURI', cb);
 };
 
+Event.byCalendar = function(calendarId, callback) {
+  return Event.request('byCalendar', {
+    key: calendarId
+  }, callback);
+};
+
+Event.tags = function(callback) {
+  return Event.rawRequest("tags", {
+    group: true
+  }, function(err, results) {
+    var out, result, tag, type, _i, _len, _ref1;
+    if (err) {
+      return callback(err);
+    }
+    out = {
+      calendar: [],
+      tag: []
+    };
+    for (_i = 0, _len = results.length; _i < _len; _i++) {
+      result = results[_i];
+      _ref1 = result.key, type = _ref1[0], tag = _ref1[1];
+      out[type].push(tag);
+    }
+    return callback(null, out);
+  });
+};
+
 Event.byURI = function(uri, cb) {
   var req;
   req = Event.request('byURI', null, cb);

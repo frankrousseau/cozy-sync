@@ -25,6 +25,12 @@ Alarm.all = function(cb) {
   return Alarm.request('byURI', cb);
 };
 
+Alarm.byCalendar = function(calendarId, callback) {
+  return Alarm.request('byCalendar', {
+    key: calendarId
+  }, callback);
+};
+
 Alarm.byURI = function(uri, cb) {
   var req;
   req = Alarm.request('byURI', null, cb);
@@ -32,4 +38,25 @@ Alarm.byURI = function(uri, cb) {
     key: uri
   });
   return req.setHeader('content-type', 'application/json');
+};
+
+Alarm.tags = function(callback) {
+  return Alarm.rawRequest("tags", {
+    group: true
+  }, function(err, results) {
+    var out, result, tag, type, _i, _len, _ref;
+    if (err) {
+      return callback(err);
+    }
+    out = {
+      calendar: [],
+      tag: []
+    };
+    for (_i = 0, _len = results.length; _i < _len; _i++) {
+      result = results[_i];
+      _ref = result.key, type = _ref[0], tag = _ref[1];
+      out[type].push(tag);
+    }
+    return callback(null, out);
+  });
 };
