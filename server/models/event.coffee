@@ -10,15 +10,26 @@ module.exports = Event = americano.getModel 'Event',
     caldavuri: String
     start: String
     end: String
-    rrule: String
     place: type: String, default: ''
-    description: type: String, default: ''
     details: type: String, default: ''
-    diff: type: Number, default: 0
+    description: type: String, default: ''
+    rrule: String
+    attendees   : type : [Object]
     related: type: String, default: null
+    timezone    : type : String
+    alarms      : type : [Object]
 
 # Add Ical utilities to Event model
 require('cozy-ical').decorateEvent Event
+
+# 'start' and 'end' use those format,
+# According to allDay or rrules.
+Event.dateFormat = 'YYYY-MM-DD'
+Event.ambiguousDTFormat = 'YYYY-MM-DD[T]HH:mm:00'
+Event.utcDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000Z'
+
+# Handle only unique units strings.
+Event.alarmTriggRegex = /(\+?|-)PT?(\d+)(W|D|H|M|S)/
 
 Event.all = (cb) -> Event.request 'byURI', cb
 Event.byURI = (uri, cb) ->

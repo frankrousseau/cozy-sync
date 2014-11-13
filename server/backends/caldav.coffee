@@ -59,7 +59,7 @@ module.exports = class CozyCalDAVBackend
         callback null, null
 
     _toICal: (obj, timezone) ->
-        cal = new VCalendar('cozy', 'my-calendar')
+        cal = new VCalendar organization: 'Cozy', title: 'Cozy Calendar'
         # cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
         cal.add obj.toIcal(timezone)
         cal.toString()
@@ -104,7 +104,6 @@ module.exports = class CozyCalDAVBackend
     _parseSingleObjICal: (calendarData, callback) ->
         new ICalParser().parseString calendarData, (err, calendar) =>
             return callback err if err
-
             callback null, @_extractCalObject calendar
 
     getCalendarObject: (calendarId, objectUri, callback) ->
