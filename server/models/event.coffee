@@ -25,8 +25,8 @@ require('cozy-ical').decorateEvent Event
 # 'start' and 'end' use those format,
 # According to allDay or rrules.
 Event.dateFormat = 'YYYY-MM-DD'
-Event.ambiguousDTFormat = 'YYYY-MM-DD[T]HH:mm:00'
-Event.utcDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000Z'
+Event.ambiguousDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000'
+Event.utcDTFormat = 'YYYY-MM-DD[T]HH:mm:00.000[Z]'
 
 # Handle only unique units strings.
 Event.alarmTriggRegex = /(\+?|-)PT?(\d+)(W|D|H|M|S)/
