@@ -40,14 +40,16 @@ module.exports = class CozyCalDAVBackend
             account.updateAttributes ctag: ctag, ->
 
     getCalendarsForUser: (principalUri, callback) ->
-        calendar =
-            id: 'my-calendar'
-            uri: 'my-calendar'
-            principaluri: principalUri
-            "{http://calendarserver.org/ns/}getctag": @ctag
-            "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
-            "{DAV:}displayname": 'Cozy Calendar'
-        callback null, [calendar]
+        @getCalendarsName (err, calendars) =>
+            icalCalendars = calendars.map (calendar) =>
+                calendar =
+                    id: calendar
+                    uri: encodeURIComponent calendar
+                    principaluri: principalUri
+                    "{http://calendarserver.org/ns/}getctag": @ctag
+                    "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
+                    "{DAV:}displayname": calendar
+            callback null, icalCalendars
 
     createCalendar: (principalUri, url, properties, callback) ->
         callback null, null
@@ -67,8 +69,8 @@ module.exports = class CozyCalDAVBackend
     getCalendarObjects: (calendarId, callback) ->
         objects = []
         async.parallel [
-            (cb) => @Alarm.all cb
-            (cb) => @Event.all cb
+            (cb) => @Alarm.byCalendar calendarId, cb
+            (cb) => @Event.byCalendar calendarId, cb
             (cb) => @User.getTimezone cb
         ], (err, results) =>
             return callback err if err
@@ -82,7 +84,6 @@ module.exports = class CozyCalDAVBackend
             callback null, objects
 
     _findCalendarObject: (calendarId, objectUri, callback) ->
-
         async.series [
             (cb) => @Alarm.byURI objectUri, cb
             (cb) => @Event.byURI objectUri, cb
@@ -174,8 +175,8 @@ module.exports = class CozyCalDAVBackend
         reader = VObject_Reader.new()
         validator = CalDAV_CQValidator.new()
         async.parallel [
-            (cb) => @Alarm.all cb
-            (cb) => @Event.all cb
+            (cb) => @Alarm.byCalendar calendarId, cb
+            (cb) => @Event.byCalendar calendarId, cb
             (cb) => @User.getTimezone cb
         ], (err, results) =>
             return callback err if err
@@ -202,3 +203,22 @@ module.exports = class CozyCalDAVBackend
                 return callback ex, []
 
             callback null, objects
+
+    getCalendarsName: (callback) ->
+        async.parallel [
+            @Event.tags
+            @Alarm.tags
+        ], (err, results) ->
+
+            if err?
+                callback err
+            else
+                rawCalendars = results[0].calendar.concat results[1].calendar
+                calendars = []
+                # removes duplicates
+                for rawCalendar in rawCalendars
+                    if rawCalendar not in calendars
+                        calendars.push rawCalendar
+
+                callback null, calendars
+
