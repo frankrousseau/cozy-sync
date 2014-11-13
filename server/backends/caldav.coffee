@@ -128,13 +128,13 @@ module.exports = class CozyCalDAVBackend
             return callback err if err
 
             if obj.name is 'VEVENT'
-                event = @Event.fromIcal obj
+                event = @Event.fromIcal obj, calendarId
                 event.caldavuri = objectUri
                 @Event.create event, (err, event) ->
                     callback err, null
 
             else if obj.name is 'VTODO'
-                alarm = @Alarm.fromIcal obj
+                alarm = @Alarm.fromIcal obj, calendarId
                 alarm.caldavuri = objectUri
                 @Alarm.create alarm, (err, alarm) ->
                     callback err, null
@@ -151,14 +151,14 @@ module.exports = class CozyCalDAVBackend
                 return callback err if err
 
                 if newObj.name is 'VEVENT' and oldObj instanceof @Event
-                    event = @Event.fromIcal(newObj).toObject()
+                    event = @Event.fromIcal(newObj, calendarId).toObject()
                     delete event.id
 
                     oldObj.updateAttributes event, (err, event) ->
                         callback err, null
 
                 else if newObj.name is 'VTODO' and oldObj instanceof @Alarm
-                    alarm = @Alarm.fromIcal newObj
+                    alarm = @Alarm.fromIcal newObj, calendarId
                     oldObj.updateAttributes alarm, (err, alarm) ->
                         callback err, null
 
