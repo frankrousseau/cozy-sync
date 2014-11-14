@@ -16,6 +16,11 @@ module.exports = Alarm = americano.getModel('Alarm', {
   related: {
     type: String,
     "default": null
+  },
+  tags: {
+    type: function(x) {
+      return x;
+    }
   }
 });
 

@@ -42,6 +42,11 @@ module.exports = Event = americano.getModel('Event', {
   },
   alarms: {
     type: [Object]
+  },
+  tags: {
+    type: function(x) {
+      return x;
+    }
   }
 });
 

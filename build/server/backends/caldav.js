@@ -85,7 +85,7 @@ module.exports = CozyCalDAVBackend = (function() {
             "{DAV:}displayname": calendar
           };
         });
-        return callback(null, icalCalendars);
+        return callback(err, icalCalendars);
       };
     })(this));
   };
