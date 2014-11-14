@@ -49,7 +49,7 @@ module.exports = class CozyCalDAVBackend
                     "{http://calendarserver.org/ns/}getctag": @ctag
                     "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
                     "{DAV:}displayname": calendar
-            callback null, icalCalendars
+            callback err, icalCalendars
 
     createCalendar: (principalUri, url, properties, callback) ->
         callback null, null

@@ -9,6 +9,7 @@ module.exports = Alarm = americano.getModel 'Alarm',
     timezone:    String
     action:      type: String, default: 'DISPLAY'
     related:     type: String, default: null
+    tags : type : (x) -> x
 
 # Add Ical utilities to Alarm model
 require('cozy-ical').decorateAlarm Alarm

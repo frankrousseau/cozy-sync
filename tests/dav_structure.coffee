@@ -6,6 +6,7 @@ describe 'Basic DAV Structure', ->
     before helpers.createRequests
     before helpers.cleanDB
     before helpers.makeDAVAccount
+    before helpers.createEvent 'A', 'B', 13
     before helpers.startServer
     after  helpers.closeServer
     after  helpers.cleanDB
@@ -169,9 +170,8 @@ describe 'Basic DAV Structure', ->
         it 'contains ref to the calendar', ->
 
             ref = '<d:href>/public/sync/calendars/me/my-calendar/</d:href>'
-            refName = '<d:displayname>Cozy Calendar</d:displayname>'
+            refName = '<d:displayname>my-calendar</d:displayname>'
             refType = '<d:resourcetype><d:collection/><cal:calendar/></d:resourcetype>'
-
             @resbody.should.have.string ref
             @resbody.should.have.string refName
             @resbody.should.have.string refType

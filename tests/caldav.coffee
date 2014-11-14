@@ -20,7 +20,6 @@ describe 'Caldav support', ->
     after helpers.closeServer
     after helpers.cleanDB
 
-
     describe 'Apple PROPFIND /public/sync/calendars/me/my-calendar/ D=1', ->
 
         before helpers.send 'PROPFIND', '/public/calendars/me/my-calendar/', """
