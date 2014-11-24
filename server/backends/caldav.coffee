@@ -189,14 +189,19 @@ module.exports = class CozyCalDAVBackend
                     # @TODO convert directly from juggling to VObject
                     ical = @_toICal jugglingObj, timezone
                     vobj = reader.read ical
-
                     if validator.validate vobj, filters
-                        uri = jugglingObj.caldavuri or (jugglingObj.id + '.ics')
+                        {id, caldavuri, lastModification} = jugglingObj
+                        uri = caldavuri or (id + '.ics')
+                        if lastModification?
+                            lastModification = new Date lastModification
+                        else
+                            lastModification = new Date()
+
                         objects.push
-                            id:           jugglingObj.id
+                            id:           id
                             uri:          uri
                             calendardata: ical
-                            lastmodified: new Date().getTime()
+                            lastmodified: lastModification.getTime()
 
             catch ex
                 console.log ex.stack
