@@ -66,3 +66,12 @@ $('.tab.carddav').click ->
     $(this).addClass 'selected'
     device = $(this).data 'device'
     $(".carddavconf[data-device='#{device}']").show()
+
+$('select#calendar').change (ev)->
+    $('option#placeholder').remove()
+    #https://#{domain}/public/sync/calendars/me/THE_CALENDAR
+    #iosuri :  #{domain}/public/sync/principals/me
+    domain = $('#iosuri').text().split('/')[0]
+
+    $('#thunderbirduri').text(
+        'https://' + domain + '/public/sync/calendars/me/' + this.value)
