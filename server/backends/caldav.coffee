@@ -63,7 +63,7 @@ module.exports = class CozyCalDAVBackend
     _toICal: (obj, timezone) ->
         cal = new VCalendar organization: 'Cozy', title: 'Cozy Calendar'
         # cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
-        cal.add obj.toIcal(timezone)
+        cal.add obj.toIcal timezone
         cal.toString()
 
     getCalendarObjects: (calendarId, callback) ->
@@ -77,8 +77,8 @@ module.exports = class CozyCalDAVBackend
 
             objects = results[0].concat(results[1]).map (obj) =>
                 id:           obj.id
-                uri:          obj.caldavuri or (obj.id + '.ics')
-                calendardata: @_toICal(obj, results[2])
+                uri:          obj.caldavuri or "#{obj.id}.ics"
+                calendardata: @_toICal obj, results[2]
                 lastmodified: new Date().getTime()
 
             callback null, objects
@@ -118,8 +118,8 @@ module.exports = class CozyCalDAVBackend
 
                 callback null,
                     id:           obj.id
-                    uri:          obj.caldavuri or (obj.id + '.ics')
-                    calendardata: @_toICal(obj, timezone)
+                    uri:          obj.caldavuri or "#{obj.id}.ics"
+                    calendardata: @_toICal obj, timezone
                     lastmodified: new Date().getTime()
 
 
@@ -191,7 +191,7 @@ module.exports = class CozyCalDAVBackend
                     vobj = reader.read ical
                     if validator.validate vobj, filters
                         {id, caldavuri, lastModification} = jugglingObj
-                        uri = caldavuri or (id + '.ics')
+                        uri = caldavuri or "#{id}.ics"
                         if lastModification?
                             lastModification = new Date lastModification
                         else
