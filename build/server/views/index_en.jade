@@ -52,7 +52,7 @@ html(lang="en")
       .caldavconf(data-device="ios")
         p
           | In the "Server" field, type:
-        p.url
+        p#iosuri.url
           | #{domain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
@@ -64,11 +64,16 @@ html(lang="en")
           | https://#{domain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
-        p
-          | Use the following url:
-        p.url
-          | https://#{domain}/public/sync/calendars/me/my-calendar/
+        p 
+          | Select a calendar:&nbsp;
+          select#calendar
+            option#placeholder(value="") -              
+            - each c in calendars
+              option(value=encodeURIComponent(c))= c
 
+        p
+          | Then use the following url:
+        p#thunderbirduri.url
 
       h1 CardDAV configuration (Contacts)
       p
