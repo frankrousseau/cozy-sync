@@ -137,7 +137,7 @@ module.exports = CozyCalDAVBackend = (function() {
         objects = results[0].concat(results[1]).map(function(obj) {
           return {
             id: obj.id,
-            uri: obj.caldavuri || (obj.id + '.ics'),
+            uri: obj.caldavuri || ("" + obj.id + ".ics"),
             calendardata: _this._toICal(obj, results[2]),
             lastmodified: new Date().getTime()
           };
@@ -210,7 +210,7 @@ module.exports = CozyCalDAVBackend = (function() {
           }
           return callback(null, {
             id: obj.id,
-            uri: obj.caldavuri || (obj.id + '.ics'),
+            uri: obj.caldavuri || ("" + obj.id + ".ics"),
             calendardata: _this._toICal(obj, timezone),
             lastmodified: new Date().getTime()
           });
@@ -305,7 +305,7 @@ module.exports = CozyCalDAVBackend = (function() {
       })(this)
     ], (function(_this) {
       return function(err, results) {
-        var alarms, events, ex, ical, jugglingObj, timezone, uri, vobj, _i, _len, _ref1;
+        var alarms, caldavuri, events, ex, ical, id, jugglingObj, lastModification, timezone, uri, vobj, _i, _len, _ref1;
         if (err) {
           return callback(err);
         }
@@ -317,12 +317,18 @@ module.exports = CozyCalDAVBackend = (function() {
             ical = _this._toICal(jugglingObj, timezone);
             vobj = reader.read(ical);
             if (validator.validate(vobj, filters)) {
-              uri = jugglingObj.caldavuri || (jugglingObj.id + '.ics');
+              id = jugglingObj.id, caldavuri = jugglingObj.caldavuri, lastModification = jugglingObj.lastModification;
+              uri = caldavuri || ("" + id + ".ics");
+              if (lastModification != null) {
+                lastModification = new Date(lastModification);
+              } else {
+                lastModification = new Date();
+              }
               objects.push({
-                id: jugglingObj.id,
+                id: id,
                 uri: uri,
                 calendardata: ical,
-                lastmodified: new Date().getTime()
+                lastmodified: lastModification.getTime()
               });
             }
           }
