@@ -98,7 +98,6 @@ exports.cleanDB = (done) ->
 
     requests =
         'event':         'byURI'
-        'alarm':         'byURI'
         'contact':       'byURI'
         'user':          'all'
         'cozyinstance':  'all'

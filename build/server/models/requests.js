@@ -43,16 +43,6 @@ module.exports = {
       return emit(doc.carddavuri || doc._id + '.vcf', doc);
     }
   },
-  alarm: {
-    all: function(doc) {
-      return emit(doc._id, doc);
-    },
-    byURI: function(doc) {
-      return emit(doc.caldavuri || doc._id + '.ics', doc);
-    },
-    tags: tagsView,
-    byCalendar: byCalendar
-  },
   event: {
     all: function(doc) {
       return emit(doc._id, doc);

@@ -9,11 +9,11 @@ WebdavAccount = require '../models/webdavaccount'
 async = require "async"
 axon = require 'axon'
 time  = require "time"
-{ICalParser, VCalendar, VTimezone, VEvent, VTodo} = require "cozy-ical"
+{ICalParser, VCalendar, VTimezone, VEvent} = require "cozy-ical"
 
 module.exports = class CozyCalDAVBackend
 
-    constructor: (@Event, @Alarm, @User) ->
+    constructor: (@Event, @User) ->
 
         @getLastCtag (err, ctag) =>
             # we suppose something happened while webdav was down
@@ -47,7 +47,7 @@ module.exports = class CozyCalDAVBackend
                     uri: encodeURIComponent calendar
                     principaluri: principalUri
                     "{http://calendarserver.org/ns/}getctag": @ctag
-                    "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT', 'VTODO' ]
+                    "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT' ]
                     "{DAV:}displayname": calendar
             callback err, icalCalendars
 
@@ -69,31 +69,34 @@ module.exports = class CozyCalDAVBackend
     getCalendarObjects: (calendarId, callback) ->
         objects = []
         async.parallel [
-            (cb) => @Alarm.byCalendar calendarId, cb
             (cb) => @Event.byCalendar calendarId, cb
             (cb) => @User.getTimezone cb
         ], (err, results) =>
+
             return callback err if err
 
-            objects = results[0].concat(results[1]).map (obj) =>
+            [events, timezone] = results
+
+            objects = events.map (obj) =>
+
+                if lastModification?
+                    lastModification = new Date lastModification
+                else
+                    lastModification = new Date()
+
                 id:           obj.id
                 uri:          obj.caldavuri or "#{obj.id}.ics"
-                calendardata: @_toICal obj, results[2]
-                lastmodified: new Date().getTime()
+                calendardata: @_toICal obj, timezone
+                lastmodified: lastModification.getTime()
 
             callback null, objects
 
     _findCalendarObject: (calendarId, objectUri, callback) ->
-        async.series [
-            (cb) => @Alarm.byURI objectUri, cb
-            (cb) => @Event.byURI objectUri, cb
-        ], (err, results) =>
-            object = (results[0]?[0] or results[1]?[0])
-            callback err, object
+        @Event.byURI objectUri, (err, results) -> callback err, results[0]
 
-    # take a calendar object from ICalParser, extract VEvent ot VTodo
+    # take a calendar object from ICalParser, extract VEvent
     _extractCalObject: (calendarobj) =>
-        if calendarobj instanceof VEvent or calendarobj instanceof VTodo
+        if calendarobj instanceof VEvent
             return calendarobj
         else
             for obj in calendarobj.subComponents
@@ -130,15 +133,7 @@ module.exports = class CozyCalDAVBackend
             if obj.name is 'VEVENT'
                 event = @Event.fromIcal obj, calendarId
                 event.caldavuri = objectUri
-                @Event.create event, (err, event) ->
-                    callback err, null
-
-            else if obj.name is 'VTODO'
-                alarm = @Alarm.fromIcal obj, calendarId
-                alarm.caldavuri = objectUri
-                @Alarm.create alarm, (err, alarm) ->
-                    callback err, null
-
+                @Event.create event, (err, event) -> callback err, null
             else
                 callback Exc.notImplementedYet()
 
@@ -157,11 +152,6 @@ module.exports = class CozyCalDAVBackend
                     oldObj.updateAttributes event, (err, event) ->
                         callback err, null
 
-                else if newObj.name is 'VTODO' and oldObj instanceof @Alarm
-                    alarm = @Alarm.fromIcal newObj, calendarId
-                    oldObj.updateAttributes alarm, (err, alarm) ->
-                        callback err, null
-
                 else
                     callback Exc.notImplementedYet()
 
@@ -175,17 +165,14 @@ module.exports = class CozyCalDAVBackend
         reader = VObject_Reader.new()
         validator = CalDAV_CQValidator.new()
         async.parallel [
-            (cb) => @Alarm.byCalendar calendarId, cb
             (cb) => @Event.byCalendar calendarId, cb
             (cb) => @User.getTimezone cb
         ], (err, results) =>
             return callback err if err
 
-            [alarms, events, timezone] = results
-
+            [events, timezone] = results
             try
-
-                for jugglingObj in alarms.concat events
+                for jugglingObj in events
                     # @TODO convert directly from juggling to VObject
                     ical = @_toICal jugglingObj, timezone
                     vobj = reader.read ical
@@ -210,15 +197,12 @@ module.exports = class CozyCalDAVBackend
             callback null, objects
 
     getCalendarsName: (callback) ->
-        async.series [
-            @Event.tags
-            @Alarm.tags
-        ], (err, results) ->
+        @Event.tags (err, results) ->
 
             if err?
                 callback err
             else
-                rawCalendars = results[0].calendar.concat results[1].calendar
+                rawCalendars = results.calendar
                 calendars = []
                 # removes duplicates
                 for rawCalendar in rawCalendars \
