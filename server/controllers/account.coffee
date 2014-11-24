@@ -2,6 +2,7 @@ fs = require 'fs'
 path = require 'path'
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
+Event = require '../models/event'
 
 davAccount = null
 WebDAVAccount.first (err, account) ->
@@ -25,11 +26,18 @@ module.exports =
             filename = "index_en"
 
         domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
-        data =
-            login: davAccount?.login
-            password: davAccount?.token
-            domain: domain
-        res.render filename, data
+        
+        Event.getCalendarsName (err, calendars) ->
+            if err
+                calendars = []
+
+            data =
+                login: davAccount?.login
+                password: davAccount?.token
+                domain: domain
+                calendars: calendars
+
+            res.render filename, data
 
     getCredentials: (req, res) ->
         if davAccount?
