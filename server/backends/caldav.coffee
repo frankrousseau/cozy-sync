@@ -64,7 +64,7 @@ module.exports = class CozyCalDAVBackend
     _toICal: (obj, timezone) ->
         cal = new VCalendar organization: 'Cozy', title: 'Cozy Calendar'
         # cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
-        cal.add obj.toIcal(timezone)
+        cal.add obj.toIcal timezone
         return cal.toString()
 
     getCalendarObjects: (calendarId, callback) ->
