@@ -28,6 +28,7 @@ module.exports =
         domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
         
         Event.tags (err, tags) ->
+
             if err
                 calendars = []
 
