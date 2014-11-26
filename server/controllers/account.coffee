@@ -27,7 +27,7 @@ module.exports =
 
         domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
         
-        Event.getCalendarsName (err, calendars) ->
+        Event.tags (err, tags) ->
             if err
                 calendars = []
 
@@ -35,7 +35,7 @@ module.exports =
                 login: davAccount?.login
                 password: davAccount?.token
                 domain: domain
-                calendars: calendars
+                calendars: tags.calendar
 
             res.render filename, data
 

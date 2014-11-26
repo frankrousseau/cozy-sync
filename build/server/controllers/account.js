@@ -44,8 +44,8 @@ module.exports = {
       filename = "index_en";
     }
     domain = cozyInstance != null ? cozyInstance.domain : 'your.cozy.url';
-    return Event.getCalendarsName(function(err, calendars) {
-      var data;
+    return Event.tags(function(err, tags) {
+      var calendars, data;
       if (err) {
         calendars = [];
       }
@@ -53,7 +53,7 @@ module.exports = {
         login: davAccount != null ? davAccount.login : void 0,
         password: davAccount != null ? davAccount.token : void 0,
         domain: domain,
-        calendars: calendars
+        calendars: tags.calendar
       };
       return res.render(filename, data);
     });

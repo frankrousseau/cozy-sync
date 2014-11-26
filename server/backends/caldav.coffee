@@ -6,6 +6,7 @@ CalendarQueryParser = require('jsDAV/lib/CalDAV/calendarQueryParser')
 VObject_Reader = require('jsDAV/lib/VObject/reader')
 CalDAV_CQValidator = require('jsDAV/lib/CalDAV/calendarQueryValidator')
 WebdavAccount = require '../models/webdavaccount'
+Event = require '../models/event'
 async = require "async"
 axon = require 'axon'
 time  = require "time"
@@ -40,7 +41,8 @@ module.exports = class CozyCalDAVBackend
             account.updateAttributes ctag: ctag, ->
 
     getCalendarsForUser: (principalUri, callback) ->
-        @getCalendarsName (err, calendars) =>
+        Event.tags (err, tags) =>
+            calendars = tags.calendar
             icalCalendars = calendars.map (calendar) =>
                 calendar =
                     id: calendar
@@ -194,19 +196,3 @@ module.exports = class CozyCalDAVBackend
                 return callback ex, []
 
             callback null, objects
-
-    getCalendarsName: (callback) ->
-        @Event.tags (err, results) ->
-
-            if err?
-                callback err
-            else
-                rawCalendars = results.calendar
-                calendars = []
-                # removes duplicates
-                for rawCalendar in rawCalendars \
-                when rawCalendar not in calendars
-                    calendars.push rawCalendar
-
-                callback null, calendars
-
