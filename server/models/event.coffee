@@ -2,7 +2,6 @@ americano = require 'americano-cozy'
 
 time = require 'time'
 moment = require 'moment'
-Alarm = require './alarm'
 async = require 'async'
 {VCalendar, VTodo, VAlarm, VEvent} = require '../lib/ical_helpers'
 
@@ -53,21 +52,3 @@ Event.byURI = (uri, cb) ->
     req = Event.request 'byURI', null, cb
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
-
-Event.getCalendarsName = (callback) ->
-    async.series [
-        Event.tags
-        Alarm.tags
-    ], (err, results) ->
-
-        if err?
-            callback err
-        else
-            rawCalendars = results[0].calendar.concat results[1].calendar
-            calendars = []
-            # removes duplicates
-            for rawCalendar in rawCalendars \
-            when rawCalendar not in calendars
-                calendars.push rawCalendar
-
-            callback null, calendars

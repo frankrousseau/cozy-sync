@@ -44,7 +44,6 @@ module.exports = class CozyCalDAVBackend
             icalCalendars = calendars.map (calendar) =>
                 calendar =
                     id: calendar
-                    # uri: encodeURIComponent calendar
                     uri: calendar
                     principaluri: principalUri
                     "{http://calendarserver.org/ns/}getctag": @ctag
@@ -63,7 +62,6 @@ module.exports = class CozyCalDAVBackend
 
     _toICal: (obj, timezone) ->
         cal = new VCalendar organization: 'Cozy', title: 'Cozy Calendar'
-        # cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
         cal.add obj.toIcal timezone
         return cal.toString()
 
