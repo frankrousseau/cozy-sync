@@ -38,7 +38,7 @@ html(lang="fr")
           button#hide-password Cacher
 
         button#generate-btn Réinitialiser le mot de passe
-
+      - var dDomain = (domain == '') ? 'votre.url.cozy' : domain
       h1 Configuration de CalDav (Calendrier)
       p
         | Lors du processus de configuration, votre smartphone va vous demander d'entrer une URL
@@ -52,8 +52,8 @@ html(lang="fr")
       .caldavconf(data-device="ios")
         p
           | Dans le champ "Serveur", écrivez :
-        p.url
-          | #{domain}/public/sync/principals/me
+        p#iosuri.url
+          | #{dDomain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
         p
@@ -62,13 +62,19 @@ html(lang="fr")
           | Google Play avec le mot-clé "caldav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
+        p 
+          | Sélectionnez un calendrier :&nbsp;
+          select#calendar
+            option#placeholder(value="") -              
+            - each c in calendars
+              option(value=encodeURIComponent(c))= c
+
         p
-          | Utilisez l'URL suivante :
-        p.url
-          | https://#{domain}/public/sync/calendars/me/my-calendar/
+          | Puis utilisez l'URL suivante :
+        p#thunderbirduri.url
 
 
       h1 Configuration de CardDav (Contacts)
@@ -83,7 +89,7 @@ html(lang="fr")
         p
           | Dans le champ "Serveur", écrivez :
         p.url
-          | #{domain}/public/sync
+          | #{dDomain}/public/sync
 
       .carddavconf(data-device="android")
         p
@@ -92,7 +98,7 @@ html(lang="fr")
           | Google Play avec le mot-clé "carddav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       h1 Configuration de WebDav (Fichiers)
       p

@@ -224,6 +224,13 @@ $('.tab.carddav').click(function() {
   device = $(this).data('device');
   return $(".carddavconf[data-device='" + device + "']").show();
 });
+
+$('select#calendar').change(function(ev) {
+  var domain;
+  $('option#placeholder').remove();
+  domain = $('#iosuri').text().split('/')[0];
+  return $('#thunderbirduri').text('https://' + domain + '/public/sync/calendars/me/' + this.value);
+});
 });
 
 ;require.register("spinner", function(exports, require, module) {

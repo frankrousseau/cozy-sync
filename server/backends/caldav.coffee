@@ -6,6 +6,7 @@ CalendarQueryParser = require('jsDAV/lib/CalDAV/calendarQueryParser')
 VObject_Reader = require('jsDAV/lib/VObject/reader')
 CalDAV_CQValidator = require('jsDAV/lib/CalDAV/calendarQueryValidator')
 WebdavAccount = require '../models/webdavaccount'
+Event = require '../models/event'
 async = require "async"
 axon = require 'axon'
 time  = require "time"
@@ -40,11 +41,11 @@ module.exports = class CozyCalDAVBackend
             account.updateAttributes ctag: ctag, ->
 
     getCalendarsForUser: (principalUri, callback) ->
-        @getCalendarsName (err, calendars) =>
+        Event.calendars (err, calendars) =>
             icalCalendars = calendars.map (calendar) =>
                 calendar =
                     id: calendar
-                    uri: encodeURIComponent calendar
+                    uri: calendar
                     principaluri: principalUri
                     "{http://calendarserver.org/ns/}getctag": @ctag
                     "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT' ]
@@ -62,9 +63,8 @@ module.exports = class CozyCalDAVBackend
 
     _toICal: (obj, timezone) ->
         cal = new VCalendar organization: 'Cozy', title: 'Cozy Calendar'
-        # cal.add new VTimezone new time.Date(obj.trigg or obj.start), timezone
         cal.add obj.toIcal timezone
-        cal.toString()
+        return cal.toString()
 
     getCalendarObjects: (calendarId, callback) ->
         objects = []
@@ -202,19 +202,3 @@ module.exports = class CozyCalDAVBackend
                 return callback ex, []
 
             callback null, objects
-
-    getCalendarsName: (callback) ->
-        @Event.tags (err, results) ->
-
-            if err?
-                callback err
-            else
-                rawCalendars = results.calendar
-                calendars = []
-                # removes duplicates
-                for rawCalendar in rawCalendars \
-                when rawCalendar not in calendars
-                    calendars.push rawCalendar
-
-                callback null, calendars
-

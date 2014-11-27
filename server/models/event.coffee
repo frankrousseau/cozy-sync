@@ -2,6 +2,7 @@ americano = require 'americano-cozy'
 
 time = require 'time'
 moment = require 'moment'
+async = require 'async'
 {VCalendar, VTodo, VAlarm, VEvent} = require '../lib/ical_helpers'
 
 # EVENT
@@ -45,6 +46,12 @@ Event.tags = (callback) ->
             [type, tag] = result.key
             out[type].push tag
         callback null, out
+
+Event.calendars = (callback) ->
+    Event.tags (err, results) ->
+        return callback err, [] if err
+
+        callback null, results.calendar
 
 Event.byURI = (uri, cb) ->
     # See Alarm
