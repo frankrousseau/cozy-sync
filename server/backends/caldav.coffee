@@ -79,6 +79,7 @@ module.exports = class CozyCalDAVBackend
 
             objects = events.map (obj) =>
 
+                {lastModification} = obj
                 if lastModification?
                     lastModification = new Date lastModification
                 else
@@ -119,11 +120,17 @@ module.exports = class CozyCalDAVBackend
             @User.getTimezone (err, timezone) =>
                 return callback err if err
 
+                {lastModification} = obj
+                if lastModification?
+                    lastModification = new Date lastModification
+                else
+                    lastModification = new Date()
+
                 callback null,
                     id:           obj.id
                     uri:          obj.caldavuri or "#{obj.id}.ics"
                     calendardata: @_toICal obj, timezone
-                    lastmodified: new Date().getTime()
+                    lastmodified: lastModification.getTime()
 
 
     createCalendarObject: (calendarId, objectUri, calendarData, callback) =>
