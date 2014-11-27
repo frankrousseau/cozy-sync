@@ -133,7 +133,8 @@ module.exports = CozyCalDAVBackend = (function() {
         events = results[0], timezone = results[1];
         objects = events.map(function(obj) {
           var lastModification;
-          if (typeof lastModification !== "undefined" && lastModification !== null) {
+          lastModification = obj.lastModification;
+          if (lastModification != null) {
             lastModification = new Date(lastModification);
           } else {
             lastModification = new Date();
@@ -194,14 +195,21 @@ module.exports = CozyCalDAVBackend = (function() {
           return callback(null, null);
         }
         return _this.User.getTimezone(function(err, timezone) {
+          var lastModification;
           if (err) {
             return callback(err);
+          }
+          lastModification = obj.lastModification;
+          if (lastModification != null) {
+            lastModification = new Date(lastModification);
+          } else {
+            lastModification = new Date();
           }
           return callback(null, {
             id: obj.id,
             uri: obj.caldavuri || ("" + obj.id + ".ics"),
             calendardata: _this._toICal(obj, timezone),
-            lastmodified: new Date().getTime()
+            lastmodified: lastModification.getTime()
           });
         });
       };
