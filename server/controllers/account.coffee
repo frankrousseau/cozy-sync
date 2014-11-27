@@ -25,10 +25,10 @@ module.exports =
         catch e
             filename = "index_en"
 
-        if cozyInstance? and cozyInstance.domain isnt ""
+        if cozyInstance?.domain?
             domain = cozyInstance.domain
         else
-            domain = 'your.cozy.url'
+            domain = ''
         
         Event.calendars (err, calendars) ->
             data =

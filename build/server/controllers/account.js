@@ -43,10 +43,10 @@ module.exports = {
       e = _error;
       filename = "index_en";
     }
-    if ((cozyInstance != null) && cozyInstance.domain !== "") {
+    if ((cozyInstance != null ? cozyInstance.domain : void 0) != null) {
       domain = cozyInstance.domain;
     } else {
-      domain = 'your.cozy.url';
+      domain = '';
     }
     return Event.calendars(function(err, calendars) {
       var data;

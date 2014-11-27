@@ -38,7 +38,7 @@ html(lang="fr")
           button#hide-password Cacher
 
         button#generate-btn Réinitialiser le mot de passe
-
+      - var dDomain = (domain == '') ? 'votre.url.cozy' : domain
       h1 Configuration de CalDav (Calendrier)
       p
         | Lors du processus de configuration, votre smartphone va vous demander d'entrer une URL
@@ -53,7 +53,7 @@ html(lang="fr")
         p
           | Dans le champ "Serveur", écrivez :
         p#iosuri.url
-          | #{domain}/public/sync/principals/me
+          | #{dDomain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
         p
@@ -62,7 +62,7 @@ html(lang="fr")
           | Google Play avec le mot-clé "caldav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
         p 
@@ -89,7 +89,7 @@ html(lang="fr")
         p
           | Dans le champ "Serveur", écrivez :
         p.url
-          | #{domain}/public/sync
+          | #{dDomain}/public/sync
 
       .carddavconf(data-device="android")
         p
@@ -98,7 +98,7 @@ html(lang="fr")
           | Google Play avec le mot-clé "carddav"). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       h1 Configuration de WebDav (Fichiers)
       p
