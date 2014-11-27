@@ -47,6 +47,12 @@ Event.tags = (callback) ->
             out[type].push tag
         callback null, out
 
+Event.calendars = (callback) ->
+    Event.tags (err, results) ->
+        return callback err, [] if err
+
+        callback null, results.calendar
+
 Event.byURI = (uri, cb) ->
     # See Alarm
     req = Event.request 'byURI', null, cb

@@ -25,18 +25,17 @@ module.exports =
         catch e
             filename = "index_en"
 
-        domain = if cozyInstance? then cozyInstance.domain else 'your.cozy.url'
+        if cozyInstance? and cozyInstance.domain isnt ""
+            domain = cozyInstance.domain
+        else
+            domain = 'your.cozy.url'
         
-        Event.tags (err, tags) ->
-
-            if err
-                calendars = []
-
+        Event.calendars (err, calendars) ->
             data =
                 login: davAccount?.login
                 password: davAccount?.token
                 domain: domain
-                calendars: tags.calendar
+                calendars: calendars
 
             res.render filename, data
 

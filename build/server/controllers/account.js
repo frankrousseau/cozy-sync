@@ -43,17 +43,18 @@ module.exports = {
       e = _error;
       filename = "index_en";
     }
-    domain = cozyInstance != null ? cozyInstance.domain : 'your.cozy.url';
-    return Event.tags(function(err, tags) {
-      var calendars, data;
-      if (err) {
-        calendars = [];
-      }
+    if ((cozyInstance != null) && cozyInstance.domain !== "") {
+      domain = cozyInstance.domain;
+    } else {
+      domain = 'your.cozy.url';
+    }
+    return Event.calendars(function(err, calendars) {
+      var data;
       data = {
         login: davAccount != null ? davAccount.login : void 0,
         password: davAccount != null ? davAccount.token : void 0,
         domain: domain,
-        calendars: tags.calendar
+        calendars: calendars
       };
       return res.render(filename, data);
     });

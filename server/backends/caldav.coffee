@@ -41,8 +41,7 @@ module.exports = class CozyCalDAVBackend
             account.updateAttributes ctag: ctag, ->
 
     getCalendarsForUser: (principalUri, callback) ->
-        Event.tags (err, tags) =>
-            calendars = tags.calendar
+        Event.calendars (err, calendars) =>
             icalCalendars = calendars.map (calendar) =>
                 calendar =
                     id: calendar

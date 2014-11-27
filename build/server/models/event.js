@@ -93,6 +93,15 @@ Event.tags = function(callback) {
   });
 };
 
+Event.calendars = function(callback) {
+  return Event.tags(function(err, results) {
+    if (err) {
+      return callback(err, []);
+    }
+    return callback(null, results.calendar);
+  });
+};
+
 Event.byURI = function(uri, cb) {
   var req;
   req = Event.request('byURI', null, cb);

@@ -72,10 +72,9 @@ module.exports = CozyCalDAVBackend = (function() {
   };
 
   CozyCalDAVBackend.prototype.getCalendarsForUser = function(principalUri, callback) {
-    return Event.tags((function(_this) {
-      return function(err, tags) {
-        var calendars, icalCalendars;
-        calendars = tags.calendar;
+    return Event.calendars((function(_this) {
+      return function(err, calendars) {
+        var icalCalendars;
         icalCalendars = calendars.map(function(calendar) {
           return calendar = {
             id: calendar,
