@@ -39,7 +39,7 @@ html(lang="en")
           button#hide-password Hide
 
         button#generate-btn reset password
-
+      - var dDomain = (domain == '') ? 'your.cozy.url' : domain
       h1 CalDAV configuration (Calendar)
       p
         | Your client will ask for an url on which to connect, here are the
@@ -52,8 +52,8 @@ html(lang="en")
       .caldavconf(data-device="ios")
         p
           | In the "Server" field, type:
-        p.url
-          | #{domain}/public/sync/principals/me
+        p#iosuri.url
+          | #{dDomain}/public/sync/principals/me
 
       .caldavconf(data-device="android")
         p
@@ -61,14 +61,19 @@ html(lang="en")
           | to install a dedicated app. The required url depend of that app. But
           | you can try that one by default:
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
-        p
-          | Use the following url:
-        p.url
-          | https://#{domain}/public/sync/calendars/me/my-calendar/
+        p 
+          | Select a calendar:&nbsp;
+          select#calendar
+            option#placeholder(value="") -              
+            - each c in calendars
+              option(value=encodeURIComponent(c))= c
 
+        p
+          | Then use the following url:
+        p#thunderbirduri.url
 
       h1 CardDAV configuration (Contacts)
       p
@@ -81,7 +86,7 @@ html(lang="en")
         p
           | In the "Server" field, type:
         p.url
-          | #{domain}/public/sync
+          | #{dDomain}/public/sync
 
       .carddavconf(data-device="android")
         p
@@ -89,7 +94,7 @@ html(lang="en")
           | to install a dedicated app. The required url depend of your app. But
           | you can try that one by default:
         p.url
-          | https://#{domain}/public/sync/principals/me/
+          | https://#{dDomain}/public/sync/principals/me/
 
       h1 WebDAV configuration (Files)
       p

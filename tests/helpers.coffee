@@ -80,6 +80,7 @@ exports.createEvent = (title, description, start) -> (done) ->
         place:       description
         details:     description
         description: title
+        tags: ['my-calendar']
 
     Event.create data, (err, doc)  =>
         @events ?= {}
@@ -97,7 +98,6 @@ exports.cleanDB = (done) ->
 
     requests =
         'event':         'byURI'
-        'alarm':         'byURI'
         'contact':       'byURI'
         'user':          'all'
         'cozyinstance':  'all'

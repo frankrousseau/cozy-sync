@@ -19,11 +19,10 @@ nodeCardDAV = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 
 # Calendar
 Event = require './models/event'
-Alarm = require './models/alarm'
 User = require './models/user'
 jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/calendarRoot"
 cozy_CalBackend = require './backends/caldav'
-caldavBackend  = new cozy_CalBackend Event, Alarm, User
+caldavBackend  = new cozy_CalBackend Event, User
 nodeCalDAV = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
 
 
