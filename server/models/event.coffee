@@ -20,6 +20,8 @@ module.exports = Event = americano.getModel 'Event',
     timezone    : type : String
     alarms      : type : [Object]
     tags : type : (x) -> x
+    created     : type: String
+    lastModification: type: String
 
 # Add Ical utilities to Event model
 require('cozy-ical').decorateEvent Event
