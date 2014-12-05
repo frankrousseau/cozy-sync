@@ -22,6 +22,7 @@ module.exports = Event = americano.getModel 'Event',
     tags : type : (x) -> x
     created     : type: String
     lastModification: type: String
+    mozLastack : type: String # Lightning saves here when he display reminders.
 
 # Add Ical utilities to Event model
 require('cozy-ical').decorateEvent Event

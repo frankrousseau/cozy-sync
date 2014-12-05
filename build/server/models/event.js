@@ -55,6 +55,9 @@ module.exports = Event = americano.getModel('Event', {
   },
   lastModification: {
     type: String
+  },
+  mozLastack: {
+    type: String
   }
 });
 
