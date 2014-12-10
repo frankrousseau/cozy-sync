@@ -15,10 +15,10 @@ html(lang="fr")
       h1 WebDAV: CalDAV et CardDAV
       p
         | WebDav est un protocole standard qui permet à n'importe quel périphérique
-        | (qui le supporte) de synchroniser les contacts, le calendrier et les fichiers
-        | avec votre Cozy. Si vous voulez que les contacts et le calendrier de
-        | votre smartphone soient synchronisés avec votre Cozy (et vice-versa !)
-        |, vous trouverez les étapes de configuration sur cette page.
+        | (qui le supporte) de synchroniser les contacts, l'agenda et les fichiers
+        | avec votre Cozy. Si vous voulez que les contacts et l'agenda de
+        | votre smartphone soient synchronisés avec votre Cozy (et vice-versa !),
+        | vous trouverez les étapes de configuration sur cette page.
 
       h1 Identifiants du serveur
       p
@@ -41,8 +41,8 @@ html(lang="fr")
       - var dDomain = (domain == '') ? 'votre.url.cozy' : domain
       h1 Configuration de CalDav (Calendrier)
       p
-        | Lors du processus de configuration, votre smartphone va vous demander d'entrer une URL
-        | sur laquelle se connecter, voici les différentes adresses en fonction
+        | Lors du processus de configuration, votre smartphone va vous demander de saisir une URL
+        | sur laquelle se connecter ; voici les différentes adresses disponibles en fonction
         | de votre téléphone ou application.
 
       h2.tab.caldav.selected(data-device="ios") iOS
@@ -57,16 +57,16 @@ html(lang="fr")
 
       .caldavconf(data-device="android")
         p
-          | Pour synchroniser le calendrier de votre téléphone Android, vous
-          | devez installer une application dédiée. (faites une recherche sur
+          | Pour synchroniser l'agenda de votre téléphone Android, vous
+          | devez installer une application dédiée (faites une recherche sur
           | Google Play avec le mot-clé "caldav"). L'URL à utiliser dépend de
-          | cette application, mais vous pouvez essayer la suivante par défaut :
+          | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
           | https://#{dDomain}/public/sync/principals/me/
 
       .caldavconf(data-device="thunderbird")
         p 
-          | Sélectionnez un calendrier :&nbsp;
+          | Sélectionnez un agenda :&nbsp;
           select#calendar
             option#placeholder(value="") -              
             - each c in calendars
@@ -79,7 +79,7 @@ html(lang="fr")
 
       h1 Configuration de CardDav (Contacts)
       p
-        | Lors du processus de configuration, votre smartphone va vous demander d'entrer une URL
+        | Lors du processus de configuration, votre smartphone va vous demander de saisir une URL
         | sur laquelle se connecter, voici les différentes adresses en fonction
         | de votre téléphone ou application.
       h2.tab.carddav.selected(data-device="ios") iOS
@@ -94,9 +94,9 @@ html(lang="fr")
       .carddavconf(data-device="android")
         p
           | Pour synchroniser les contacts de votre téléphone Android, vous
-          | devez installer une application dédiée. (faites une recherche sur
+          | devez installer une application dédiée (faites une recherche sur
           | Google Play avec le mot-clé "carddav"). L'URL à utiliser dépend de
-          | cette application, mais vous pouvez essayer la suivante par défaut :
+          | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
           | https://#{dDomain}/public/sync/principals/me/
 
@@ -109,7 +109,7 @@ html(lang="fr")
 
       h1 Dépannage
       p
-        | Si vous rencontrez des problèmes, faites le nous savoir&nbsp;
+        | Si vous rencontrez des problèmes, faites-le nous savoir&nbsp;
         a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") sur Github !
 
     script.
