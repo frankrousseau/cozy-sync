@@ -48,13 +48,16 @@ module.exports = {
     } else {
       domain = '';
     }
-    return Event.calendars(function(err, calendars) {
-      var data;
+    return Event.calendars(function(err, calendarTags) {
+      var calendarNames, data;
+      calendarNames = calendarTags.map(function(calendar) {
+        return calendar.name;
+      });
       data = {
         login: davAccount != null ? davAccount.login : void 0,
         password: davAccount != null ? davAccount.token : void 0,
         domain: domain,
-        calendars: calendars
+        calendars: calendarNames
       };
       return res.render(filename, data);
     });

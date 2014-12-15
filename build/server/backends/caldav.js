@@ -75,15 +75,18 @@ module.exports = CozyCalDAVBackend = (function() {
     return Event.calendars((function(_this) {
       return function(err, calendars) {
         var icalCalendars;
-        icalCalendars = calendars.map(function(calendar) {
-          return calendar = {
-            id: calendar,
-            uri: calendar,
+        icalCalendars = calendars.map(function(calendarTag) {
+          var calendarData;
+          calendarData = {
+            id: calendarTag.name,
+            uri: calendarTag.name,
             principaluri: principalUri,
             "{http://calendarserver.org/ns/}getctag": _this.ctag,
             "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS["new"](['VEVENT']),
-            "{DAV:}displayname": calendar
+            "{DAV:}displayname": calendarTag.name,
+            "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
           };
+          return calendarData;
         });
         return callback(err, icalCalendars);
       };
