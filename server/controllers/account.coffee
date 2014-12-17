@@ -30,12 +30,14 @@ module.exports =
         else
             domain = ''
         
-        Event.calendars (err, calendars) ->
+        Event.calendars (err, calendarTags) ->
+            calendarNames = calendarTags.map (calendar) -> calendar.name
+            
             data =
                 login: davAccount?.login
                 password: davAccount?.token
                 domain: domain
-                calendars: calendars
+                calendars: calendarNames
 
             res.render filename, data
 

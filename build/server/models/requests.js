@@ -43,6 +43,11 @@ module.exports = {
       return emit(doc.carddavuri || doc._id + '.vcf', doc);
     }
   },
+  tag: {
+    all: function(doc) {
+      return emit(doc.name, doc);
+    }
+  },
   event: {
     all: function(doc) {
       return emit(doc._id, doc);

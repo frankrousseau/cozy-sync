@@ -42,14 +42,16 @@ module.exports = class CozyCalDAVBackend
 
     getCalendarsForUser: (principalUri, callback) ->
         Event.calendars (err, calendars) =>
-            icalCalendars = calendars.map (calendar) =>
-                calendar =
-                    id: calendar
-                    uri: calendar
+            icalCalendars = calendars.map (calendarTag) =>
+                calendarData =
+                    id: calendarTag.name
+                    uri: calendarTag.name
                     principaluri: principalUri
                     "{http://calendarserver.org/ns/}getctag": @ctag
                     "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT' ]
-                    "{DAV:}displayname": calendar
+                    "{DAV:}displayname": calendarTag.name
+                    "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
+                return calendarData
             callback err, icalCalendars
 
     createCalendar: (principalUri, url, properties, callback) ->

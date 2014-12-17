@@ -59,6 +59,9 @@
     "WebDAVAccount": {
       "description": "Store webDAV password and sync informations"
     },
+    "Tag": {
+      "description": "Read your tags, to get calendar's color"
+    },
     "CozyInstance": {
       "description": "Read your cozy's url to generate help"
     }

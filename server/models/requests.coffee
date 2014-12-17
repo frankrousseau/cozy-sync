@@ -19,6 +19,9 @@ module.exports =
     contact:
         all: (doc) -> emit doc._id, doc
         byURI: (doc) -> emit (doc.carddavuri or doc._id + '.vcf'), doc
+    tag:
+        all: (doc) -> emit doc.name, doc
+
     event:
         all: (doc) -> emit doc._id, doc
         byURI: (doc) -> emit (doc.caldavuri or doc._id + '.ics'), doc
