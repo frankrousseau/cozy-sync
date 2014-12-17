@@ -1,51 +1,45 @@
 fs = require 'fs'
 path = require 'path'
+async = require 'async'
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
 Event = require '../models/event'
 
-davAccount = null
-WebDAVAccount.first (err, account) ->
-    if account? then davAccount = account
-    else davAccount = null
+# Get the template name for given locale, fallbacks to english template
+getTemplateName = (locale) ->
+    # If run from build/, templates are compiled to JS
+    # otherwise, they are in jade
+    filePath = path.resolve __dirname, '../views/index_en.js'
+    runFromBuild = fs.existsSync filePath
+    extension = if runFromBuild then 'js' else 'jade'
 
-cozyInstance = null
-CozyInstance.first (err, instance) ->
-    if instance? then cozyInstance = instance
-    else cozyInstance = null
+    fileName = "index_#{locale}.#{extension}"
+    filePath = path.resolve __dirname, "../views/#{fileName}"
+    fileName = "index_en.#{extension}" unless fs.exists(filePath)
+    return fileName
 
 module.exports =
     index: (req, res) ->
-        locale = cozyInstance?.locale or 'en'
-
-        filename = "index_#{locale}"
-        filePath = path.resolve __dirname, "../views/#{filename}.jade"
-        try
-            stats = fs.lstatSync filePath
-        catch e
-            filename = "index_en"
-
-        if cozyInstance?.domain?
-            domain = cozyInstance.domain
-        else
-            domain = ''
-        
-        Event.calendars (err, calendarTags) ->
+        async.parallel {
+            davAccount: (done) -> WebDAVAccount.first done
+            calendarTags: (done) -> Event.calendars done
+            instance: (done) -> CozyInstance.first done
+        }, (err, results) ->
+            console.log err if err?
+            {davAccount, calendarTags, instance} = results
             calendarNames = calendarTags.map (calendar) -> calendar.name
-            
+
+            locale = instance?.locale or 'en'
+            domain = instance?.domain or ''
+
             data =
                 login: davAccount?.login
                 password: davAccount?.token
                 domain: domain
                 calendars: calendarNames
 
-            res.render filename, data
-
-    getCredentials: (req, res) ->
-        if davAccount?
-            res.send davAccount.toJSON()
-        else
-            res.send error: true, msg: 'No webdav account generated', 404
+            fileName = getTemplateName locale
+            res.render fileName, data
 
     createCredentials: (req, res) ->
         WebDAVAccount.createAccount (err, account) ->
