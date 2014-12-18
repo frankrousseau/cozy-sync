@@ -1,4 +1,5 @@
 fs = require 'fs'
+path = require 'path'
 americano = require 'americano'
 DAVServer = require './davserver'
 
@@ -13,8 +14,7 @@ module.exports =
 
     common:
         set:
-            'view engine': 'jade'
-            views: './server/views'
+            views: path.join __dirname, 'views'
         use: [
             americano.static publicPath, maxAge: 86400000
             americano.bodyParser keepExtensions: true
@@ -27,6 +27,11 @@ module.exports =
                 req.url = req.url.replace '/public', '/public/sync'
                 DAVServer.exec req, res
         ]
+
+        engine:
+            # Allows res.render of .js files (pre-rendered jade)
+            js: (path, locals, callback) ->
+                callback null, require(path)(locals)
     development: [
         americano.logger 'dev'
     ]
