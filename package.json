@@ -22,6 +22,7 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "jsDAV": "cozy/jsDAV#c43a719d1e",
+    "cozy-realtime-adapter": "0.11.3",
     "async": "0.2.10",
     "moment": "2.5.1",
     "lazy": "1.0.11",

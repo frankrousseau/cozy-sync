@@ -25,6 +25,10 @@ module.exports = class CozyCalDAVBackend
                 @ctag = @ctag + 1
                 @saveLastCtag @ctag
 
+                # clear cache
+                @icalCalendars = undefined
+
+
             # keep ctag updated
             socket = axon.socket 'sub-emitter'
             socket.connect 9105
@@ -41,18 +45,27 @@ module.exports = class CozyCalDAVBackend
             account.updateAttributes ctag: ctag, ->
 
     getCalendarsForUser: (principalUri, callback) ->
-        Event.calendars (err, calendars) =>
-            icalCalendars = calendars.map (calendarTag) =>
-                calendarData =
-                    id: calendarTag.name
-                    uri: calendarTag.name
-                    principaluri: principalUri
-                    "{http://calendarserver.org/ns/}getctag": @ctag
-                    "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT' ]
-                    "{DAV:}displayname": calendarTag.name
-                    "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
-                return calendarData
-            callback err, icalCalendars
+        # Return cached version if available, or generate it.
+        # principalUri is not handled by the cache.
+
+        if @icalCalendars?
+            setTimeout => # "setTimeout 0" to reset stack.
+                    callback null, @icalCalendars
+                , 0
+
+        else # no cache version available, generate it.
+            Event.calendars (err, calendars) =>
+                @icalCalendars = calendars.map (calendarTag) =>
+                    calendarData =
+                        id: calendarTag.name
+                        uri: calendarTag.name
+                        principaluri: principalUri
+                        "{http://calendarserver.org/ns/}getctag": @ctag
+                        "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS.new [ 'VEVENT' ]
+                        "{DAV:}displayname": calendarTag.name
+                        "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
+                    return calendarData
+                callback err, @icalCalendars
 
     createCalendar: (principalUri, url, properties, callback) ->
         callback null, null
@@ -114,25 +127,23 @@ module.exports = class CozyCalDAVBackend
             callback null, @_extractCalObject calendar
 
     getCalendarObject: (calendarId, objectUri, callback) ->
-
         @_findCalendarObject calendarId, objectUri, (err, obj) =>
             return callback err if err
             return callback null, null unless obj
 
-            @User.getTimezone (err, timezone) =>
-                return callback err if err
+            timezone = @User.timezone
 
-                {lastModification} = obj
-                if lastModification?
-                    lastModification = new Date lastModification
-                else
-                    lastModification = new Date()
+            {lastModification} = obj
+            if lastModification?
+                lastModification = new Date lastModification
+            else
+                lastModification = new Date()
 
-                callback null,
-                    id:           obj.id
-                    uri:          obj.caldavuri or "#{obj.id}.ics"
-                    calendardata: @_toICal obj, timezone
-                    lastmodified: lastModification.getTime()
+            callback null,
+                id:           obj.id
+                uri:          obj.caldavuri or "#{obj.id}.ics"
+                calendardata: @_toICal obj, timezone
+                lastmodified: lastModification.getTime()
 
 
     createCalendarObject: (calendarId, objectUri, calendarData, callback) =>
@@ -185,6 +196,7 @@ module.exports = class CozyCalDAVBackend
                     # @TODO convert directly from juggling to VObject
                     ical = @_toICal jugglingObj, timezone
                     vobj = reader.read ical
+
                     if validator.validate vobj, filters
                         {id, caldavuri, lastModification} = jugglingObj
                         uri = caldavuri or "#{id}.ics"
