@@ -11,6 +11,12 @@ application = module.exports = (callback) ->
 
     require('./server/models/webdavaccount').first ->
         americano.start options, (app, server) ->
+            User = require './server/models/user'
+            Realtimer = require 'cozy-realtime-adapter'
+            realtime = Realtimer server : server, ['event.*']
+            realtime.on 'user.*', -> User.updateUser()
+            User.updateUser() # initialize User attributes.
+
             initialize ->
                 callback app, server if callback?
 
