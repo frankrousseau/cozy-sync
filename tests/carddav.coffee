@@ -114,8 +114,10 @@ describe 'Carddav support', ->
                 created.should.have.property 'carddavuri'
                 should.not.exist created.fn
                 done()
-        it "and contact's vcf should include the UID property", ->
-            created.toVCF().indexOf('UID').should.not.equal -1
+        it "and contact's vcf should include the UID property", (done) ->
+            created.toVCF (err, vCardOutput) ->
+                vCardOutput.indexOf('UID').should.not.equal -1
+                done()
 
     describe "Android Check contact creation", ->
 
@@ -191,10 +193,10 @@ describe 'Carddav support', ->
                     if dp.value is '1 11 1'
                         return done new Error('contact was not updated')
 
-        it "and contact's vcf should include the UID property", ->
-            console.log created.toVCF()
-            created.toVCF().indexOf('UID').should.not.equal -1
-
+        it "and contact's vcf should include the UID property", (done) ->
+            created.toVCF (err, vCardOutput) ->
+                vCardOutput.indexOf('UID').should.not.equal -1
+                done()
 
     describe "Android delete Contact", ->
         url = '/public/addressbooks/me/all-contacts/926f1393b7e328e6992e54178903582c.vcf'
