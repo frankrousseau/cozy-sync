@@ -1,6 +1,7 @@
+async = require 'async'
+axon = require 'axon'
 Exc       = require 'jsDAV/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
-axon = require 'axon'
 
 
 handle    = (err) ->
@@ -48,10 +49,13 @@ module.exports = class CozyCardDAVBackend
         @Contact.all (err, contacts) ->
             return callback handle err if err
 
-            callback null, contacts.map (contact) ->
-                lastmodified: 0
-                carddata:     contact.toVCF()
-                uri:          contact.getURI()
+            async.mapSeries contacts, (contact, next) ->
+                contact.toVCF (err, vCardOutput) ->
+                    next err,
+                        lastmodified: 0
+                        carddata: vCardOutput
+                        uri: contact.getURI()
+            , callback
 
     getCard: (addressBookId, cardUri, callback) ->
         @Contact.byURI cardUri, (err, contact) ->
@@ -59,19 +63,18 @@ module.exports = class CozyCardDAVBackend
             return callback null unless contact.length
 
             contact = contact[0]
-
-            callback null,
-                lastmodified: 0
-                carddata:     contact.toVCF()
-                uri:          contact.getURI()
+            contact.toVCF (err, vCardOutput) ->
+                callback null,
+                    lastmodified: 0
+                    carddata: vCardOutput
+                    uri: contact.getURI()
 
     createCard: (addressBookId, cardUri, cardData, callback) ->
-        contact = @Contact.parse(cardData)
-        contact.carddavuri = cardUri
-        @Contact.create contact, (err, contact) ->
-            return callback handle err if err
-
-            callback null
+        data = @Contact.parse cardData
+        data.carddavuri = cardUri
+        @Contact.create data, (err, contact) ->
+            return callback handle err if err?
+            contact.handlePhoto data.photo, callback
 
     updateCard: (addressBookId, cardUri, cardData, callback) ->
         @Contact.byURI cardUri, (err, contact) =>
@@ -79,14 +82,13 @@ module.exports = class CozyCardDAVBackend
             return callback handle 'Not Found' unless contact.length
 
             contact = contact[0]
-            data = @Contact.parse(cardData).toObject()
+            data = @Contact.parse cardData
             data.id = contact._id
             data.carddavuri = cardUri
 
             contact.updateAttributes data, (err, contact) ->
-                return callback handle err if err
-
-                callback null
+                return callback handle err if err?
+                contact.handlePhoto data.photo, callback
 
     deleteCard: (addressBookId, cardUri, callback) ->
 

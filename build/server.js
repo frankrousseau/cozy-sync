@@ -14,6 +14,16 @@ application = module.exports = function(callback) {
   };
   return require('./server/models/webdavaccount').first(function() {
     return americano.start(options, function(app, server) {
+      var Realtimer, User, realtime;
+      User = require('./server/models/user');
+      Realtimer = require('cozy-realtime-adapter');
+      realtime = Realtimer({
+        server: server
+      }, ['event.*']);
+      realtime.on('user.*', function() {
+        return User.updateUser();
+      });
+      User.updateUser();
       return initialize(function() {
         if (callback != null) {
           return callback(app, server);

@@ -39,7 +39,8 @@ module.exports = CozyCalDAVBackend = (function() {
         _this.saveLastCtag(_this.ctag);
         onChange = function() {
           _this.ctag = _this.ctag + 1;
-          return _this.saveLastCtag(_this.ctag);
+          _this.saveLastCtag(_this.ctag);
+          return _this.icalCalendars = void 0;
         };
         socket = axon.socket('sub-emitter');
         socket.connect(9105);
@@ -72,25 +73,32 @@ module.exports = CozyCalDAVBackend = (function() {
   };
 
   CozyCalDAVBackend.prototype.getCalendarsForUser = function(principalUri, callback) {
-    return Event.calendars((function(_this) {
-      return function(err, calendars) {
-        var icalCalendars;
-        icalCalendars = calendars.map(function(calendarTag) {
-          var calendarData;
-          calendarData = {
-            id: calendarTag.name,
-            uri: calendarTag.name,
-            principaluri: principalUri,
-            "{http://calendarserver.org/ns/}getctag": _this.ctag,
-            "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS["new"](['VEVENT']),
-            "{DAV:}displayname": calendarTag.name,
-            "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
-          };
-          return calendarData;
-        });
-        return callback(err, icalCalendars);
-      };
-    })(this));
+    if (this.icalCalendars != null) {
+      return setTimeout((function(_this) {
+        return function() {
+          return callback(null, _this.icalCalendars);
+        };
+      })(this), 0);
+    } else {
+      return Event.calendars((function(_this) {
+        return function(err, calendars) {
+          _this.icalCalendars = calendars.map(function(calendarTag) {
+            var calendarData;
+            calendarData = {
+              id: calendarTag.name,
+              uri: calendarTag.name,
+              principaluri: principalUri,
+              "{http://calendarserver.org/ns/}getctag": _this.ctag,
+              "{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set": SCCS["new"](['VEVENT']),
+              "{DAV:}displayname": calendarTag.name,
+              "{http://apple.com/ns/ical/}calendar-color": calendarTag.color
+            };
+            return calendarData;
+          });
+          return callback(err, _this.icalCalendars);
+        };
+      })(this));
+    }
   };
 
   CozyCalDAVBackend.prototype.createCalendar = function(principalUri, url, properties, callback) {
@@ -192,29 +200,25 @@ module.exports = CozyCalDAVBackend = (function() {
   CozyCalDAVBackend.prototype.getCalendarObject = function(calendarId, objectUri, callback) {
     return this._findCalendarObject(calendarId, objectUri, (function(_this) {
       return function(err, obj) {
+        var lastModification, timezone;
         if (err) {
           return callback(err);
         }
         if (!obj) {
           return callback(null, null);
         }
-        return _this.User.getTimezone(function(err, timezone) {
-          var lastModification;
-          if (err) {
-            return callback(err);
-          }
-          lastModification = obj.lastModification;
-          if (lastModification != null) {
-            lastModification = new Date(lastModification);
-          } else {
-            lastModification = new Date();
-          }
-          return callback(null, {
-            id: obj.id,
-            uri: obj.caldavuri || ("" + obj.id + ".ics"),
-            calendardata: _this._toICal(obj, timezone),
-            lastmodified: lastModification.getTime()
-          });
+        timezone = _this.User.timezone;
+        lastModification = obj.lastModification;
+        if (lastModification != null) {
+          lastModification = new Date(lastModification);
+        } else {
+          lastModification = new Date();
+        }
+        return callback(null, {
+          id: obj.id,
+          uri: obj.caldavuri || ("" + obj.id + ".ics"),
+          calendardata: _this._toICal(obj, timezone),
+          lastmodified: lastModification.getTime()
         });
       };
     })(this));
