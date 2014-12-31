@@ -19,3 +19,15 @@ User.getTimezone = function(callback) {
     return callback(null, (users != null ? (_ref = users[0]) != null ? _ref.timezone : void 0 : void 0) || "Europe/Paris");
   });
 };
+
+User.updateUser = function(callback) {
+  return User.getTimezone(function(err, timezone) {
+    if (err) {
+      console.log(err);
+      User.timezone = 'Europe/Paris';
+    } else {
+      User.timezone = timezone || "Europe/Paris";
+    }
+    return typeof callback === "function" ? callback() : void 0;
+  });
+};
