@@ -78,5 +78,7 @@ describe 'Carddav support - Apple', ->
                 created.should.have.property 'carddavuri'
                 done()
 
-        it "and contact's vcf should include the UID property", ->
-            created.toVCF().indexOf('UID').should.not.equal -1
+        it "and contact's vcf should include the UID property", (done) ->
+            created.toVCF (err, vCardOutput) ->
+                vCardOutput.indexOf('UID').should.not.equal -1
+                done()
