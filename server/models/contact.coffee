@@ -26,7 +26,7 @@ Contact::toVCF = (callback) ->
         stream = @getFile 'picture', ->
         buffers = []
         stream.on 'data', buffers.push.bind(buffers)
-        stream.on 'end', ->
+        stream.on 'end', =>
             picture = Buffer.concat(buffers).toString 'base64'
             callback null, VCardParser.toVCF(@, picture)
     else

@@ -40,11 +40,13 @@ Contact.prototype.toVCF = function(callback) {
     stream = this.getFile('picture', function() {});
     buffers = [];
     stream.on('data', buffers.push.bind(buffers));
-    return stream.on('end', function() {
-      var picture;
-      picture = Buffer.concat(buffers).toString('base64');
-      return callback(null, VCardParser.toVCF(this, picture));
-    });
+    return stream.on('end', (function(_this) {
+      return function() {
+        var picture;
+        picture = Buffer.concat(buffers).toString('base64');
+        return callback(null, VCardParser.toVCF(_this, picture));
+      };
+    })(this));
   } else {
     return callback(null, VCardParser.toVCF(this));
   }
