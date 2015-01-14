@@ -48,7 +48,6 @@ module.exports = class CozyCardDAVBackend
     getCards: (addressbookId, callback) ->
         @Contact.all (err, contacts) ->
             return callback handle err if err
-
             async.mapSeries contacts, (contact, next) ->
                 contact.toVCF (err, vCardOutput) ->
                     next err,
@@ -85,13 +84,14 @@ module.exports = class CozyCardDAVBackend
             data = @Contact.parse cardData
             data.id = contact._id
             data.carddavuri = cardUri
-
+            # Surprinsingly updateAttributes has no effect without this pre-fill
+            for k, v of data
+                contact[k] = v
             contact.updateAttributes data, (err, contact) ->
                 return callback handle err if err?
                 contact.handlePhoto data.photo, callback
 
     deleteCard: (addressBookId, cardUri, callback) ->
-
         @Contact.byURI cardUri, (err, contact) ->
             return callback handle err if err
 
