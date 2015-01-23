@@ -84,6 +84,8 @@ module.exports = class CozyCardDAVBackend
             data = @Contact.parse cardData
             data.id = contact._id
             data.carddavuri = cardUri
+
+            # @TODO: fix during cozydb migration
             # Surprinsingly updateAttributes has no effect without this pre-fill
             for k, v of data
                 contact[k] = v
