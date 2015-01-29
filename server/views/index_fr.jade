@@ -43,7 +43,7 @@ html(lang="fr")
       p
         | Lors du processus de configuration, votre smartphone va vous demander de saisir une URL
         | sur laquelle se connecter ; voici les différentes adresses disponibles en fonction
-        | de votre téléphone ou application.
+        | de votre téléphone ou application :
 
       h2.tab.caldav.selected(data-device="ios") iOS
       h2.tab.caldav(data-device="android") Android
@@ -51,7 +51,7 @@ html(lang="fr")
 
       .caldavconf(data-device="ios")
         p
-          | Dans le champ "Serveur", écrivez :
+          | Dans le champ « Serveur », écrivez :
         p#iosuri.url
           | #{dDomain}/public/sync/principals/me
 
@@ -59,7 +59,7 @@ html(lang="fr")
         p
           | Pour synchroniser l'agenda de votre téléphone Android, vous
           | devez installer une application dédiée (faites une recherche sur
-          | Google Play avec le mot-clé "caldav"). L'URL à utiliser dépend de
+          | Google Play avec le mot-clé « caldav »). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
           | https://#{dDomain}/public/sync/principals/me/
@@ -73,7 +73,7 @@ html(lang="fr")
               option(value=encodeURIComponent(c))= c
 
         p
-          | Puis utilisez l'URL suivante :
+          | Puis utilisez l'URL suivante :
         p#thunderbirduri.url
 
 
@@ -87,7 +87,7 @@ html(lang="fr")
 
       .carddavconf(data-device="ios")
         p
-          | Dans le champ "Serveur", écrivez :
+          | Dans le champ « Serveur », écrivez :
         p.url
           | #{dDomain}/public/sync
 
@@ -95,7 +95,7 @@ html(lang="fr")
         p
           | Pour synchroniser les contacts de votre téléphone Android, vous
           | devez installer une application dédiée (faites une recherche sur
-          | Google Play avec le mot-clé "carddav"). L'URL à utiliser dépend de
+          | Google Play avec le mot-clé « carddav »). L'URL à utiliser dépend de
           | cette application, mais vous pouvez essayer la suivante par défaut :
         p.url
           | https://#{dDomain}/public/sync/principals/me/
@@ -110,7 +110,7 @@ html(lang="fr")
       h1 Dépannage
       p
         | Si vous rencontrez des problèmes, faites-le nous savoir&nbsp;
-        a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") sur Github !
+        a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") sur Github !
 
     script.
       window.password = "#{password}";
