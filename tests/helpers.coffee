@@ -55,7 +55,7 @@ exports.makeDAVAccount = (done) ->
 
 exports.createContact = (name) -> (done) ->
     Contact = require "#{exports.prefix}server/models/contact"
-    sampleaddress = 'Box3;Suite215;14 Avenue de la République;Compiègne;Picardie;60200;France'
+    sampleaddress = ['Box3','Suite215','14 Avenue de la République','Compiègne','Picardie','60200','France']
     data =
         fn: name
         note: "some stuff about #{name}"

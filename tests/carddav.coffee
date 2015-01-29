@@ -112,7 +112,6 @@ describe 'Carddav support', ->
                 should.not.exist err
                 created = contact[0]
                 created.should.have.property 'carddavuri'
-                should.not.exist created.fn
                 done()
         it "and contact's vcf should include the UID property", (done) ->
             created.toVCF (err, vCardOutput) ->

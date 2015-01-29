@@ -11,6 +11,22 @@ module.exports = Contact = americano.getModel 'Contact',
     note          : String
     _attachments  : Object
 
+Contact.afterInitialize = ->
+    # Cleanup the model,
+    # Defensive against data from DataSystem
+
+    # n and fn MUST be valid.
+    if not @n? or @n is ''
+        if not @fn?
+            @fn = ''
+
+        @n = VCardParser.fnToN(@fn).join ';'
+
+    else if not @fn? or @fn is ''
+        @fn = VCardParser.nToFN @n.split ';'
+
+    return @
+
 Contact::getURI = -> @carddavuri or @id + '.vcf'
 Contact.all = (cb) -> Contact.request 'byURI', cb
 Contact.byURI = (uri, cb) ->
@@ -47,6 +63,4 @@ Contact.parse = (vcf) ->
     parser = new VCardParser()
     parser.read(vcf)
     contact = parser.contacts[0]
-    if contact.fn and contact.n
-        delete contact.fn
     return new Contact parser.contacts[0]
