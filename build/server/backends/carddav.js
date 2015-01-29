@@ -120,7 +120,7 @@ module.exports = CozyCardDAVBackend = (function() {
   CozyCardDAVBackend.prototype.updateCard = function(addressBookId, cardUri, cardData, callback) {
     return this.Contact.byURI(cardUri, (function(_this) {
       return function(err, contact) {
-        var data;
+        var data, k, v;
         if (err) {
           return callback(handle(err));
         }
@@ -131,6 +131,10 @@ module.exports = CozyCardDAVBackend = (function() {
         data = _this.Contact.parse(cardData);
         data.id = contact._id;
         data.carddavuri = cardUri;
+        for (k in data) {
+          v = data[k];
+          contact[k] = v;
+        }
         return contact.updateAttributes(data, function(err, contact) {
           if (err != null) {
             return callback(handle(err));

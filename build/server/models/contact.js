@@ -17,6 +17,18 @@ module.exports = Contact = americano.getModel('Contact', {
   _attachments: Object
 });
 
+Contact.afterInitialize = function() {
+  if ((this.n == null) || this.n === '') {
+    if (this.fn == null) {
+      this.fn = '';
+    }
+    this.n = VCardParser.fnToN(this.fn).join(';');
+  } else if ((this.fn == null) || this.fn === '') {
+    this.fn = VCardParser.nToFN(this.n.split(';'));
+  }
+  return this;
+};
+
 Contact.prototype.getURI = function() {
   return this.carddavuri || this.id + '.vcf';
 };
@@ -77,8 +89,5 @@ Contact.parse = function(vcf) {
   parser = new VCardParser();
   parser.read(vcf);
   contact = parser.contacts[0];
-  if (contact.fn && contact.n) {
-    delete contact.fn;
-  }
   return new Contact(parser.contacts[0]);
 };
