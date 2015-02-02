@@ -81,6 +81,7 @@ html(lang="en")
         | required ones, depending on your phone or software.
       h2.tab.carddav.selected(data-device="ios") iOS
       h2.tab.carddav(data-device="android") Android
+      h2.tab.carddav(data-device="thunderbird") Thunderbird (SOGo)
 
       .carddavconf(data-device="ios")
         p
@@ -95,6 +96,13 @@ html(lang="en")
           | you can try that one by default:
         p.url
           | https://#{dDomain}/public/sync/principals/me/
+
+      .carddavconf(data-device="thunderbird")
+        p
+          | To sync contacts with thunderbird, you have to install the SOGo
+          | addon. Then use the following url:
+        p.url
+          | https://#{dDomain}/public/sync/addressbooks/me/all-contacts/
 
       h1 WebDAV configuration (Files)
       p
