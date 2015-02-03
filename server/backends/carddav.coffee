@@ -8,6 +8,8 @@ handle    = (err) ->
     console.log err
     return new Exc.jsDAV_Exception err.message || err
 
+allContactsId = 'all-contacts'
+
 module.exports = class CozyCardDAVBackend
 
     constructor: (@Contact) ->
@@ -36,17 +38,28 @@ module.exports = class CozyCardDAVBackend
             account.updateAttributes cardctag: ctag, ->
 
     getAddressBooksForUser: (principalUri, callback) ->
-        book =
-            id: 'all-contacts'
-            uri: 'all-contacts'
-            principaluri: principalUri
-            "{http://calendarserver.org/ns/}getctag": @ctag
-            "{DAV:}displayname": 'Cozy Contacts'
+        @Contact.tags (err, tags) ->
+            books = tags.map (tag) ->
 
-        return callback null, [book]
+                book =
+                    id: tag
+                    uri: tag
+                    principaluri: principalUri
+                    "{http://calendarserver.org/ns/}getctag": @ctag
+                    "{DAV:}displayname": tag
+                return book
+
+            books.push
+                id: allContactsId
+                uri: allContactsId
+                principaluri: principalUri
+                "{http://calendarserver.org/ns/}getctag": @ctag
+                "{DAV:}displayname": 'Cozy Contacts'
+
+            return callback null, books
 
     getCards: (addressbookId, callback) ->
-        @Contact.all (err, contacts) ->
+        processContacts = (err, contacts) ->
             return callback handle err if err
             async.mapSeries contacts, (contact, next) ->
                 contact.toVCF (err, vCardOutput) ->
@@ -55,6 +68,12 @@ module.exports = class CozyCardDAVBackend
                         carddata: vCardOutput
                         uri: contact.getURI()
             , callback
+
+        if addressbookId is allContactsId
+            @Contact.all processContacts
+        else
+            @Contact.byTag addressbookId, processContacts
+
 
     getCard: (addressBookId, cardUri, callback) ->
         @Contact.byURI cardUri, (err, contact) ->
@@ -71,6 +90,7 @@ module.exports = class CozyCardDAVBackend
     createCard: (addressBookId, cardUri, cardData, callback) ->
         data = @Contact.parse cardData
         data.carddavuri = cardUri
+        data.addTag addressBookId unless addressBookId is allContactsId
         @Contact.create data, (err, contact) ->
             return callback handle err if err?
             contact.handlePhoto data.photo, callback
@@ -84,6 +104,7 @@ module.exports = class CozyCardDAVBackend
             data = @Contact.parse cardData
             data.id = contact._id
             data.carddavuri = cardUri
+            data.addTag addressBookId unless addressBookId is allContactsId
 
             # @TODO: fix during cozydb migration
             # Surprinsingly updateAttributes has no effect without this pre-fill

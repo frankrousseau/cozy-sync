@@ -9,6 +9,7 @@ module.exports = Contact = americano.getModel 'Contact',
     n             : String
     datapoints    : Object
     note          : String
+    tags          : (x) -> x # DAMN IT JUGGLING
     _attachments  : Object
 
 Contact.afterInitialize = ->
@@ -28,12 +29,28 @@ Contact.afterInitialize = ->
     return @
 
 Contact::getURI = -> @carddavuri or @id + '.vcf'
+
+Contact::addTag = (tag) ->
+    @tags = [] unless @tags?
+
+    if @tags.indexOf tag is -1
+        @tags.push tag
+
 Contact.all = (cb) -> Contact.request 'byURI', cb
 Contact.byURI = (uri, cb) ->
     # see alarms for complexity
     req = Contact.request 'byURI', null, cb
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
+
+Contact.byTag = (tag, callback) ->
+    Contact.request 'byTag', key: tag, callback
+
+
+Contact.tags = (callback) ->
+    Contact.rawRequest "tags", group: true, (err, results) ->
+        return callback err, [] if err
+        callback null, results.map (keyValue) -> return keyValue.key
 
 Contact::toVCF = (callback) ->
     if @_attachments?.picture?
