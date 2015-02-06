@@ -3,7 +3,7 @@ should = require('chai').Should()
 xmldoc = require 'xmldoc'
 Contact = require "#{helpers.prefix}server/models/contact"
 
-describe 'Carddav support', ->
+describe 'Carddav support - groups', ->
 
     before helpers.createRequests
     before helpers.cleanDB
@@ -11,9 +11,8 @@ describe 'Carddav support', ->
     before helpers.startServer
     before helpers.createContact 'Bob'
     before helpers.createContact 'Steve', ['group1']
-
     before ->
-        url = '/public/sync/addressbooks/me/all-contacts/'
+        url = '/public/sync/addressbooks/me/group1/'
         @bobHref   = url + @contacts['Bob'].id   + '.vcf'
         @steveHref = url + @contacts['Steve'].id + '.vcf'
 
@@ -26,9 +25,10 @@ describe 'Carddav support', ->
     ###
 
 
-    describe 'Android PROPFIND /public/sync/addressbooks/me/all-contacts/ D=1', ->
 
-        url = '/public/addressbooks/me/all-contacts/'
+    describe 'Android PROPFIND /public/sync/addressbooks/me/group1/ D=1', ->
+
+        url = '/public/addressbooks/me/group1/'
         before helpers.send 'PROPFIND', url, """
             <?xml version="1.0" encoding="utf-8" ?>
             <A:propfind xmlns:A="DAV:">
@@ -39,18 +39,18 @@ describe 'Carddav support', ->
             </A:propfind>
         """, depth: 1
 
-        it 'contains a ref to each Contacts', ->
+        it 'contains a ref to each Contacts of group1', ->
             body = new xmldoc.XmlDocument @resbody
             responses = body.childrenNamed 'd:response'
-            responses.length.should.equal 3
+            responses.length.should.equal 2
             hrefs = responses.map (res) -> res.childNamed('d:href').val
 
-            hrefs.should.include @bobHref
+            hrefs.should.not.include @bobHref
             hrefs.should.include @steveHref
 
-    describe 'Android REPORT /public/sync/addressbooks/me/all-contacts/', ->
+    describe 'Android REPORT /public/sync/addressbooks/me/group1/', ->
 
-        url = '/public/addressbooks/me/all-contacts/'
+        url = '/public/addressbooks/me/group1/'
         before (done) ->
             helpers.send('REPORT', url, """
                 <?xml version="1.0" encoding="utf-8" ?>
@@ -59,7 +59,6 @@ describe 'Carddav support', ->
                     <A:address-data/>
                     <B:getetag/>
                 </B:prop>
-                <B:href>#{@bobHref}</B:href>
                 <B:href>#{@steveHref}</B:href>
                 </A:addressbook-multiget>
             """).call @, done
@@ -78,13 +77,12 @@ describe 'Carddav support', ->
 
                 results[href] = card
 
-            results[@bobHref].should.have.string 'bob@test.com'
             results[@steveHref].should.have.string 'steve@test.com'
 
 
-    describe "Android Create contact", ->
+    describe "Android Create contact in group1", ->
 
-        url = '/public/addressbooks/me/all-contacts/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
+        url = '/public/addressbooks/me/group1/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
         before helpers.send 'PUT', url, """
             BEGIN:VCARD
             VERSION:3.0
@@ -111,6 +109,11 @@ describe 'Carddav support', ->
                 created = contact[0]
                 created.should.have.property 'carddavuri'
                 done()
+        it "and contact should have group name in tags", ->
+            should.exist created.tags
+            if created.tags
+                created.tags.should.contain 'group1'
+
         it "and contact's vcf should include the UID property", (done) ->
             created.toVCF (err, vCardOutput) ->
                 vCardOutput.indexOf('UID').should.not.equal -1
@@ -118,7 +121,7 @@ describe 'Carddav support', ->
 
     describe "Android Check contact creation", ->
 
-        url = '/public/addressbooks/me/all-contacts/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
+        url = '/public/addressbooks/me/group1/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
         before helpers.send('HEAD', url, "")
 
         it "should return the contact E-tag", ->
@@ -128,7 +131,7 @@ describe 'Carddav support', ->
 
     describe "Android update created Contact", ->
 
-        url = '/public/addressbooks/me/all-contacts/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
+        url = '/public/addressbooks/me/group1/24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf'
         before (done) ->
             helpers.send('PUT', url, """
                 BEGIN:VCARD
@@ -147,64 +150,15 @@ describe 'Carddav support', ->
             @res.statusCode.should.equal 200
             @resbody.should.have.length 0
 
+        updated = null
         it "and contact has been updated in db", (done) ->
             Contact.byURI '24edbec3-a2db-4b07-97d1-3609d526f4c8.vcf', (err, contact) ->
                 should.not.exist err
-                contact = contact[0]
-                contact.should.have.property 'carddavuri'
+                updated = contact[0]
+                updated.should.have.property 'carddavuri'
                 done()
 
-    describe "Android update Cozy Contact", ->
-
-        url = '/public/addressbooks/me/all-contacts/926f1393b7e328e6992e54178903582c.vcf'
-        before helpers.send 'PUT', url, """
-            BEGIN:VCARD
-            VERSION:3.0
-            NOTE:some stuff about Bob
-            FN:Bob
-            TEL;TYPE=HOME:000
-            EMAIL;TYPE=HOME:bob@test.com
-            ADR;TYPE=HOME:Box3;Suite215;14 Avenue de la République;Compiègne;Picardie;60200;France
-            UID:cf3250e4-bf00-484a-86bd-debc4d79e186
-            TEL;TYPE=WORK:1 11 2
-            N:;Bob;;;
-            PRODID:-//dmfs.org//mimedir.vcard//EN
-            REV:20131011T073813Z
-            END:VCARD
-        """
-
-        it "should work", ->
-            @res.statusCode.should.equal 201
-            @resbody.should.have.length 0
-
-        created = null
-        it "and contact has been updated in db", (done) ->
-
-            Contact.byURI '926f1393b7e328e6992e54178903582c.vcf', (err, contacts) ->
-                should.not.exist err
-                created = contacts[0]
-                should.exist created
-                for dp in created.datapoints
-                    if dp.value is '1 11 2'
-                        return done()
-                    if dp.value is '1 11 1'
-                        return done new Error('contact was not updated')
-
-        it "and contact's vcf should include the UID property", (done) ->
-            created.toVCF (err, vCardOutput) ->
-                vCardOutput.indexOf('UID').should.not.equal -1
-                done()
-
-    describe "Android delete Contact", ->
-        url = '/public/addressbooks/me/all-contacts/926f1393b7e328e6992e54178903582c.vcf'
-        before helpers.send 'DELETE', url, ""
-
-        it "should work", ->
-            @res.statusCode.should.equal 204
-            @resbody.should.have.length 0
-
-        it "and contact has been deleted in db", (done) ->
-            Contact.byURI '926f1393b7e328e6992e54178903582c.vcf', (err, contact) ->
-                should.not.exist err
-                should.not.exist contact[0]
-                done()
+        it "and contact should have group name in tags", ->
+            should.exist updated.tags
+            if updated.tags
+                updated.tags.should.contain 'group1'

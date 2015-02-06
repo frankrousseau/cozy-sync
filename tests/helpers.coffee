@@ -53,11 +53,13 @@ exports.makeDAVAccount = (done) ->
         data = login: 'me', password: PASSWORD
         WebDAVAccount.create data, done
 
-exports.createContact = (name) -> (done) ->
+exports.createContact = (name, tags) -> (done) ->
     Contact = require "#{exports.prefix}server/models/contact"
     sampleaddress = ['Box3','Suite215','14 Avenue de la République','Compiègne','Picardie','60200','France']
     data =
+        n: ";#{name};;;"
         fn: name
+        tags: tags
         note: "some stuff about #{name}"
         datapoints: [
             {name: 'tel'  , type: 'home', value: '000'}
