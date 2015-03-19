@@ -20,7 +20,7 @@ getTemplateName = function(locale) {
   extension = runFromBuild ? 'js' : 'jade';
   fileName = "index_" + locale + "." + extension;
   filePath = path.resolve(__dirname, "../views/" + fileName);
-  if (!fs.exists(filePath)) {
+  if (!fs.existsSync(filePath)) {
     fileName = "index_en." + extension;
   }
   return fileName;

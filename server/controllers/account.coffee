@@ -15,7 +15,7 @@ getTemplateName = (locale) ->
 
     fileName = "index_#{locale}.#{extension}"
     filePath = path.resolve __dirname, "../views/#{fileName}"
-    fileName = "index_en.#{extension}" unless fs.exists(filePath)
+    fileName = "index_en.#{extension}" unless fs.existsSync(filePath)
     return fileName
 
 module.exports =
@@ -39,6 +39,7 @@ module.exports =
                 calendars: calendarNames
 
             fileName = getTemplateName locale
+
             res.render fileName, data
 
     createCredentials: (req, res) ->

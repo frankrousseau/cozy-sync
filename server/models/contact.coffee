@@ -9,6 +9,7 @@ module.exports = Contact = americano.getModel 'Contact',
     n             : String
     datapoints    : Object
     note          : String
+    tags          : (x) -> x # DAMN IT JUGGLING
     _attachments  : Object
     org           : String
     title         : String
@@ -47,6 +48,23 @@ Contact.byURI = (uri, cb) ->
     req = Contact.request 'byURI', null, cb
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
+
+
+Contact::addTag = (tag) ->
+    @tags = [] unless @tags?
+
+    if @tags.indexOf tag is -1
+        @tags.push tag
+
+
+Contact.byTag = (tag, callback) ->
+    Contact.request 'byTag', key: tag, callback
+
+
+Contact.tags = (callback) ->
+    Contact.rawRequest "tags", group: true, (err, results) ->
+        return callback err, [] if err
+        callback null, results.map (keyValue) -> return keyValue.key
 
 
 Contact::toVCF = (callback) ->
