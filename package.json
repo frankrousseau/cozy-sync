@@ -27,7 +27,7 @@
     "axon": "1.0.0",
     "cozy-ical": "1.1.5",
     "cozy-realtime-adapter": "0.11.3",
-    "cozy-vcard": "0.2.5",
+    "cozy-vcard": "0.2.8",
     "jade": "1.1.5",
     "jsDAV": "cozy/jsDAV#c43a719d1e",
     "lazy": "1.0.11",
