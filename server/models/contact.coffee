@@ -10,6 +10,14 @@ module.exports = Contact = americano.getModel 'Contact',
     datapoints    : Object
     note          : String
     _attachments  : Object
+    org           : String
+    title         : String
+    department    : String
+    bday          : String
+    nickname      : String
+    url           : String
+    revision      : Date
+
 
 Contact.afterInitialize = ->
     # Cleanup the model,
@@ -27,13 +35,19 @@ Contact.afterInitialize = ->
 
     return @
 
+
 Contact::getURI = -> @carddavuri or @id + '.vcf'
+
+
 Contact.all = (cb) -> Contact.request 'byURI', cb
+
+
 Contact.byURI = (uri, cb) ->
     # see alarms for complexity
     req = Contact.request 'byURI', null, cb
     req.body = JSON.stringify key: uri
     req.setHeader 'content-type', 'application/json'
+
 
 Contact::toVCF = (callback) ->
     if @_attachments?.picture?
@@ -48,10 +62,11 @@ Contact::toVCF = (callback) ->
     else
         callback null, VCardParser.toVCF(@)
 
+
 # Convert base64 encoded string a jpg file and upload it
 # Then clean the temporarily created file
 Contact::handlePhoto = (photo, callback) ->
-    if photo?
+    if photo? and photo.length > 0
         filePath = "/tmp/#{@id}.jpg"
         fs.writeFile filePath, photo, encoding: 'base64', (err) =>
             @attachFile filePath, name: 'picture', (err) ->
@@ -59,8 +74,9 @@ Contact::handlePhoto = (photo, callback) ->
     else
         callback null
 
+
 Contact.parse = (vcf) ->
     parser = new VCardParser()
-    parser.read(vcf)
+    parser.read vcf
     contact = parser.contacts[0]
     return new Contact parser.contacts[0]

@@ -10,7 +10,7 @@ application = module.exports = (callback) ->
         root: __dirname
 
     require('./server/models/webdavaccount').first ->
-        americano.start options, (app, server) ->
+        americano.start options, (err, app, server) ->
             User = require './server/models/user'
             Realtimer = require 'cozy-realtime-adapter'
             realtime = Realtimer server : server, ['event.*']

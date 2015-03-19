@@ -19,13 +19,15 @@ module.exports =
             americano.static publicPath, maxAge: 86400000
             americano.bodyParser keepExtensions: true
             americano.logger 'dev'
-            americano.errorHandler
-                dumpExceptions: true
-                showStack: true
             (req, res, next) ->
                 return next null unless req.url.indexOf('/public') is 0
                 req.url = req.url.replace '/public', '/public/sync'
                 DAVServer.exec req, res
+        ]
+        useAfter: [
+            americano.errorHandler
+                dumpExceptions: true
+                showStack: true
         ]
 
         engine:

@@ -4,11 +4,12 @@ Exc       = require 'jsDAV/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
 
 
-handle    = (err) ->
-    console.log err
+handle = (err) ->
     return new Exc.jsDAV_Exception err.message || err
 
+
 module.exports = class CozyCardDAVBackend
+
 
     constructor: (@Contact) ->
 
@@ -26,14 +27,17 @@ module.exports = class CozyCardDAVBackend
             socket.connect 9105
             socket.on 'contact.*', onChange
 
+
     getLastCtag: (callback) ->
         WebdavAccount.first (err, account) ->
             callback err, account?.cardctag or 0
+
 
     saveLastCtag: (ctag, callback = ->) =>
         WebdavAccount.first (err, account) =>
             return callback err if err or not account
             account.updateAttributes cardctag: ctag, ->
+
 
     getAddressBooksForUser: (principalUri, callback) ->
         book =
@@ -45,6 +49,7 @@ module.exports = class CozyCardDAVBackend
 
         return callback null, [book]
 
+
     getCards: (addressbookId, callback) ->
         @Contact.all (err, contacts) ->
             return callback handle err if err
@@ -55,6 +60,7 @@ module.exports = class CozyCardDAVBackend
                         carddata: vCardOutput
                         uri: contact.getURI()
             , callback
+
 
     getCard: (addressBookId, cardUri, callback) ->
         @Contact.byURI cardUri, (err, contact) ->
@@ -68,6 +74,7 @@ module.exports = class CozyCardDAVBackend
                     carddata: vCardOutput
                     uri: contact.getURI()
 
+
     createCard: (addressBookId, cardUri, cardData, callback) ->
         data = @Contact.parse cardData
         data.carddavuri = cardUri
@@ -75,23 +82,27 @@ module.exports = class CozyCardDAVBackend
             return callback handle err if err?
             contact.handlePhoto data.photo, callback
 
+
     updateCard: (addressBookId, cardUri, cardData, callback) ->
         @Contact.byURI cardUri, (err, contact) =>
             return callback handle err if err
             return callback handle 'Not Found' unless contact.length
 
+
             contact = contact[0]
             data = @Contact.parse cardData
             data.id = contact._id
             data.carddavuri = cardUri
+            delete contact.rev
 
             # @TODO: fix during cozydb migration
             # Surprinsingly updateAttributes has no effect without this pre-fill
             for k, v of data
                 contact[k] = v
-            contact.updateAttributes data, (err, contact) ->
+            contact.save (err, contact) ->
                 return callback handle err if err?
                 contact.handlePhoto data.photo, callback
+
 
     deleteCard: (addressBookId, cardUri, callback) ->
         @Contact.byURI cardUri, (err, contact) ->
