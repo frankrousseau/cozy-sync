@@ -4,6 +4,7 @@ html(lang="es")
     meta(name="viewport", content="width=device-width,initial-scale=1")
     meta(http-equiv="content-type", content="text/html; charset=utf-8")
     title Cozy - Sincronización
+    link(rel="stylesheet", href="/fonts/fonts.css")
     link(rel="stylesheet", href="stylesheets/app.css")
     link(rel="icon", type="image/x-icon", href="favicon.ico")
     link(rel="icon", type="image/png", href="favicon-96x96.png", sizes="96x96")
@@ -13,108 +14,120 @@ html(lang="es")
   body
     #content
 
-      h1 WebDAV: CalDAV y CardDAV
-      p
-        | WebDav es un protocolo standard que permite a cualquier periférico (que lo soporta)
-        | sincronizar los contactos, la agenda y los archivos con Cozy.
-        | Si usted desea que los contactos y la agenda de su teléfono
-        | se sincronicen con su Cozy (¡y vice-versa!), encontrará en esta página
-         | las etapas que debe seguir para la configuración.
-
-      h1 Identificadores del servidor
-      p
-        | Antes de continuar, usted debe generar identificadores específicos
-        | para la aplicación con el fin de no dejar sus datos en libre acceso.
-        | Los periféricos que se han de sincronizar utilizarán esos identificadores
-        | para conectarse a su Cozy en su nombre.
-
-      .url.credentials
+      .content-block
+        h1 WebDAV: CalDAV y CardDAV
         p
-          | Nombre del usuario:&nbsp;
-          span#login-span #{login}
+          | WebDav es un protocolo standard que permite a cualquier periférico (que lo soporta)
+          | sincronizar los contactos, la agenda y los archivos con Cozy.
+          | Si usted desea que los contactos y la agenda de su teléfono
+          | se sincronicen con su Cozy (¡y vice-versa!), encontrará en esta página
+          | las etapas que debe seguir para la configuración.
+
+      .content-block
+        h1 Identificadores del servidor
         p
-          | contraseña:&nbsp;
-          span#password-span
-          button#show-password Mostrar
-          button#hide-password Ocultar
+          | Antes de continuar, usted debe generar identificadores específicos
+          | para la aplicación con el fin de no dejar sus datos en libre acceso.
+          | Los periféricos que se han de sincronizar utilizarán esos identificadores
+          | para conectarse a su Cozy en su nombre.
 
-        button#generate-btn reinicializar contraseña
-      - var dDomain = (domain == '') ? 'your.cozy.url' : dominio
-      h1 Configuración de CalDav (Agenda)
-      p
-        | Durante el proceso de configuración su periférico va a pedirle una url para conectarse, he aquí
-        algunas direcciones disponibles en función de su periférico o aplicación :
+        .url.credentials
+          p
+            | Nombre del usuario:&nbsp;
+            span#login-span #{login}
+          p
+            | contraseña:&nbsp;
+            span#password-span
+            button#show-password Mostrar
+            button#hide-password Ocultar
 
-      h2.tab.caldav.selected(data-device="ios") iOS
-      h2.tab.caldav(data-device="android") Android
-      h2.tab.caldav(data-device="thunderbird") Thunderbird (Lightning)
+          button#generate-btn reinicializar contraseña
+        - var dDomain = (domain == '') ? 'your.cozy.url' : dominio
 
-      .caldavconf(data-device="ios")
+      .content-block
+        h1 Configuración de CalDav (Agenda)
         p
-          | En la casilla "Servidor", escribir:
-        p#iosuri.url
-          | #{dDomain}/public/sync/principals/me
+          | Durante el proceso de configuración su periférico va a pedirle una url para conectarse, he aquí
+          algunas direcciones disponibles en función de su periférico o aplicación :
 
-      .caldavconf(data-device="android")
+        .content-tab
+          .menu-tab
+            h2.tab.caldav.selected(data-device="ios") iOS
+            h2.tab.caldav(data-device="android") Android
+            h2.tab.caldav(data-device="thunderbird") Thunderbird (Lightning)
+
+          .caldavconf(data-device="ios")
+            p
+              | En la casilla "Servidor", escribir:
+            p#iosuri.url
+              | #{dDomain}/public/sync/principals/me
+
+          .caldavconf(data-device="android")
+            p
+              | Para sincronizar su periférico Android con CalDAV, usted tiene
+              | que instalar una aplicación dedicada. Pero
+              | en su defecto, ensaye con esta url:
+            p.url
+              | https://#{dDomain}/public/sync/principals/me/
+
+          .caldavconf(data-device="thunderbird")
+            p
+              | Seleccione una agenda :&nbsp;
+              select#calendar
+                option#placeholder(value="") -
+                - each c in calendars
+                  option(value=encodeURIComponent(c))= c
+
+            p
+              | Y utilice la URL siguiente :
+            p#thunderbirduri.url
+
+      .content-block
+        h1 Configuración de CardDav (Contacts)
         p
-          | Para sincronizar su periférico Android con CalDAV, usted tiene
-          | que instalar una aplicación dedicada. Pero
-          | en su defecto, ensaye con esta url:
-        p.url
-          | https://#{dDomain}/public/sync/principals/me/
+          | Durante el proceso de configuración su periférico va a pedirle una url para conectarse, he aquí
+          algunas direcciones disponibles en función de su periférico o aplicación :
 
-      .caldavconf(data-device="thunderbird")
+        .content-tab
+          .menu-tab
+            h2.tab.carddav.selected(data-device="ios") iOS
+            h2.tab.carddav(data-device="android") Android
+            h2.tab.carddav(data-device="android") Android
+
+          .carddavconf(data-device="ios")
+            p
+              | En la casilla "Servidor", escribir:
+            p.url
+              | #{dDomain}/public/sync
+
+          .carddavconf(data-device="android")
+            p
+              | Para sincronizar los contactos de su periférico Android, usted tiene que
+              | instalar una aplicación dedicada. La url que se requiere depende de su aplicación. Pero en su defecto, puede ensayar con ésta:
+              | en su defecto, ensaye con esta url:
+            p.url
+              | https://#{dDomain}/public/sync/principals/me/
+
+          .carddavconf(data-device="thunderbird")
+            p
+              | Para sincronizar los contactos con thunderbird, usted tiene que instalar
+              | la extensión SOGo. Utilizar la url siguiente:
+            p.url
+              | https://#{dDomain}/public/sync/addressbooks/me/all-contacts/
+
+      .content-block
+        h1 Configuración de WebDav (Archivos)
         p
-          | Seleccione una agenda :&nbsp;
-          select#calendar
-            option#placeholder(value="") -
-            - each c in calendars
-              option(value=encodeURIComponent(c))= c
+          | Cozy no acepta la sincronización de archivos por medio de WebDav.
+          Proximamente facilitaremos otra manera de hacerlo.
+          | Aceptará trabajar off-line también.
 
+      .content-block
+        h1 Solución de problemas
         p
-          | Y utilice la URL siguiente :
-        p#thunderbirduri.url
-
-      h1 Configuración de CardDav (Contacts)
-      p
-        | Durante el proceso de configuración su periférico va a pedirle una url para conectarse, he aquí
-        algunas direcciones disponibles en función de su periférico o aplicación :
-      h2.tab.carddav.selected(data-device="ios") iOS
-      h2.tab.carddav(data-device="android") Android
-      h2.tab.carddav(data-device="android") Android
-
-      .carddavconf(data-device="ios")
-        p
-          | En la casilla "Servidor", escribir:
-        p.url
-          | #{dDomain}/public/sync
-
-      .carddavconf(data-device="android")
-        p
-          | Para sincronizar los contactos de su periférico Android, usted tiene que
-          | instalar una aplicación dedicada. La url que se requiere depende de su aplicación. Pero en su defecto, puede ensayar con ésta:
-          | en su defecto, ensaye con esta url:
-        p.url
-          | https://#{dDomain}/public/sync/principals/me/
-
-      .carddavconf(data-device="thunderbird")
-        p
-          | Para sincronizar los contactos con thunderbird, usted tiene que instalar
-          | la extensión SOGo. Utilizar la url siguiente:
-        p.url
-          | https://#{dDomain}/public/sync/addressbooks/me/all-contacts/
-
-      h1 Configuración de WebDav (Archivos)
-      p
-        | Cozy no acepta la sincronización de archivos por medio de WebDav.
-        Proximamente facilitaremos otra manera de hacerlo.
-        | Aceptará trabajar off-line también.
-
-      h1 Solución de problemas
-      p
-        | Si usted utiliza otro cliente y encuentra
-        | problemas, le rogamos nos los haga conocer&nbsp;
-        a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") en Github!
+          | Si usted utiliza otro cliente y encuentra
+          | problemas, le rogamos nos los haga conocer&nbsp;
+          a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") en Github!
 
     script.
       window.password = "#{password}";
