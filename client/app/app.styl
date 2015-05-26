@@ -17,7 +17,7 @@ text-shadow()
     src url('../fonts/maven-pro-light-200.otf')
 
 blue = #34A6FF
-orange = #fe8800
+orange = #FE8800
 
 html, body
     height 100%
@@ -54,22 +54,34 @@ h3
     font-family styled
 
 h1
-    margin-top 65px
-    border-bottom 1px solid #CCC
+    margin 0
+    padding 12px 20px
+    background #EEE
+    border-bottom 1px solid #DDD
+    border-radius 8px 8px 0 0
 
 h2
-    margin-top 50px
-    background #77A
+    margin 0
+    background #FBFBFB
     font-size 26px
 
     &.tab
         display inline-block
-        border-radius 0
-        border-right 1px solid #fff
+        position relative
 
         &.selected
         &:hover
-            background #77A - 20%
+            color blue
+            cursor pointer
+
+        &.selected:after
+            content ""
+            position absolute
+            left 0
+            bottom -2px
+            width 100%
+            height 2px
+            background blue
 
 .caldavconf
 .carddavconf
@@ -81,26 +93,44 @@ h2
 
 
 h3
-    margin-top:30px
+    margin-top 30px
 
 p
-    margin-top 5px
-    margin-bottom 5px
+    margin 20px
+    line-height 1.4
 
 h2
-.url
-   color white
+   color #555
    font-size 20px
-   border-radius 5px
-   padding 10px
+   padding 10px 20px
 
 #content
     padding 20px
     max-width 600px
     margin auto
+
+// block individuals
+.content-block
+    margin-top 30px
     background #FBFBFB
-    border-right 1px solid #EEE
-    border-left 1px solid #EEE
+    border 1px solid #DDD
+    border-radius 8px
+
+    ul li
+        color blue
+
+        a
+            text-decoration none
+            line-height 1.8
+
+// block with tabs
+.content-tab
+    margin 20px
+    padding-bottom 5px
+    border-left 2px solid #DDD
+
+.menu-tab
+    border-bottom 2px solid #DDD
 
 button
     cursor pointer
@@ -128,10 +158,18 @@ button:active
     color white
 
 .url
-   background #7A7
+    color #FFF
+    font-size 18px
+    padding 12px 16px
+    background #555
+    border-radius 6px
 
 .credentials
-   font-weight normal
+    margin 20px
+    padding 16px 20px
 
-   span
-     font-weight bold
+    p
+        margin 10px 0
+
+    span
+        font-weight bold
