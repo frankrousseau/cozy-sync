@@ -54,8 +54,7 @@ h2.tab {
   display: inline-block;
   position: relative;
 }
-h2.tab.selected,
-h2.tab:hover {
+h2.tab.selected {
   color: #34a6ff;
   cursor: pointer;
 }
@@ -67,6 +66,10 @@ h2.tab.selected:after {
   width: 100%;
   height: 2px;
   background: #34a6ff;
+}
+h2.tab:hover {
+  color: #fe8800;
+  cursor: pointer;
 }
 .caldavconf,
 .carddavconf {
