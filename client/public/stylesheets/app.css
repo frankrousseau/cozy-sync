@@ -25,7 +25,7 @@ a:hover {
 #show-password,
 #hide-password {
   display: inline-block;
-  margin-left: 15px;
+  margin-left: 1em;
 }
 #hide-password {
   display: none;
@@ -37,18 +37,19 @@ h3 {
 }
 h1 {
   margin: 0;
-  padding: 12px 20px;
+  padding: 0.7rem 1rem;
   background: #eee;
   border-bottom: 1px solid #ddd;
   border-radius: 8px 8px 0 0;
-  font-size: 28px;
+  font-size: 1.6em;
   font-weight: normal;
   color: #333;
 }
 h2 {
   margin: 0;
-  background: #fbfbfb;
-  font-size: 26px;
+  padding: 0.4em 0.6em;
+  color: #555;
+  font-size: 1.2em;
 }
 h2.tab {
   display: inline-block;
@@ -57,15 +58,6 @@ h2.tab {
 h2.tab.selected {
   color: #34a6ff;
   cursor: pointer;
-}
-h2.tab.selected:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 2px;
-  background: #34a6ff;
 }
 h2.tab:hover {
   color: #fe8800;
@@ -79,25 +71,18 @@ h2.tab:hover {
 .carddavconf ~ .carddavconf {
   display: none;
 }
-h3 {
-  margin-top: 30px;
-}
 p {
-  margin: 20px;
+  margin: 1em;
+  font-size: 1em;
   line-height: 1.4;
 }
-h2 {
-  color: #555;
-  font-size: 20px;
-  padding: 10px 20px;
-}
 #content {
-  padding: 20px;
-  max-width: 600px;
+  padding: 1em;
   margin: auto;
+  max-width: 40em;
 }
 .content-block {
-  margin-top: 30px;
+  margin-top: 2em;
   background: #fbfbfb;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -109,28 +94,30 @@ h2 {
   text-decoration: none;
   line-height: 1.8;
 }
+.content-block:last-child {
+  margin-bottom: 4em;
+}
 .content-tab {
-  margin: 20px;
-  padding-bottom: 5px;
+  margin: 1em;
+  padding-bottom: 0.1em;
   border-left: 2px solid #ddd;
 }
 .menu-tab {
   border-bottom: 2px solid #ddd;
 }
 button {
+  padding: 0.3em 0.8em;
   cursor: pointer;
-  border: 1px solid #34a6ff;
   background: #34a6ff;
-  color: #fff;
+  border: 1px solid #34a6ff;
   box-shadow: none;
+  border-radius: 3px;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #fff;
+  font-size: 0.8em;
   -moz-text-shadow: none;
   -webkit-text-shadow: none;
   text-shadow: none;
-  border-radius: 5px;
-  font-family: 'Source Sans Pro', sans-serif;
-  padding: 5px;
-  font-size: 12px;
-  min-width: 50px;
   outline: none;
 }
 button:hover {
@@ -147,18 +134,22 @@ button:active {
   color: #fff;
 }
 .url {
-  color: #fff;
-  font-size: 18px;
-  padding: 12px 16px;
+  padding: 0.8em 1em;
   background: #555;
-  border-radius: 6px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1.05em;
+  word-wrap: break-word;
 }
 .credentials {
-  margin: 20px;
-  padding: 16px 20px;
+  margin: 1em;
+  padding: 1em;
+}
+.credentials.url {
+  word-wrap: normal;
 }
 .credentials p {
-  margin: 10px 0;
+  margin: 0 0 0.5em;
 }
 .credentials span {
   font-weight: bold;
