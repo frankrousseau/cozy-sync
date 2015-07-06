@@ -33,7 +33,7 @@ module.exports =
         byTag: byTag
         tags: tagsView
     tag:
-        all: (doc) -> emit doc.name, doc
+        byName: (doc) -> emit doc.name, doc
 
     event:
         all: (doc) -> emit doc._id, doc

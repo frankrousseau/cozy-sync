@@ -15,7 +15,7 @@ Tag.getOrCreateByName = (name, callback) ->
     
     createIt =  -> Tag.create name: name, callback
 
-    Tag.request 'all', key: name, (err, tags) ->
+    Tag.request 'byName', key: name, (err, tags) ->
         if err
             log.error err
             createIt()
