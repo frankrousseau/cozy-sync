@@ -12,6 +12,9 @@ axon = require 'axon'
 time  = require "time"
 {ICalParser, VCalendar, VTimezone, VEvent} = require "cozy-ical"
 
+log = require('printit')
+    prefix: 'caldav:backend'
+
 module.exports = class CozyCalDAVBackend
 
     constructor: (@Event, @User) ->
@@ -212,7 +215,12 @@ module.exports = class CozyCalDAVBackend
                             lastmodified: lastModification.getTime()
 
             catch ex
-                console.log ex.stack
+                log.error 'CalendarQuery went wrong with the following' + \
+                          'parameters:'
+                log.error "calendarId: #{calendarId}"
+                log.error "filters:"
+                log.error filters
+                log.error ex.stack
                 return callback ex, []
 
             callback null, objects

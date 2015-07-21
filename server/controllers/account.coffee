@@ -4,6 +4,8 @@ async = require 'async'
 WebDAVAccount = require '../models/webdavaccount'
 CozyInstance = require '../models/cozyinstance'
 Event = require '../models/event'
+log = require('printit')
+    prefix: 'account:controller'
 
 # Get the template name for given locale, fallbacks to english template
 getTemplateName = (locale) ->
@@ -25,7 +27,9 @@ module.exports =
             calendarTags: (done) -> Event.calendars done
             instance: (done) -> CozyInstance.first done
         }, (err, results) ->
-            console.log err if err?
+
+            log.error err if err?
+
             {davAccount, calendarTags, instance} = results
             calendarNames = calendarTags.map (calendar) -> calendar.name
 

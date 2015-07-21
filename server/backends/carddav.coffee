@@ -2,11 +2,14 @@ async = require 'async'
 axon = require 'axon'
 Exc       = require 'jsDAV/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
+log = require('printit')
+    prefix: 'carddav:backend'
 
 
 handle = (err) ->
-    console.log err
-    return new Exc.jsDAV_Exception err.message || err
+    errorMessage = err.message or err
+    log.error "Handling error -- #{errorMessage}"
+    return new Exc.jsDAV_Exception errorMessage
 
 allContactsId = 'all-contacts'
 

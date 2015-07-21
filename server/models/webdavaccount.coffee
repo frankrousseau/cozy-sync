@@ -1,6 +1,9 @@
 americano = require 'americano-cozy'
 shortId = require 'shortid'
 
+log = require('printit')
+    prefix: 'webdavaccount:model'
+
 # Object required to store the automatically generated webdav credentials.
 module.exports = WebDAVAccount = americano.getModel 'WebDAVAccount',
     id: String
@@ -20,7 +23,7 @@ WebDAVAccount.first = (callback) ->
             # Retrocompatibility, webdav account has no business
             # being encrypted, we rename the password field as token in the db
             if account?.password
-                console.log "WEBDAVACCOUNT HAS A PASSWORD, PATCHING"
+                log.info "WEBDAVACCOUNT HAS A PASSWORD, PATCHING"
                 account.token = account.password
                 account.password = null
                 account.save (err) ->
