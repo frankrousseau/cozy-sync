@@ -284,6 +284,9 @@ module.exports = CozyCalDAVBackend = (function() {
 
   CozyCalDAVBackend.prototype.calendarQuery = function(calendarId, filters, callback) {
     var objects, reader, validator;
+    console.log('CalendarQuery', calendarId);
+    console.log('Filters:');
+    log.info(filters);
     objects = [];
     reader = VObject_Reader["new"]();
     validator = CalDAV_CQValidator["new"]();
@@ -304,6 +307,9 @@ module.exports = CozyCalDAVBackend = (function() {
           return callback(err);
         }
         events = results[0], timezone = results[1];
+        ical = null;
+        vobj = null;
+        jugglingObj = null;
         try {
           for (i = 0, len = events.length; i < len; i++) {
             jugglingObj = events[i];
@@ -331,7 +337,16 @@ module.exports = CozyCalDAVBackend = (function() {
           log.error("calendarId: " + calendarId);
           log.error("filters:");
           log.error(filters);
+          log.error("exception");
+          log.error(ex);
+          log.error("stack");
           log.error(ex.stack);
+          log.error("jugglingObj");
+          log.error(jugglingObj);
+          log.error("ical");
+          log.error(ical);
+          log.error("vobj");
+          console.log(vobj);
           return callback(ex, []);
         }
         return callback(null, objects);
