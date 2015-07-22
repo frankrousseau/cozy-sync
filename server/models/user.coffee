@@ -1,4 +1,6 @@
 americano = require 'americano-cozy'
+log = require('printit')
+    prefix: 'user:model'
 
 module.exports = User = americano.getModel 'User',
     timezone: type: String, default: "Europe/Paris"
@@ -11,7 +13,8 @@ User.getTimezone = (callback) ->
 User.updateUser = (callback) ->
     User.getTimezone (err, timezone) ->
         if err
-            console.log err
+            message = "Something went wrong during timezone retrieval -- #{err}"
+            log.error message
             User.timezone = 'Europe/Paris'
         else
             User.timezone = timezone or "Europe/Paris"
