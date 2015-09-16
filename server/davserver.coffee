@@ -1,4 +1,4 @@
-jsDAV = require "jsDAV"
+jsDAV = require "cozy-jsdav-fork"
 
 jsDAV.debugMode = not not process.env.DEBUG
 
@@ -6,13 +6,13 @@ jsDAV.debugMode = not not process.env.DEBUG
 cozy_Auth_Backend = require './backends/auth'
 
 # Permissions
-jsDAVACL_PrincipalCollection = require "jsDAV/lib/DAVACL/principalCollection"
+jsDAVACL_PrincipalCollection = require "cozy-jsdav-fork/lib/DAVACL/principalCollection"
 cozy_PrincipalBackend = require './backends/principal'
 principalBackend = new cozy_PrincipalBackend
 nodePrincipalCollection = jsDAVACL_PrincipalCollection.new(principalBackend)
 
 # Contacts
-jsCardDAV_AddressBookRoot = require "jsDAV/lib/CardDAV/addressBookRoot"
+jsCardDAV_AddressBookRoot = require "cozy-jsdav-fork/lib/CardDAV/addressBookRoot"
 cozy_CardBackend = require './backends/carddav'
 carddavBackend = new cozy_CardBackend require './models/contact'
 nodeCardDAV = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
@@ -20,7 +20,7 @@ nodeCardDAV = jsCardDAV_AddressBookRoot.new(principalBackend, carddavBackend)
 # Calendar
 Event = require './models/event'
 User = require './models/user'
-jsCalDAV_CalendarRoot        = require "jsDAV/lib/CalDAV/calendarRoot"
+jsCalDAV_CalendarRoot        = require "cozy-jsdav-fork/lib/CalDAV/calendarRoot"
 cozy_CalBackend = require './backends/caldav'
 caldavBackend  = new cozy_CalBackend Event, User
 nodeCalDAV = jsCalDAV_CalendarRoot.new(principalBackend, caldavBackend)
@@ -36,10 +36,10 @@ module.exports = jsDAV.mount
 
     authBackend: cozy_Auth_Backend.new()
     plugins: [
-        require "jsDAV/lib/DAV/plugins/auth"
-        require "jsDAV/lib/CardDAV/plugin"
-        require "jsDAV/lib/CalDAV/plugin"
-        require "jsDAV/lib/DAVACL/plugin"
+        require "cozy-jsdav-fork/lib/DAV/plugins/auth"
+        require "cozy-jsdav-fork/lib/CardDAV/plugin"
+        require "cozy-jsdav-fork/lib/CalDAV/plugin"
+        require "cozy-jsdav-fork/lib/DAVACL/plugin"
     ]
 
     node: [nodePrincipalCollection, nodeCardDAV, nodeCalDAV]
