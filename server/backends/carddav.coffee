@@ -1,6 +1,6 @@
 async = require 'async'
 axon = require 'axon'
-Exc       = require 'jsDAV/lib/shared/exceptions'
+Exc       = require 'cozy-jsdav-fork/lib/shared/exceptions'
 WebdavAccount = require '../models/webdavaccount'
 log = require('printit')
     prefix: 'carddav:backend'

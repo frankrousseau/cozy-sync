@@ -1,6 +1,6 @@
 # Interface = require 'jsdav/lib/CardDAV/interfaces/iBackend'
-Exc = require 'jsDAV/lib/shared/exceptions'
-BasicAuth = require 'jsDAV/lib/DAV/plugins/auth/abstractBasic'
+Exc = require 'cozy-jsdav-fork/lib/shared/exceptions'
+BasicAuth = require 'cozy-jsdav-fork/lib/DAV/plugins/auth/abstractBasic'
 WebDAVAccount = require '../models/webdavaccount'
 
 module.exports = BasicAuth.extend

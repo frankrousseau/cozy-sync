@@ -24,7 +24,7 @@ before_install:
     - export TOKEN=apptoken
 
 after_install:
-    - cd node_modules/jsDAV
+    - cd node_modules/cozy-jsdav-fork/
     - npm install
     - cd ../..
 

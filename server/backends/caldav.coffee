@@ -1,10 +1,10 @@
 "use strict"
 
-Exc = require "jsDAV/lib/shared/exceptions"
-SCCS = require "jsDAV/lib/CalDAV/properties/supportedCalendarComponentSet"
-CalendarQueryParser = require('jsDAV/lib/CalDAV/calendarQueryParser')
-VObject_Reader = require('jsDAV/lib/VObject/reader')
-CalDAV_CQValidator = require('jsDAV/lib/CalDAV/calendarQueryValidator')
+Exc = require "cozy-jsdav-fork/lib/shared/exceptions"
+SCCS = require "cozy-jsdav-fork/lib/CalDAV/properties/supportedCalendarComponentSet"
+CalendarQueryParser = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryParser')
+VObject_Reader = require('cozy-jsdav-fork/lib/VObject/reader')
+CalDAV_CQValidator = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryValidator')
 WebdavAccount = require '../models/webdavaccount'
 Event = require '../models/event'
 async = require "async"
