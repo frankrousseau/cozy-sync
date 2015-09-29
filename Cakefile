@@ -75,6 +75,7 @@ task 'build', 'Build CoffeeScript to Javascript', ->
     logger.info "Start compilation..."
     command = "coffee -cb --output build/server server && " + \
               "coffee -cb --output build/ server.coffee && " + \
+              "cp -rf server/locales build/server &&" + \
               "rm -rf build/server/views && " + \
               "mkdir build/server/views"
     exec command, (err, stdout, stderr) ->
