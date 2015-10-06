@@ -1,4 +1,4 @@
-{
+module.exports = {
   "webdav": "WebDAV: CalDAV et CardDAV",
   "WebDav est un protocole standard": "WebDav est un protocole standard qui permet à n'importe quel périphérique (qui le supporte) de synchroniser les contacts, l'agenda et les fichiers avec votre Cozy. Si vous voulez que les contacts et l'agenda de votre smartphone soient synchronisés avec votre Cozy (et vice-versa !), vous trouverez les étapes de configuration sur cette page.",
   "two tutorials": "Vous trouverez 2 tutoriels sur notre documentation en ligne :",
@@ -27,3 +27,4 @@
   "experimenting problems": "Si vous rencontrez des problèmes, faites-le nous savoir",
   "on github": "sur Github"
 }
+;

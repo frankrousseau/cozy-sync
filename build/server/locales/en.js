@@ -1,4 +1,4 @@
-{
+module.exports = {
   "webdav": "WebDAV: CalDAV and CardDAV",
   "standard protocol": "WebDAV is a standard protocol that allows any device (that suppports it) to get synchronized with the Contact, Calendar and Files informations from your Cozy. So, if you want that your smartphone to be kept up to date with your Cozy, you will find in the following, the instructions to set this synchronization.",
   "two tutorials": "You will find two tutorials on our online documentation :",
@@ -26,3 +26,4 @@
   "experimenting problems": "If you use another client and are experimenting problems, please let us know about it",
   "on github": "on Github"
 }
+;
