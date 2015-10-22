@@ -22,9 +22,9 @@ html(lang="en")
           | #{tutorials}
           ul
             li
-              a(target="_blank", href="http://cozy.io/en/mobile/contacts.html") #{contacts}
+              a(target="_blank", href="http://cozy.io/en/mobile/contacts.html") #{contactsTutorial}
             li
-              a(target="_blank", href="http://cozy.io/en/mobile/calendar.html") #{calendar}
+              a(target="_blank", href="http://cozy.io/en/mobile/calendar.html") #{calendarTutorial}
 
       .content-block
         h1 #{server}
@@ -120,7 +120,7 @@ html(lang="en")
           a(target="_blank", href="https://github.com/mycozycloud/cozy-webdav/issues") #{github}!
 
     script.
-      window.password = "#{password}";
+      window.password = "#{token}";
     script(src="javascripts/vendor.js")
     script(src="javascripts/app.js", onload="require('initialize');")
 

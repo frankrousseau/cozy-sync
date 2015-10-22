@@ -39,13 +39,13 @@ module.exports =
             localizationManager.ensureReady (err) ->
                 data =
                     login: davAccount?.login
-                    password: davAccount?.token
+                    token: davAccount?.token
                     domain: domain
                     calendars: calendarNames
                     webdav: localizationManager.t 'webdav'
                     standard: localizationManager.t 'standard protocol'
                     tutorials: localizationManager.t 'two tutorials'
-                    contacts: localizationManager.t 'contacts tutorial'
+                    contactsTutorial: localizationManager.t 'contacts tutorial'
                     server: localizationManager.t 'server credentials'
                     further: localizationManager.t 'before going further'
                     log: localizationManager.t 'login'
@@ -54,7 +54,7 @@ module.exports =
                     hide: localizationManager.t 'hide'
                     reset: localizationManager.t 'reset password'
                     dom: localizationManager.t 'domain'
-                    calendar: localizationManager.t 'calendar'
+                    calendarTutorial: localizationManager.t 'calendar'
                     client: localizationManager.t 'your client will ask for'
                     serverField: localizationManager.t 'in the server field'
                     android: localizationManager.t 'sync android'
@@ -70,7 +70,7 @@ module.exports =
 
 
                 fileName = getTemplateName locale
-                res.render fileName, data 
+                res.render fileName, data
 
     createCredentials: (req, res) ->
         WebDAVAccount.createAccount (err, account) ->
