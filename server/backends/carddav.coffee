@@ -38,8 +38,8 @@ module.exports = class CozyCardDAVBackend
             callback err, account?.cardctag or 0
 
 
-    saveLastCtag: (ctag, callback = ->) =>
-        WebdavAccount.first (err, account) =>
+    saveLastCtag: (ctag, callback = ->) ->
+        WebdavAccount.first (err, account) ->
             return callback err if err or not account
             account.updateAttributes cardctag: ctag, ->
 

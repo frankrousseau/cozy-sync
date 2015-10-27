@@ -4,7 +4,7 @@ Exc = require "cozy-jsdav-fork/lib/shared/exceptions"
 SCCS = require "cozy-jsdav-fork/lib/CalDAV/properties/supportedCalendarComponentSet"
 CalendarQueryParser = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryParser')
 VObject_Reader = require('cozy-jsdav-fork/lib/VObject/reader')
-CalDAV_CQValidator = require('cozy-jsdav-fork/lib/CalDAV/calendarQueryValidator')
+CalDAV_CQValidator = require 'cozy-jsdav-fork/lib/CalDAV/calendarQueryValidator'
 WebdavAccount = require '../models/webdavaccount'
 Event = require '../models/event'
 async = require "async"
@@ -42,8 +42,8 @@ module.exports = class CozyCalDAVBackend
         WebdavAccount.first (err, account) ->
             callback err, account?.ctag or 0
 
-    saveLastCtag: (ctag, callback = ->) =>
-        WebdavAccount.first (err, account) =>
+    saveLastCtag: (ctag, callback = ->) ->
+        WebdavAccount.first (err, account) ->
             return callback err if err or not account
             account.updateAttributes ctag: ctag, ->
 
@@ -53,8 +53,8 @@ module.exports = class CozyCalDAVBackend
 
         if @icalCalendars?
             setTimeout => # "setTimeout 0" to reset stack.
-                    callback null, @icalCalendars
-                , 0
+                callback null, @icalCalendars
+            , 0
 
         else # no cache version available, generate it.
             Event.calendars (err, calendars) =>

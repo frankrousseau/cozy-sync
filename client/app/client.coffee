@@ -4,12 +4,12 @@ module.exports =
         $.ajax
             type: 'GET'
             url: url
-            success: (response) =>
+            success: (response) ->
                 if response.success
                     callbacks.success response
                 else
                     callbacks.error response
-            error: (response) =>
+            error: (response) ->
                 callbacks.error response
 
     post: (url, data, callbacks) ->
@@ -18,11 +18,11 @@ module.exports =
             url: url
             data: JSON.stringify data
             dataType: "json"
-            success: (response) =>
+            success: (response) ->
                 if response.success
                     callbacks.success response
                 else
                     callbacks.error response
-            error: (response) =>
+            error: (response) ->
                 callbacks.error response
 

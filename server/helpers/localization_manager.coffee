@@ -6,7 +6,7 @@ class LocalizationManager
     polyglot: null
 
     # should be run when app starts
-    initialize: (callback = () ->) ->
+    initialize: (callback = ->) ->
         @ensureReady callback
 
     setRenderer: (renderer) ->
