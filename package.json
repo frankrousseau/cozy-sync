@@ -13,7 +13,10 @@
   "scripts": {
     "start": "node build/server.js",
     "test": "cake --use-js tests",
-    "build": "cake build"
+    "build": "cake build",
+    "lint": "npm run lint1 || npm run lint2",
+    "lint1": "coffeelint -f coffeelint.json ./server/",
+    "lint2": "coffeelint -f coffeelint.json ./client/app/"
   },
   "repository": {
     "type": "git",
@@ -43,7 +46,8 @@
     "request": "2.34.0",
     "xmldoc": "0.1.2",
     "mocha": "1.17.1",
-    "coffee-script": "latest"
+    "coffee-script": "latest",
+    "coffeelint": "1.6.1"
   },
   "cozy-permissions": {
     "Alarm": {
