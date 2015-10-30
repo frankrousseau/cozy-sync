@@ -13,7 +13,10 @@
   "scripts": {
     "start": "node build/server.js",
     "test": "cake --use-js tests",
-    "build": "cake build"
+    "build": "cake build",
+    "lint": "npm run lint1 || npm run lint2",
+    "lint1": "coffeelint -f coffeelint.json ./server/",
+    "lint2": "coffeelint -f coffeelint.json ./client/app/"
   },
   "repository": {
     "type": "git",
@@ -28,7 +31,7 @@
     "cozy-ical": "1.1.14",
     "cozy-jsdav-fork": "0.3.11",
     "cozy-realtime-adapter": "0.11.3",
-    "cozy-vcard": "0.2.10",
+    "cozy-vcard": "0.2.15",
     "cozydb": "^0.1.0",
     "jade": "1.1.5",
     "lazy": "1.0.11",
@@ -43,7 +46,8 @@
     "request": "2.34.0",
     "xmldoc": "0.1.2",
     "mocha": "1.17.1",
-    "coffee-script": "latest"
+    "coffee-script": "latest",
+    "coffeelint": "1.6.1"
   },
   "cozy-permissions": {
     "Alarm": {

@@ -1,8 +1,8 @@
 {exec} = require 'child_process'
 fs     = require 'fs'
 logger = require('printit')
-            date: false
-            prefix: 'cake'
+    date: false
+    prefix: 'cake'
 
 option '-f', '--file [FILE*]' , 'List of test files to run'
 option '-d', '--dir [DIR*]' , 'Directory of test files to run'
@@ -53,10 +53,10 @@ task 'tests', "Run tests #{taskDetails}", (opts) ->
         if err
             console.log stderr
             logger.error "Running mocha caught exception:\n" + err
-            setTimeout (=> process.exit 1), 10
+            setTimeout (-> process.exit 1), 10
         else
             logger.info "Tests succeeded!"
-            setTimeout (=> process.exit 0), 10
+            setTimeout (-> process.exit 0), 10
 
 buildJade = ->
     jade = require 'jade'
@@ -101,14 +101,3 @@ task 'build', 'Build CoffeeScript to Javascript', ->
             logger.info "Compilation succeeded."
             process.exit 0
 
-task "lint", "Run Coffeelint", ->
-    process.env.TZ = "Europe/Paris"
-    command = "coffeelint "
-    command += " -f coffeelint.json -r server/"
-    logger.options.prefix = 'cake:lint'
-    logger.info 'Start linting...'
-    exec command, (err, stdout, stderr) ->
-        if err
-            logger.error err
-        else
-            console.log stdout

@@ -9,10 +9,10 @@ module.exports = Tag = americano.getModel 'Tag',
 Tag.byNames = (names, callback) ->
     Tag.request 'all', keys: names, callback
 
-# Get a tag by name, or create the instance of it, 
+# Get a tag by name, or create the instance of it,
 # but don't save it in database.
 Tag.getOrCreateByName = (name, callback) ->
-    
+
     createIt =  -> Tag.create name: name, callback
 
     Tag.request 'byName', key: name, (err, tags) ->
