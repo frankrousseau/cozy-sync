@@ -115,20 +115,16 @@ module.exports = {
     return $.ajax({
       type: 'GET',
       url: url,
-      success: (function(_this) {
-        return function(response) {
-          if (response.success) {
-            return callbacks.success(response);
-          } else {
-            return callbacks.error(response);
-          }
-        };
-      })(this),
-      error: (function(_this) {
-        return function(response) {
+      success: function(response) {
+        if (response.success) {
+          return callbacks.success(response);
+        } else {
           return callbacks.error(response);
-        };
-      })(this)
+        }
+      },
+      error: function(response) {
+        return callbacks.error(response);
+      }
     });
   },
   post: function(url, data, callbacks) {
@@ -137,20 +133,16 @@ module.exports = {
       url: url,
       data: JSON.stringify(data),
       dataType: "json",
-      success: (function(_this) {
-        return function(response) {
-          if (response.success) {
-            return callbacks.success(response);
-          } else {
-            return callbacks.error(response);
-          }
-        };
-      })(this),
-      error: (function(_this) {
-        return function(response) {
+      success: function(response) {
+        if (response.success) {
+          return callbacks.success(response);
+        } else {
           return callbacks.error(response);
-        };
-      })(this)
+        }
+      },
+      error: function(response) {
+        return callbacks.error(response);
+      }
     });
   }
 };

@@ -35,7 +35,6 @@ module.exports = CozyCalDAVBackend = (function() {
     this.User = User;
     this.createCalendarObject = bind(this.createCalendarObject, this);
     this._extractCalObject = bind(this._extractCalObject, this);
-    this.saveLastCtag = bind(this.saveLastCtag, this);
     this.getLastCtag((function(_this) {
       return function(err, ctag) {
         var onChange, socket;
@@ -64,16 +63,14 @@ module.exports = CozyCalDAVBackend = (function() {
     if (callback == null) {
       callback = function() {};
     }
-    return WebdavAccount.first((function(_this) {
-      return function(err, account) {
-        if (err || !account) {
-          return callback(err);
-        }
-        return account.updateAttributes({
-          ctag: ctag
-        }, function() {});
-      };
-    })(this));
+    return WebdavAccount.first(function(err, account) {
+      if (err || !account) {
+        return callback(err);
+      }
+      return account.updateAttributes({
+        ctag: ctag
+      }, function() {});
+    });
   };
 
   CozyCalDAVBackend.prototype.getCalendarsForUser = function(principalUri, callback) {
