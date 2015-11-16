@@ -4,6 +4,7 @@ cozydb = require 'cozydb'
 class LocalizationManager
 
     polyglot: null
+    defaultPolyglot: null
 
     # should be run when app starts
     initialize: (callback = ->) ->
@@ -22,14 +23,22 @@ class LocalizationManager
         # we are not ready, let's get ready
         @retrieveLocale (err, locale) =>
             return callback err if err
-            phrases = try require "../locales/#{locale}"
-            catch err then require '../locales/en'
+            defaultPhrases = require '../locales/en'
+            try
+                phrases = require "../locales/#{locale}"
+            catch err
+                phrases = defaultPhrases
 
             @polyglot = new Polyglot locale: locale, phrases: phrases
+            @defaultPolyglot  = new Polyglot
+                locale: 'en'
+                phrases: defaultPhrases
             callback null, @polyglot
 
     # execute polyglot.t, for server-side localization
     t: (key, params = {}) ->
+        unless params._?
+            params._ = @defaultPolyglot?.t key, params
         return @polyglot?.t key, params
 
     render: (name, options, callback) ->
