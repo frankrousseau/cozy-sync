@@ -32,7 +32,7 @@ module.exports =
             log.error err if err?
 
             {davAccount, calendarTags, instance} = results
-            calendarNames = calendarTags.map (calendar) -> calendar.name
+            calendarNames = calendarTags?.map (calendar) -> calendar.name
 
             locale = instance?.locale or 'en'
             domain = instance?.domain or ''
