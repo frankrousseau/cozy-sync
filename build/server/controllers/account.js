@@ -50,9 +50,9 @@ module.exports = {
         log.error(err);
       }
       davAccount = results.davAccount, calendarTags = results.calendarTags, instance = results.instance;
-      calendarNames = calendarTags.map(function(calendar) {
+      calendarNames = calendarTags != null ? calendarTags.map(function(calendar) {
         return calendar.name;
-      });
+      }) : void 0;
       locale = (instance != null ? instance.locale : void 0) || 'en';
       domain = (instance != null ? instance.domain : void 0) || '';
       return localizationManager.ensureReady(function(err) {
