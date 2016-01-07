@@ -24,22 +24,22 @@
   },
   "readmeFilename": "README.md",
   "dependencies": {
-    "americano": "0.4.1",
+    "americano": "0.4.2",
     "americano-cozy": "0.2.11",
     "async": "0.2.10",
     "axon": "1.0.0",
-    "cozy-ical": "1.1.14",
+    "cozy-ical": "1.1.15",
     "cozy-jsdav-fork": "0.3.13",
     "cozy-realtime-adapter": "0.11.3",
-    "cozy-vcard": "0.2.15",
+    "cozy-vcard": "0.2.16",
     "cozydb": "^0.1.0",
     "jade": "1.1.5",
     "lazy": "1.0.11",
     "moment": "2.5.1",
     "node-polyglot": "^0.4.3",
-    "printit": "0.1.8",
+    "printit": "0.1.15",
     "shortid": "2.0.0",
-    "time": "0.10.0"
+    "time": "0.11.4"
   },
   "devDependencies": {
     "chai": "1.9.0",
