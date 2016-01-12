@@ -16,7 +16,8 @@
     "build": "cake build",
     "lint": "npm run lint1 || npm run lint2",
     "lint1": "coffeelint -f coffeelint.json ./server/",
-    "lint2": "coffeelint -f coffeelint.json ./client/app/"
+    "lint2": "coffeelint -f coffeelint.json ./client/app/",
+    "postinstall": "node postinstall.js"
   },
   "repository": {
     "type": "git",
@@ -38,8 +39,7 @@
     "moment": "2.5.1",
     "node-polyglot": "^0.4.3",
     "printit": "0.1.15",
-    "shortid": "2.0.0",
-    "time": "0.11.4"
+    "shortid": "2.0.0"
   },
   "devDependencies": {
     "chai": "1.9.0",
