@@ -1,8 +1,8 @@
 fs = require 'fs'
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 VCardParser = require 'cozy-vcard'
 
-module.exports = Contact = americano.getModel 'Contact',
+module.exports = Contact = cozydb.getModel 'Contact',
     id            : String
     carddavuri    : String
     fn            : String

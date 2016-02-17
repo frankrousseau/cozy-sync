@@ -1,7 +1,7 @@
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 
 # Object required to store the automatically generated webdav credentials.
-module.exports = CozyInstance = americano.getModel 'CozyInstance',
+module.exports = CozyInstance = cozydb.getModel 'CozyInstance',
     id: String
     domain: String
     locale: String

@@ -1,4 +1,4 @@
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 time = require 'time'
 moment = require 'moment'
 async = require 'async'
@@ -6,7 +6,7 @@ async = require 'async'
 Tag = require '../models/tag'
 
 # EVENT
-module.exports = Event = americano.getModel 'Event',
+module.exports = Event = cozydb.getModel 'Event',
     id: type:String, default: null
     caldavuri: String
     start: String

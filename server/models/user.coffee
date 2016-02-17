@@ -1,8 +1,8 @@
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 log = require('printit')
     prefix: 'user:model'
 
-module.exports = User = americano.getModel 'User',
+module.exports = User = cozydb.getModel 'User',
     timezone: type: String, default: "Europe/Paris"
 
 User.getTimezone = (callback) ->
