@@ -92,7 +92,7 @@ exports.createEvent = (title, description, start) -> (done) ->
 exports.createRequests = (done) ->
     @timeout 10000
     root = require('path').join __dirname, exports.prefix
-    require('americano-cozy').configure root, null, (err) ->
+    require('americano').configure root, null, (err) ->
         done err
 
 exports.cleanDB = (done) ->

@@ -1,8 +1,8 @@
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 log = require('printit')
     prefix: 'tag:model'
 
-module.exports = Tag = americano.getModel 'Tag',
+module.exports = Tag = cozydb.getModel 'Tag',
     name : type: String
     color : type: String, default: '#008AF6'
 

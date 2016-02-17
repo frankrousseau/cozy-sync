@@ -43,5 +43,5 @@ module.exports =
     ]
 
     plugins: [
-        'americano-cozy'
+        'cozydb'
     ]

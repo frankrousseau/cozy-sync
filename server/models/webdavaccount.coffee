@@ -1,11 +1,11 @@
-americano = require 'americano-cozy'
+cozydb = require 'cozydb'
 shortId = require 'shortid'
 
 log = require('printit')
     prefix: 'webdavaccount:model'
 
 # Object required to store the automatically generated webdav credentials.
-module.exports = WebDAVAccount = americano.getModel 'WebDAVAccount',
+module.exports = WebDAVAccount = cozydb.getModel 'WebDAVAccount',
     id: String
     login: String
     token: String
