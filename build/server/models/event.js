@@ -114,10 +114,7 @@ Event.calendars = function(callback) {
 };
 
 Event.byURI = function(uri, cb) {
-  var req;
-  req = Event.request('byURI', null, cb);
-  req.body = JSON.stringify({
+  return Event.request('byURI', {
     key: uri
-  });
-  return req.setHeader('content-type', 'application/json');
+  }, cb);
 };

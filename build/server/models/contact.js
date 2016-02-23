@@ -48,12 +48,9 @@ Contact.all = function(cb) {
 };
 
 Contact.byURI = function(uri, cb) {
-  var req;
-  req = Contact.request('byURI', null, cb);
-  req.body = JSON.stringify({
+  return Contact.request('byURI', {
     key: uri
-  });
-  return req.setHeader('content-type', 'application/json');
+  }, cb);
 };
 
 Contact.prototype.addTag = function(tag) {
