@@ -45,9 +45,7 @@ Contact.all = (cb) -> Contact.request 'byURI', cb
 
 Contact.byURI = (uri, cb) ->
     # see alarms for complexity
-    req = Contact.request 'byURI', null, cb
-    req.body = JSON.stringify key: uri
-    req.setHeader 'content-type', 'application/json'
+    Contact.request 'byURI', key: uri, cb
 
 
 Contact::addTag = (tag) ->
