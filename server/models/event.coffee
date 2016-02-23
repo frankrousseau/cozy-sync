@@ -57,6 +57,4 @@ Event.calendars = (callback) ->
 
 Event.byURI = (uri, cb) ->
     # See Alarm
-    req = Event.request 'byURI', null, cb
-    req.body = JSON.stringify key: uri
-    req.setHeader 'content-type', 'application/json'
+    Event.request 'byURI', key: uri, cb
