@@ -155,6 +155,9 @@ module.exports = class CozyCalDAVBackend
 
             if obj.name is 'VEVENT'
                 event = @Event.fromIcal obj, calendarId
+                # on creation, event id must be null, remove the id
+                # that may have been imported from ical object
+                event.id = null
                 event.caldavuri = objectUri
                 @Event.create event, (err, event) -> callback err, null
             else
