@@ -234,6 +234,7 @@ module.exports = CozyCalDAVBackend = (function() {
         }
         if (obj.name === 'VEVENT') {
           event = _this.Event.fromIcal(obj, calendarId);
+          event.id = null;
           event.caldavuri = objectUri;
           return _this.Event.create(event, function(err, event) {
             return callback(err, null);
