@@ -190,6 +190,8 @@ describe 'Carddav support', ->
                     if dp.value is '1 11 1'
                         return done new Error('contact was not updated')
 
+                done new Error 'contact is not as expected'
+
         it "and contact's vcf should include the UID property", (done) ->
             created.toVCF (err, vCardOutput) ->
                 vCardOutput.indexOf('UID').should.not.equal -1
