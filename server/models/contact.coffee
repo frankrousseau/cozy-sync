@@ -1,6 +1,10 @@
 fs = require 'fs'
 cozydb = require 'cozydb'
+stream = require 'stream'
 VCardParser = require 'cozy-vcard'
+log = require('printit')
+    prefix: 'model:contact'
+
 
 module.exports = Contact = cozydb.getModel 'Contact',
     id            : String
@@ -69,12 +73,17 @@ Contact::toVCF = (callback) ->
     if @_attachments?.picture?
         # we get a stream that we need to convert into a buffer
         # so we can output a base64 version of the picture
-        stream = @getFile 'picture', ->
-        buffers = []
-        stream.on 'data', buffers.push.bind(buffers)
-        stream.on 'end', =>
-            picture = Buffer.concat(buffers).toString 'base64'
+        stream = @getFile 'picture', (err) ->
+            callback err if err?
+        chunks = []
+        bufferer = new stream.Writable
+        bufferer._write = (chunk, enc, next) ->
+            chunks.push(chunk)
+            next()
+        bufferer.on 'end', ->
+            picture = Buffer.concat(chunks).toString 'base64'
             callback null, VCardParser.toVCF(@, picture)
+        stream.pipe bufferer
     else
         callback null, VCardParser.toVCF(@)
 
@@ -85,8 +94,9 @@ Contact::handlePhoto = (photo, callback) ->
     if photo? and photo.length > 0
         filePath = "/tmp/#{@id}.jpg"
         fs.writeFile filePath, photo, encoding: 'base64', (err) =>
+            return callback err if err?
             @attachFile filePath, name: 'picture', (err) ->
-                fs.unlink filePath, callback
+                fs.unlink filePath, -> callback err
     else
         callback null
 
