@@ -92,8 +92,7 @@ exports.createEvent = (title, description, start) -> (done) ->
 exports.createRequests = (done) ->
     @timeout 10000
     root = require('path').join __dirname, exports.prefix
-    require('americano').configure root, null, (err) ->
-        done err
+    require('cozydb').configure root, null, done
 
 exports.cleanDB = (done) ->
     @timeout 10000
