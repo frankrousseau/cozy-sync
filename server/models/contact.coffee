@@ -6,14 +6,21 @@ log = require('printit')
     prefix: 'model:contact'
 
 
+class DataPoint extends cozydb.Model
+    @schema:
+        name: String
+        value: cozydb.NoSchema
+        type: String
+        mediatype: String
+
 module.exports = Contact = cozydb.getModel 'Contact',
     id            : String
     carddavuri    : String
     fn            : String
     n             : String
-    datapoints    : Object
+    datapoints    : [DataPoint]
     note          : String
-    tags          : (x) -> x # DAMN IT JUGGLING
+    tags          : [String]
     _attachments  : Object
     org           : String
     title         : String
@@ -22,7 +29,6 @@ module.exports = Contact = cozydb.getModel 'Contact',
     nickname      : String
     url           : String
     revision      : Date
-
 
 Contact.afterInitialize = ->
     # Cleanup the model,

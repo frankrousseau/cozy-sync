@@ -113,15 +113,10 @@ module.exports = class CozyCardDAVBackend
 
             contact = contact[0]
             data = @Contact.parse cardData
-            data.id = contact._id
             data.carddavuri = cardUri
             data.addTag addressBookId unless addressBookId is allContactsId
 
-            # @TODO: fix during cozydb migration
-            # Surprinsingly updateAttributes has no effect without this pre-fill
-            contact[k] = v for k, v of data
-
-            contact.save (err, contact) ->
+            contact.updateAttributes data, (err) ->
                 return callback handle err if err?
                 contact.handlePhoto data.photo, callback
 
