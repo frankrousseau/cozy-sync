@@ -119,11 +119,13 @@ Contact.prototype.toVCF = function(callback) {
       chunks.push(chunk);
       return next();
     };
-    bufferer.on('finish', function() {
-      var picture;
-      picture = Buffer.concat(chunks).toString('base64');
-      return callback(null, VCardParser.toVCF(this, picture));
-    });
+    bufferer.on('finish', (function(_this) {
+      return function() {
+        var picture;
+        picture = Buffer.concat(chunks).toString('base64');
+        return callback(null, VCardParser.toVCF(_this, picture));
+      };
+    })(this));
     return stream.pipe(bufferer);
   } else {
     return callback(null, VCardParser.toVCF(this));
@@ -159,6 +161,7 @@ Contact.parse = function(vcf) {
   var contact, parser;
   parser = new VCardParser();
   parser.read(vcf);
-  contact = parser.contacts[0];
-  return new Contact(parser.contacts[0]);
+  contact = new Contact(parser.contacts[0]);
+  contact.photo = parser.contacts[0].photo;
+  return contact;
 };
