@@ -119,7 +119,7 @@ Contact.prototype.toVCF = function(callback) {
       chunks.push(chunk);
       return next();
     };
-    bufferer.on('end', function() {
+    bufferer.on('finish', function() {
       var picture;
       picture = Buffer.concat(chunks).toString('base64');
       return callback(null, VCardParser.toVCF(this, picture));
