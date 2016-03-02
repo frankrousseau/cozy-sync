@@ -86,7 +86,7 @@ Contact::toVCF = (callback) ->
         bufferer._write = (chunk, enc, next) ->
             chunks.push(chunk)
             next()
-        bufferer.on 'end', ->
+        bufferer.on 'finish', ->
             picture = Buffer.concat(chunks).toString 'base64'
             callback null, VCardParser.toVCF(@, picture)
         stream.pipe bufferer
