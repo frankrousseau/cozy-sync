@@ -1,6 +1,6 @@
 {
   "name": "cozy-sync",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Synchronize you contacts and calendars through CalDAV and CardDAV protocols",
   "author": "Cozy Cloud <contact@cozycloud.cc> (http://cozycloud.cc)",
   "licenses": [
