@@ -1,6 +1,6 @@
 fs = require 'fs'
 cozydb = require 'cozydb'
-stream = require 'stream'
+WritableStream = require('stream').Writable
 VCardParser = require 'cozy-vcard'
 log = require('printit')
     prefix: 'model:contact'
@@ -82,7 +82,7 @@ Contact::toVCF = (callback) ->
         stream = @getFile 'picture', (err) ->
             callback err if err?
         chunks = []
-        bufferer = new stream.Writable
+        bufferer = new WritableStream
         bufferer._write = (chunk, enc, next) ->
             chunks.push(chunk)
             next()
