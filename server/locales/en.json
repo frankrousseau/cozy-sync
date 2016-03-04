@@ -19,7 +19,7 @@
   "select a calendar": "Select a calendar",
   "use the following url": "Then use the following url",
   "contacts": "CardDAV configuration (Contacts)",
-  "sync thunderbird": "To sync contacts with thunderbird, you have to install the SOGo addon. Then use the following url",
+  "sync thunderbird": "To sync contacts with thunderbird, you have to install an addon, for example CardBook or SOGo. Then use the above login / password, and the following url",
   "files": "WebDAV configuration (Files)",
   "doesn't support file": "Cozy doesn't support file synchronization through WebDAV. We will provide soon another way to do it. It will support offline working too.",
   "troubleshooting": "Troubleshooting",
