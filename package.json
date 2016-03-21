@@ -13,7 +13,9 @@
   "scripts": {
     "start": "node build/server.js",
     "test": "cake --use-js tests",
-    "build": "cake build",
+    "build:client": "cd client && brunch b",
+    "build:server": "cake build",
+    "build":"npm run build:client && npm run build:server",
     "lint": "npm run lint1 || npm run lint2",
     "lint1": "coffeelint -f coffeelint.json ./server/",
     "lint2": "coffeelint -f coffeelint.json ./client/app/",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "chai": "1.9.0",
+    "brunch": "1.8.5",
     "request": "2.34.0",
     "xmldoc": "0.1.2",
     "mocha": "1.17.1",
