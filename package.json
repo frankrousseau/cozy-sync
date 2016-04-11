@@ -1,6 +1,6 @@
 {
   "name": "cozy-sync",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "Synchronize you contacts and calendars through CalDAV and CardDAV protocols",
   "author": "Cozy Cloud <contact@cozycloud.cc> (http://cozycloud.cc)",
   "licenses": [
@@ -9,11 +9,13 @@
       "url": "http://www.gnu.org/licenses/agpl-3.0.html"
     }
   ],
-  "main": "server.js",
+  "main": "build/server.js",
   "scripts": {
     "start": "node build/server.js",
     "test": "cake --use-js tests",
-    "build": "cake build",
+    "build:client": "cd client && brunch b",
+    "build:server": "cake build",
+    "build": "npm run build:client && npm run build:server",
     "lint": "npm run lint1 || npm run lint2",
     "lint1": "coffeelint -f coffeelint.json ./server/",
     "lint2": "coffeelint -f coffeelint.json ./client/app/",

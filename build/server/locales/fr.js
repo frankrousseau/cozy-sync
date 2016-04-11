@@ -19,10 +19,11 @@ module.exports = {
     "select a calendar": "Sélectionnez un agenda",
     "use the following url": "Puis utilisez l'URL suivante",
     "contacts": "Configuration de CardDav (Contacts)",
-    "sync thunderbird": "Pour synchroniser les contacts avec Thunderbird, vous devez installer l'extension SOGo. Puis utilisez l'url suivante",
+    "sync thunderbird": "Pour synchroniser les contacts avec Thunderbird, vous devez installer une extension telle que CardBook ou SOGo. Puis utilisez les identifiants ci-dessus et l'url suivante :",
     "files": "Configuration de WebDav (Fichiers)",
     "doesn't support file": "Cozy ne supporte pas la synchronisation de fichiers à travers WebDav. Nous allons fournir une autre façon de synchroniser vos fichiers avec une application Cozy et des logiciels pour les différents systèmes d'exploitation et téléphones.",
     "troubleshooting": "Dépannage",
     "experimenting problems": "Si vous rencontrez des problèmes, faites-le nous savoir",
     "on github": "sur Github"
-};
+}
+;
